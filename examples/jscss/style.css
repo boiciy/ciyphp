@@ -1,0 +1,113 @@
+@charset "utf-8";
+* {padding:0;margin:0;}
+body{padding:0;margin:0;font-size:16px;font-family: microsoft yahei,arial; background:#fff; color:#5f5f5f;}
+div, dl, dt, dd, ul, h1, h2, h3, p{padding:0;margin:0;}
+li{list-style:none;}
+img{border:0;}
+a{color:#519BD8;text-decoration:none;cursor:pointer; font-family:microsoft yahei,arial;}
+a:hover{text-decoration:none;}
+textarea{  font-family:microsoft yahei,arial;}
+th,h1, h2, h3{color:#5F5F5F}
+a{outline:none; -webkit-highlight-color:rgba(0,0,0,0);}
+.nowarp{white-space: nowrap;}
+pre{border:1px solid #cccccc;padding:0.5em;}
+
+select.n,input[type="text"].n,input[type="password"].n,textarea.n{
+text-shadow:0 1px 1px rgba(200,200,200,.8);
+padding: 3px 6px;
+border: 1px solid #CCC;
+border-radius: 4px;
+-webkit-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+background-image: none;
+box-sizing: border-box;
+letter-spacing: normal;
+word-spacing: normal;
+text-transform: none;
+text-indent: 0px;
+font-size: 14px;
+font-family: microsoft yahei,arial;
+width:90%;
+}
+select:focus.n,input:focus.n,textarea:focus.n {
+	border-color: #66afe9;
+	outline: 0;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(102,175,233,0.6);
+	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(102,175,233,0.6)
+}
+button,.btn{
+transition: all 0.5s;
+background:#0779b4;
+color: #ffffff;
+cursor: pointer;
+display: inline-block;
+font-size: 14px;
+line-height: 34px;
+padding:0 20px;
+text-align: center;
+text-decoration: none;
+white-space: nowrap;
+border-style: none;
+border-radius: 3px;
+}
+button:hover,button:focus,.btn:hover,.btn:focus {
+text-shadow:1px 1px 1px #bd3714;    
+}
+.navout{max-width:1280px; margin:0 auto;display:block;min-height: 380px;}
+.indexout{width:1073px;margin:auto;}
+.indexout .navpage{ padding:8px 0 0 0;  position:relative;font-size:14px;text-shadow: 0 0 5px #ffffff;}
+.new_pub{ padding:8px 0 0 0;  position:relative;}
+.new_pub h1{ text-align: center; line-height:50px;font-size:24px;}
+/****************************** 表格 ******************************/
+table,tr, td { border-spacing:0;}
+.table { width:100%; border-spacing:0; margin:0;}
+table.record .checked td{background-color: #9eff84;background:-ms-linear-gradient(top,#c4feaa,#9eff84); background:-moz-linear-gradient(center top, #c4feaa, #9eff84);background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#c4feaa), to(#9eff84));filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#c4feaa', endColorstr='#9eff84'); background:-o-linear-gradient(top, #c4feaa, #9eff84);}
+table.record{width:100%; border-collapse:collapse;table-layout:fixed;}
+table.record th,table.record td{ text-align:center; padding:5px 10px;  width:auto; white-space: nowrap;overflow:hidden}
+table.record td{text-overflow:ellipsis;border:1px solid #dddddd;background-color: #ffffff;font-size:13px;line-height:30px;background:-ms-linear-gradient(top,#ffffff,#f9f9f9); background:-moz-linear-gradient(center top, #ffffff, #f9f9f9);background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffffff), to(#f9f9f9));filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#ffffff', endColorstr='#f9f9f9'); background:-o-linear-gradient(top, #ffffff, #f9f9f9);}
+table.record th:first-child{border-left:none;}
+table.record th:last-child{border-right:1px solid #8dc8fb;}
+table.record th{border-bottom:1px solid #ffffff;border-left:1px solid #ffffff;color:#ffffff; background-color:#8dc8fb; white-space: nowrap; text-shadow:1px 1px 1px #328ad7;}
+table.record th a{color:#ffffff; text-shadow:1px 1px 1px #000000;}
+table.record th a:hover{text-decoration: underline;}
+table.record th.sm{font-size:0.8em;padding:4px;}
+
+.page {
+height: 30px;
+margin-top:5px;
+}
+
+.page_txt {
+color: #969696;
+height: 30px;
+float: right;
+}
+.digg div.records {
+color: #000;
+display: inline-block;
+float: left;
+font-size:14px;
+margin-left: 5px;
+padding: 6px 10px;
+}
+.digg div.current {
+color: #FFFFFF;
+display: inline-block;
+float: left;
+font-weight: bold;
+margin-left: 5px;
+padding: 6px 10px;
+background-color: #d4d2d2;
+}
+
+.digg a {
+float: left;
+border: 1px solid #DDDDDD;
+color: #000000;
+margin-left: 5px;
+padding: 5px 9px;
+text-decoration: none;
+}
+.digg a:hover {
+background-color: #e1edf7;
+}
+.digg{float:left;}
