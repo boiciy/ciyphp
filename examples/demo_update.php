@@ -66,11 +66,11 @@ function formsubmit()
     postparam.icon = $("input[name=icon]").val();
     postparam.scores = getint($("input[name=scores]").val());
     if (postparam.truename === "") {
-        errmsg("请填写姓名");
+        alert("请填写姓名");
         return false;
     }
     callfunc("update",postparam,function(json){
-        showok('提交成功');
+        alert('提交成功');
     });
 }
         </script>
