@@ -1,0 +1,73 @@
+<!DOCTYPE html> <html>
+<head>
+<title>3WEB</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<style>
+    *{margin: 0;padding: 0;}
+    td{border:1px solid #cccccc;font-size:12px;padding:0.2em 0.4em;}
+</style>
+</head>
+<body style="background: #fafafa;">
+<div id="bigscreen"></div>
+<a style="position: fixed;top:0;right:0; margin:1em;padding:0.5em 1em;border-radius: 0.5em;background:#4a7dff;color:#ffffff;display: inline-block;cursor: pointer;" onclick="refme();">刷新数据</a>
+
+<script src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    $(function(){
+        refme();
+    });
+    function refme()
+    {
+        var el = document.getElementById('bigscreen');
+        var html = '<table>';
+        html += '<tr><td>$(window).height()</td><td>'+$(window).height()+"</td></tr>";
+        html += '<tr><td>$(window).width()</td><td>'+$(window).width()+"</td></tr>";
+        html += '<tr><td>document.documentElement.clientWidth</td><td>'+document.documentElement.clientWidth+"</td></tr>";
+        html += '<tr><td>document.documentElement.clientHeight</td><td>'+document.documentElement.clientHeight+"</td></tr>";
+        html += '<tr><td>navigator.appCodeName</td><td>'+navigator.appCodeName+"</td></tr>";
+        html += '<tr><td>navigator.appName</td><td>'+navigator.appName+"</td></tr>";
+        html += '<tr><td>navigator.appVersion</td><td>'+navigator.appVersion+"</td></tr>";
+        html += '<tr><td>navigator.cookieEnabled</td><td>'+navigator.cookieEnabled+"</td></tr>";
+        html += '<tr><td>navigator.doNotTrack</td><td>'+navigator.doNotTrack+"</td></tr>";
+        html += '<tr><td>navigator.hardwareConcurrency</td><td>'+navigator.hardwareConcurrency+"</td></tr>";
+        html += '<tr><td>navigator.language</td><td>'+navigator.language+"</td></tr>";
+        html += '<tr><td>navigator.maxTouchPoints</td><td>'+navigator.maxTouchPoints+"</td></tr>";
+        html += '<tr><td>navigator.platform</td><td>'+navigator.platform+"</td></tr>";
+        html += '<tr><td>navigator.product</td><td>'+navigator.product+"</td></tr>";
+        html += '<tr><td>navigator.productSub</td><td>'+navigator.productSub+"</td></tr>";
+        html += '<tr><td>navigator.userAgent</td><td>'+navigator.userAgent+"</td></tr>";
+        html += '<tr><td>navigator.vendor</td><td>'+navigator.vendor+"</td></tr>";
+        
+        html += '<tr><td>screen.availWidth</td><td>'+screen.availWidth+"</td></tr>";
+        html += '<tr><td>screen.availHeight</td><td>'+screen.availHeight+"</td></tr>";
+        html += '<tr><td>screen.availLeft</td><td>'+screen.availLeft+"</td></tr>";
+        html += '<tr><td>screen.availTop</td><td>'+screen.availTop+"</td></tr>";
+        html += '<tr><td>screen.colorDepth</td><td>'+screen.colorDepth+"</td></tr>";
+        html += '<tr><td>screen.pixelDepth</td><td>'+screen.pixelDepth+"</td></tr>";
+        html += '<tr><td>screen.width</td><td>'+screen.width+"</td></tr>";
+        html += '<tr><td>screen.height</td><td>'+screen.height+"</td></tr>";
+        
+        html += '<tr><td>window.devicePixelRatio</td><td>'+window.devicePixelRatio+"</td></tr>";
+        html += '<tr><td>window.innerHeight</td><td>'+window.innerHeight+"</td></tr>";
+        html += '<tr><td>window.innerWidth</td><td>'+window.innerWidth+"</td></tr>";
+        html += '<tr><td>window.outerHeight</td><td>'+window.outerHeight+"</td></tr>";
+        html += '<tr><td>window.outerWidth</td><td>'+window.outerWidth+"</td></tr>";
+        html += '<tr><td>window.pageXOffset</td><td>'+window.pageXOffset+"</td></tr>";
+        html += '<tr><td>window.pageYOffset</td><td>'+window.pageYOffset+"</td></tr>";
+        html += '<tr><td>window.scrollX</td><td>'+window.scrollX+"</td></tr>";
+        html += '<tr><td>window.scrollY</td><td>'+window.scrollY+"</td></tr>";
+        
+        html += '<tr><td>location.host</td><td>'+location.host+"</td></tr>";
+        html += '<tr><td>location.hostname</td><td>'+location.hostname+"</td></tr>";
+        html += '<tr><td>location.href</td><td>'+location.href+"</td></tr>";
+        html += '<tr><td>location.origin</td><td>'+location.origin+"</td></tr>";
+        html += '<tr><td>location.pathname</td><td>'+location.pathname+"</td></tr>";
+        html += '<tr><td>location.port</td><td>'+location.port+"</td></tr>";
+        html += '<tr><td>location.protocol</td><td>'+location.protocol+"</td></tr>";
+        html += '<tr><td>location.search</td><td>'+location.search+"</td></tr>";
+        html += '<tr><td>location.hash</td><td>'+location.hash+"</td></tr>";
+        html += '</table><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>';
+        el.innerHTML = html;
+    }
+</script>
+</body></html>
