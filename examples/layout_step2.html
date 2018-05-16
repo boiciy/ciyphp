@@ -1,0 +1,477 @@
+<!DOCTYPE html> <html>
+<head>
+<title>Layout Step2</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+<style id="id_theme" type="text/css"></style>
+<style type="text/css">
+@font-face {
+  font-family: 'ciyfont';  /* http://www.iconfont.cn/ 生成 */
+  src: url('font/iconfont.eot');
+  src: url('font/iconfont.eot?#iefix') format('embedded-opentype'),
+  url('font/iconfont.woff') format('woff'),
+  url('font/iconfont.ttf') format('truetype'),
+  url('font/iconfont.svg#ciyfont') format('svg');
+}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,input,button,textarea,p,blockquote,th,td,form,pre{margin: 0; padding: 0; -webkit-tap-highlight-color:rgba(0,0,0,0);box-sizing: border-box;}
+input,button,textarea,select,optgroup,option,a:active,a:hover{outline:0}
+img{display: inline-block; border: none; vertical-align: middle;}
+li{list-style:none;}
+table{border-collapse: collapse; border-spacing: 0;}
+body{font: 14px Helvetica Neue,Helvetica,PingFang SC,\5FAE\8F6F\96C5\9ED1,Tahoma,Arial,sans-serif;overflow: hidden;}
+a{text-decoration:none; }
+.icon{font-family: ciyfont;font-style: normal;}
+cite{font-style: normal;}
+
+.ciy-header-height {
+    height: 4em;/*顶部高度*/
+    line-height: 4em;
+}
+.ciy-header-top {
+    top: 4em;/*顶部高度*/
+}
+.ciy-header-topm {
+    margin-top: 4em;/*顶部高度*/
+}
+.ciy-menu-left {
+    left: 14em;/*菜单宽度*/
+}
+.ciy-menu-width {
+    width: 14em;/*菜单宽度*/
+    transition: all .8s;-webkit-transition: all .8s;
+}
+.ciy-header {
+    border-bottom: 1px solid #f6f6f6;
+    z-index: 1000;
+    background-color: #ffffff;
+    position: fixed;
+    top: 0;
+    right: 0;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+    transition: all .8s;-webkit-transition: all .8s;
+}
+.ciy-header-right{
+    position: fixed;
+    right: 0;
+    top: 0;
+}
+.ciy-side {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1001;
+    overflow-x: hidden;
+    background-color: #20222A;
+    color: #ffffff;
+    box-shadow: 1px 0 2px 0 rgba(0,0,0,.05);
+    transition: all .8s;-webkit-transition: all .8s;
+}
+.ciy-side-scroll {
+    position: relative;
+    width: calc(100% + 18px);
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.ciy-logo {
+    position: fixed;
+    left: 0;
+    top: 0;
+    text-align: center;
+    color: #ffffff;
+    z-index: 1002;
+    overflow: hidden;
+    background-color: #1E9FFF;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.15);
+}
+.ciy-body {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 998;
+    width: auto;
+    overflow: hidden;
+    overflow-y: auto;
+    transition: all .8s;-webkit-transition: all .8s;
+}
+
+.ciy-body-item {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    display:none;
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+}
+.ciy-body-show{
+    display:block;
+}
+.ciy-body-item>iframe {
+    width: 100%;
+    height: calc(100% - 4px);
+}
+.ciy-body-shade {
+    position: fixed;
+    display: none;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,.3);
+    z-index: 1000;
+}
+.ciy-menu-nav{
+}
+.ciy-menu-nav{
+    cursor: pointer;
+}
+.ciy-menu-nav a{
+    color:rgba(255,255,255,0.8);
+}
+.ciy-menu-nav cite{
+    transition: all .8s;-webkit-transition: all .8s;
+}
+.ciy-menu-nav li:hover>a{
+    color:#ffffff;
+}
+.ciy-menu-nav li.active{
+    background:rgba(255,255,255,0.1);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.ciy-menu-nav>li>a>i{
+    margin:0 0.5em 0 0.9em;
+}
+.ciy-menu-nav>li>ul>li>a{
+    margin-left:3.3em;
+}
+.ciy-menu-nav>li>ul>li>ul>li>a{
+    margin-left:4em;
+}
+.ciy-menu-nav>li,.ciy-menu-nav>li>ul>li,.ciy-menu-nav>li>ul>li>ul>li{
+    display: block;
+    width: 100%;
+    line-height: 3em;
+    min-height: 3em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+}
+.ciy-menu-nav>li>ul{
+    display: none;
+    background:#03152A;
+}
+.ciy-menu-nav>li>ul>li>ul{
+    display: none;
+    background:#03152A;
+}
+.ciy-menu-nav>li.show>ul{
+    display: block;
+}
+.ciy-menu-nav>li.show>ul>li.show>ul{
+    display: block;
+}
+.ciy-menu-more{
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid dashed dashed;
+    border-color: #fff transparent transparent;
+    overflow: hidden;
+    position: absolute;
+    top: 1.4em;
+    left: 12em;
+    border-width: 6px;
+    border-top-color: rgba(255,255,255,.7);
+    transition: all .5s;-webkit-transition: all .5s;
+}
+li.show>.ciy-menu-more{
+    top: 1em;
+    border-color: transparent transparent #fff;
+}
+.layui-nav-bar{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 5px;
+    height: 3em;
+    background-color: #5FB878;
+    transition: all .2s;
+    -webkit-transition: all .2s;
+}
+@media (min-width:992px) {/*电脑*/
+    .ciy-menu-shrink .ciy-side cite,.ciy-menu-shrink .ciy-side .ciy-menu-more,.ciy-menu-shrink .layui-nav-bar{
+        display:none;
+    }
+    .ciy-menu-shrink .ciy-side{
+        width:3em;
+    }
+    .ciy-menu-shrink .ciy-menu-left {
+        left: 3em;/*缩小菜单宽度*/
+    }
+    .ciy-menu-shrink .ciy-menu-width {
+        width: 3em;/*缩小菜单宽度*/
+    }
+    .ciy-menu-shrink .ciy-menu-nav>li>ul {
+        display:none!important;
+    }
+}
+@media (max-width:992px) {/*平板和手机*/
+    .ciy-side {
+        transform: translate3d(-20em,0,0);
+        -webkit-transform: translate3d(-20em,0,0);
+    }
+    .ciy-menu-left{
+        left: 0;
+    }
+    .ciy-menu-shrink .ciy-side {
+        transform: translate3d(0,0,0);
+        -webkit-transform: translate3d(0,0,0);
+    }
+    .ciy-menu-shrink .ciy-body-shade {
+        display:block;
+    }
+}
+    </style>
+</head>
+<body>
+  <div id="id_body">
+    <div class="ciy-layout">
+      <div class="ciy-header ciy-header-height ciy-menu-left">
+          <div>
+              <a onclick="javascript:shrink();">菜单</a>
+               按钮1 按钮2
+          </div>
+          <div class="ciy-header-right">
+              <a onclick="javascript:changetheme('#ff0000');">皮肤1</a>
+              <a onclick="javascript:changetheme('#00ff00');">皮肤2</a>
+          </div>
+      </div>
+      <!-- 侧边菜单 -->
+      <div class="ciy-side ciy-menu-width">
+        <div class="ciy-side-scroll">
+          <div class="ciy-logo ciy-header-height ciy-menu-width">
+            <i class="icon" style='font-size:2em;vertical-align: middle;'>&#xe603;</i>
+            <cite>CiyAdmin</cite>
+          </div>
+          <ul class="ciy-menu-nav ciy-header-topm">
+            <li>
+              <a>
+                <i class="icon">&#xe603;</i>
+                <cite>主页</cite>
+              </a>
+              <span class="ciy-menu-more"></span>
+              <ul>
+                <li>
+                  <a data-href="home/console.html">控制台</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a>
+                <i class="icon">&#xe603;</i>
+                <cite>组件</cite>
+              </a>
+              <span class="ciy-menu-more"></span>
+              <ul>
+                <li>
+                  <a>栅格</a>
+                  <span class="ciy-menu-more"></span>
+                  <ul>
+                    <li><a data-href="component/grid/list.html">等比例列表排列</a></li>
+                    <li><a data-href="component/grid/mobile.html">按移动端排列</a></li>
+                    <li><a data-href="component/grid/mobile-pc.html">移动桌面端组合</a></li>
+                    <li><a data-href="component/grid/all.html">全端复杂组合</a></li>
+                    <li><a data-href="component/grid/stack.html">低于桌面堆叠排列</a></li>
+                    <li><a data-href="component/grid/speed-dial.html">九宫格</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a data-href="component/button/index.html">按钮</a>
+                </li>
+                <li>
+                  <a>表单</a>
+                  <span class="ciy-menu-more"></span>
+                  <ul>
+                    <li><a data-href="component/form/element.html">表单元素</a></li>
+                    <li><a data-href="component/form/group.html">表单组合</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a>
+                <i class="icon">&#xe603;</i>
+                <cite>模板</cite>
+              </a>
+              <span class="ciy-menu-more"></span>
+              <ul>
+                <li><a data-href="user/reg.html">注册</a></li>
+                <li><a data-href="user/login.html">登入</a></li>
+                <li><a data-href="user/forget.html">忘记密码</a></li>
+                <li><a data-href="template/tips/404.html">404页面不存在</a></li>
+                <li><a data-href="template/tips/error.html">错误提示</a></li>
+                <li><a data-href="http://www.baidu.com/">百度一下</a></li>
+                <li><a data-href="http://www.layui.com/">layui官网</a></li>
+                <li><a data-href="http://www.layui.com/admin/">layuiAdmin官网</a></li>
+              </ul>
+            </li>
+            <li>
+              <a>
+                <i class="icon">&#xe603;</i>
+                <cite>应用</cite>
+              </a>
+              <span class="ciy-menu-more"></span>
+              <ul>
+                <li>
+                  <a data-href="app/message/index.html">消息中心</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a>
+                <i class="icon">&#xe603;</i>
+                <cite>高级</cite>
+              </a>
+              <span class="ciy-menu-more"></span>
+              <ul>
+                <li>
+                  <a data-href="http://www.boiweibo.com/work">博洋软件</a>  
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a>
+                <i class="icon">&#xe603;</i>
+                <cite>用户</cite>
+              </a>
+              <span class="ciy-menu-more"></span>
+              <ul>
+                <li><a href="javascript:alert('aaa');">网站用户</a></li>
+                <li><a href="javascript:;">后台管理员</a></li>
+                <li><a href="javascript:;">角色管理</a></li>
+              </ul>
+            </li>
+            <li>
+              <a>
+                <i class="icon">&#xe603;</i>
+                <cite>设置</cite>
+              </a>
+              <span class="ciy-menu-more"></span>
+              <ul>
+                <li>
+                  <a>系统设置</a>
+                  <span class="ciy-menu-more"></span>
+                  <ul>
+                    <li><a data-href="set/system/website.html">网站设置</a></li>
+                    <li><a data-href="set/system/email.html">邮件服务</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a>我的设置</a>
+                  <span class="ciy-menu-more"></span>
+                  <ul>
+                    <li><a data-href="set/user/info.html">基本资料</a></li>
+                    <li><a data-href="set/user/password.html">修改密码</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a data-href="http://ciy.cn">
+                <i class="icon">&#xe603;</i>
+                <cite>授权</cite>
+              </a>
+            </li>
+          </ul>
+          <span class="layui-nav-bar"></span>
+        </div>
+      </div>
+      <!-- 主体内容 -->
+      <div class="ciy-body ciy-header-top ciy-menu-left">
+        <div class="ciy-body-item ciy-body-show">
+          <iframe src="../3web_browser.html" frameborder="0"></iframe>
+        </div>
+      </div>
+      <div class="ciy-body-shade" onclick="shrink();"></div>
+    </div>
+  </div>
+
+<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+<script type="text/javascript">
+    'use strict';
+    $(function(){
+        $('.ciy-menu-nav').on("click","li",function(ev){
+            if($('#id_body').hasClass("ciy-menu-shrink") && window.innerWidth > 992)
+            {
+                $('.ciy-menu-nav ._ulshow').slideUp(400);//收缩的情况下，隐藏所有菜单展开
+                $('.ciy-menu-nav .show').removeClass("show");//同上
+                $('#id_body').removeClass("ciy-menu-shrink");
+            }
+            if($(this).hasClass("show"))
+            {
+                $(this).children('ul').slideUp(400);
+                $(this).removeClass("show");
+            }
+            else
+            {
+                //关闭上次打开菜单
+                if($(this).parents('ul').length == 1)
+                {
+                    $('.ciy-menu-nav ._ulshow').removeClass("_ulshow").slideUp(400);
+                    $('.ciy-menu-nav .show').removeClass("show");
+                    $(this).children('ul').addClass("_ulshow");
+                }
+                //关闭上次打开菜单 end
+                $(this).children('ul').slideDown(400);
+                $(this).addClass("show");
+            }
+            var href = $(this).children('a').attr('data-href');
+            if(href !== undefined)
+            {
+                var elifrpc = document.getElementsByTagName('iframe')[0];
+                elifrpc.setAttribute("src",href);
+                $('.ciy-menu-nav li').removeClass("active");
+                $(this).addClass("active");
+                if(window.innerWidth < 992)
+                    shrink();
+            }
+            var oEvent = ev || event;
+            oEvent.stopPropagation();
+        });
+        $('.ciy-menu-nav').on("mousemove",function(ev){
+            if($('#id_body').hasClass("ciy-menu-shrink"))
+            {
+                var el = ev.target;
+                if(ev.target.tagName != 'LI')
+                    el = $(ev.target).parents('li');
+                var txt = $(el).find('cite').text();
+                $(el).find('i').attr('title',txt);
+            }
+            else
+            {
+                var top = $(".ciy-side-scroll").scrollTop();
+                if(ev.target.tagName != 'LI')
+                    top += $(ev.target).parents('li').offset().top;
+                else
+                    top += $(ev.target).offset().top;
+                $(".layui-nav-bar").css('top',top);
+            }
+        });
+    });
+    function changetheme(color){
+        var d = document.getElementById("id_theme");
+        if(d !== undefined)
+            d.innerText=".ciy-logo{color:"+color+"!important;}";
+    }
+    function shrink(){
+        $('#id_body').toggleClass("ciy-menu-shrink");
+    }
+</script>
+</body></html>

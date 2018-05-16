@@ -1,0 +1,627 @@
+<!DOCTYPE html> <html>
+<head>
+<title>Items</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+<style id="id_theme" type="text/css"></style>
+<style type="text/css">
+@font-face {
+  font-family: 'ciyfont';  /* http://www.iconfont.cn/ 生成 */
+  src: url('font/iconfont.eot');
+  src: url('font/iconfont.eot?#iefix') format('embedded-opentype'),
+  url('font/iconfont.woff') format('woff'),
+  url('font/iconfont.ttf') format('truetype'),
+  url('font/iconfont.svg#ciyfont') format('svg');
+}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,input,button,textarea,p,blockquote,th,td,form,pre{margin: 0; padding: 0; -webkit-tap-highlight-color:rgba(0,0,0,0);box-sizing: border-box;}
+input,button,textarea,select,optgroup,option,a:active,a:hover{outline:0}
+img{display: inline-block; border: none; vertical-align: middle;}
+li{list-style:none;}
+table{border-collapse: collapse; border-spacing: 0;}
+body{font: 14px Helvetica Neue,Helvetica,PingFang SC,\5FAE\8F6F\96C5\9ED1,Tahoma,Arial,sans-serif;}
+a{text-decoration:none; }
+.icon{font-family: ciyfont;font-style: normal;}
+cite{font-style: normal;}
+@media (min-width:992px) {/*电脑*/
+    ::-webkit-scrollbar {width: 10px;height: 10px;}
+    ::-webkit-scrollbar-track,::-webkit-scrollbar-thumb {border-radius: 999px;border: 1px solid transparent;}
+    ::-webkit-scrollbar-track {box-shadow: 1px 1px 3px rgba(0,0,0,.2) inset;}
+    ::-webkit-scrollbar-thumb {background-clip: content-box;box-shadow: 0 0 0 5px rgba(0,0,0,.2) inset;}
+}
+
+.container{
+    padding:15px;
+    line-height:2em;
+}
+.row{
+    margin-bottom: 1em;
+}
+.row>div{
+    float:left;
+    position: relative;
+    background:#cccccc;
+}
+.row:after, .row:before {
+    display: table;
+    content: " ";
+}
+.row:after {
+    clear:both;
+}
+
+
+.bgcolor-primary{color:#428bca;}
+.bgcolor-success{color:#5cb85c;}
+.bgcolor-info{color:#5bc0de;}
+.bgcolor-warning{color:#f0ad4e;}
+.bgcolor-danger{color:#d9534f;}
+
+.hidden-xs {display: none!important;}
+.col-xs-1{width: 8.33333333%;}
+.col-xs-2{width:16.66666667%;}
+.col-xs-3{width:25%;}
+.col-xs-4{width:33.33333333%;}
+.col-xs-5{width:41.66666667%;}
+.col-xs-6{width:50%;}
+.col-xs-7{width:58.33333333%;}
+.col-xs-8{width:66.66666667%;}
+.col-xs-9{width:75%;}
+.col-xs-10{width:83.33333333%;}
+.col-xs-11{width:91.66666667%;}
+.col-xs-12{width:100%;}
+.col-xs-offset-1{margin-left: 8.33333333%;}
+.col-xs-offset-2{margin-left:16.66666667%;}
+.col-xs-offset-3{margin-left:25%;}
+.col-xs-offset-4{margin-left:33.33333333%;}
+.col-xs-offset-5{margin-left:41.66666667%;}
+.col-xs-offset-6{margin-left:50%;}
+.col-xs-offset-7{margin-left:58.33333333%;}
+.col-xs-offset-8{margin-left:66.66666667%;}
+.col-xs-offset-9{margin-left:75%;}
+.col-xs-offset-10{margin-left:83.33333333%;}
+.col-xs-offset-11{margin-left:91.66666667%;}
+@media(min-width: 768px) {
+    .hidden-sm {display: none!important;}
+    .col-sm-1{width: 8.33333333%;}
+    .col-sm-2{width:16.66666667%;}
+    .col-sm-3{width:25%;}
+    .col-sm-4{width:33.33333333%;}
+    .col-sm-5{width:41.66666667%;}
+    .col-sm-6{width:50%;}
+    .col-sm-7{width:58.33333333%;}
+    .col-sm-8{width:66.66666667%;}
+    .col-sm-9{width:75%;}
+    .col-sm-10{width:83.33333333%;}
+    .col-sm-11{width:91.66666667%;}
+    .col-sm-12{width:100%;}
+    .col-sm-offset-1{margin-left: 8.33333333%;}
+    .col-sm-offset-2{margin-left:16.66666667%;}
+    .col-sm-offset-3{margin-left:25%;}
+    .col-sm-offset-4{margin-left:33.33333333%;}
+    .col-sm-offset-5{margin-left:41.66666667%;}
+    .col-sm-offset-6{margin-left:50%;}
+    .col-sm-offset-7{margin-left:58.33333333%;}
+    .col-sm-offset-8{margin-left:66.66666667%;}
+    .col-sm-offset-9{margin-left:75%;}
+    .col-sm-offset-10{margin-left:83.33333333%;}
+    .col-sm-offset-11{margin-left:91.66666667%;}
+}
+@media(min-width: 992px) {
+    .hidden-md {display: none!important;}
+    .col-md-1{width: 8.33333333%;}
+    .col-md-2{width:16.66666667%;}
+    .col-md-3{width:25%;}
+    .col-md-4{width:33.33333333%;}
+    .col-md-5{width:41.66666667%;}
+    .col-md-6{width:50%;}
+    .col-md-7{width:58.33333333%;}
+    .col-md-8{width:66.66666667%;}
+    .col-md-9{width:75%;}
+    .col-md-10{width:83.33333333%;}
+    .col-md-11{width:91.66666667%;}
+    .col-md-12{width:100%;}
+    .col-md-offset-1{margin-left: 8.33333333%;}
+    .col-md-offset-2{margin-left:16.66666667%;}
+    .col-md-offset-3{margin-left:25%;}
+    .col-md-offset-4{margin-left:33.33333333%;}
+    .col-md-offset-5{margin-left:41.66666667%;}
+    .col-md-offset-6{margin-left:50%;}
+    .col-md-offset-7{margin-left:58.33333333%;}
+    .col-md-offset-8{margin-left:66.66666667%;}
+    .col-md-offset-9{margin-left:75%;}
+    .col-md-offset-10{margin-left:83.33333333%;}
+    .col-md-offset-11{margin-left:91.66666667%;}
+}
+@media(min-width: 1200px) {
+    .hidden-lg {display: none!important;}
+    .col-lg-1{width: 8.33333333%;}
+    .col-lg-2{width:16.66666667%;}
+    .col-lg-3{width:25%;}
+    .col-lg-4{width:33.33333333%;}
+    .col-lg-5{width:41.66666667%;}
+    .col-lg-6{width:50%;}
+    .col-lg-7{width:58.33333333%;}
+    .col-lg-8{width:66.66666667%;}
+    .col-lg-9{width:75%;}
+    .col-lg-10{width:83.33333333%;}
+    .col-lg-11{width:91.66666667%;}
+    .col-lg-12{width:100%;}
+    .col-lg-offset-1{margin-left: 8.33333333%;}
+    .col-lg-offset-2{margin-left:16.66666667%;}
+    .col-lg-offset-3{margin-left:25%;}
+    .col-lg-offset-4{margin-left:33.33333333%;}
+    .col-lg-offset-5{margin-left:41.66666667%;}
+    .col-lg-offset-6{margin-left:50%;}
+    .col-lg-offset-7{margin-left:58.33333333%;}
+    .col-lg-offset-8{margin-left:66.66666667%;}
+    .col-lg-offset-9{margin-left:75%;}
+    .col-lg-offset-10{margin-left:83.33333333%;}
+    .col-lg-offset-11{margin-left:91.66666667%;}
+}
+code, kbd, pre, samp {
+    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+}
+kbd {
+    padding: 2px 4px;
+    font-size: 0.8em;
+    color: #ffffff;
+    background-color: #333;
+    border-radius: 3px;
+    -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
+}
+code {
+    padding: 2px 4px;
+    font-size: 0.8em;
+    color: #c7254e;
+    background-color: #f9f2f4;
+    border-radius: 4px;
+}
+pre {
+    display: block;
+    padding: 0.5em;
+    margin: 0 0 0.7em;
+    color: #333333;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #f5f5f5;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    width:100%;
+    overflow: hidden;
+}
+.btn {
+    background: #1E9FFF;
+    color:#ffffff;
+    display: inline-block;
+    padding: 0.5em 1em;
+    font-size:1em;
+    line-height:1em;
+    margin:1px;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 4px;
+    transition: all .5s;-webkit-transition: all .5s;
+}
+.btn-lg {
+    font-size:1.3em;
+}
+.btn-sm {
+    font-size:0.8em;
+}
+.btn-xs {
+    font-size:0.8em;
+    padding: 0.3em 0.5em;
+}
+.btn:hover {
+    box-shadow: 0 0 10px rgba(255,255,255,1) inset;
+}
+.btn:active {
+    box-shadow: 0 0 5px rgba(0,0,0,0.2) inset;
+}
+textarea[disabled],select[disabled],input[disabled], .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: .65;
+}
+
+
+
+.table{
+    overflow-x: auto;
+    overflow-y:hidden;
+    border-left:1px solid #cccccc;
+    border-right:1px solid #cccccc;
+}
+.table>table{
+    min-width:100%;
+}
+th{
+    position: relative;
+    background:#f0f0f0;
+    padding:0.5em 1em;
+    text-align: left;
+    border-bottom: 1px solid #cccccc;
+    border-right:  1px solid #cccccc;
+    border-top:  1px solid #cccccc;
+    text-shadow: 0 0 3px #ffffff;
+    white-space: nowrap;
+}
+tr{
+    transition: all 1s;-webkit-transition: all 1s;
+}
+td{
+    border-bottom: 1px solid #cccccc;
+    border-right:  1px solid #cccccc;
+}
+td>div{
+    padding:0.5em 1em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+tr:nth-child(odd){
+    background:#fafafa;
+}
+tr:hover{
+    background:#daedf4;
+}
+td:nth-last-child(1),th:nth-last-child(1){
+    border-right: none;
+}
+.table th>i{
+    position: absolute;
+    cursor: pointer;
+    border-style: solid;
+    overflow: hidden;
+    border-width: 6px;
+    margin-left:0.5em;
+    top:1.5em;
+    border-color: #cccccc transparent transparent;
+    transition: all .5s;-webkit-transition: all .5s;
+}
+.table th>i.desc{
+    transform:rotate(180deg);
+    top:0.5em;
+}
+.table th>i:hover{
+    border-color: #999999 transparent transparent;
+}
+.table th>i.active{
+    border-color: #000000 transparent transparent;
+}
+
+.form-group.form-group-inline{
+    display:inline-block;
+    float:left;
+}
+.form-group.form-group-inline>div{
+    width:auto;
+}
+.form-group{
+    margin-bottom: 15px;
+    display:block;
+}
+.form-group>div{
+    width:calc(100% - 8em);
+    float:left;
+    padding:0.3em 0.5em;
+}
+.form-group>label{
+    width:7em;
+    float:left;
+    display: inline-block;
+    text-align:right;
+    padding:0.3em 0.5em;
+}
+.form-group:before,.form-group:after{
+    display: table;
+    content: " ";
+    clear:both;
+}
+
+select,textarea,input[type=text],input[type=email],input[type=url],input[type=number],input[type=range],input[type=search],input[type=color],input[type=date],input[type=datetime],input[type=time]{
+    display: block;
+    width: 100%;
+    height: 2.5em;
+    padding-left:0.5em;
+    color: #555555;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    transition: box-shadow .5s;-webkit-transition: box-shadow .5s;
+}
+textarea:focus,select:focus,input[type=text]:focus{
+    border: 1px solid rgba(82,168,236,.8);
+    -webkit-box-shadow: 0 0 8px rgba(82,168,236,.6);
+    box-shadow: 0 0 8px rgba(82,168,236,.6);
+}
+select {
+    appearance:none;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+    padding-right:0.5em;
+    background: url(data:image/png;base64,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) no-repeat scroll right center transparent;
+}
+select::-ms-expand { display: none; }
+input[type=checkbox],input[type=radio]{
+    zoom:1.5;
+    vertical-align: middle;
+}
+.formi{
+    position: relative;
+}
+.formi>input{
+    display:none;
+}
+.formi>input+i{
+    display: inline-block;
+    width: 0.8em;
+    height: 0.8em;
+    border-radius: 100%;
+    background: #f6f6f6;
+    border:0.2em solid #f6f6f6;
+    margin-right: 0.7em;
+    box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.3), 0 0 1px rgba(255, 255, 255, 0.4) inset;
+    transition: all .5s;-webkit-transition: all .5s;
+}
+.formi>input[type=checkbox]+i{
+    border-radius: 4px;
+}
+@keyframes ciy-scale {
+  0% {opacity: 0.5; transform: scale(.5);}
+  80% {opacity: 0.8; transform: scale(1.1);}
+  100% {opacity: 1; transform: scale(1);}
+}
+.formi>input:checked+i{
+    background: #1e9fff;
+    border:0.2em solid #f5fbff;
+    -webkit-animation: ciy-scale 0.5s;-ms-animation: ciy-scale 0.5s; animation-name: ciy-scale 0.5s;
+}
+    </style>
+</head>
+<body>
+  <div class="container">
+      
+      <form>
+          <div class="form-group form-group-inline">
+              <label clsss="col-xs-2">复选框</label>
+              <div style="width:400px;">
+                  <label class="formi"><input type="checkbox"/><i></i>爱迪生</label>
+                  <label class="formi"><input type="checkbox"/><i></i>特斯拉</label>
+                  <label><input type="checkbox"/>手动生</label>
+                  <label><input type="checkbox"/>手动阀</label>
+              </div>
+          </div>
+          <div class="form-group form-group-inline">
+              <label clsss="col-xs-2">单选框</label>
+              <div style="width:400px;">
+                  <label class="formi"><input type="radio" name="xxx"/><i></i>爱迪生</label>
+                  <label class="formi"><input type="radio" name="xxx"/><i></i>手动生</label>
+                  <label><input type="radio" name="xxx"/>特斯拉</label>
+                  <label><input type="radio" name="xxx"/>手动阀爱迪生</label>
+              </div>
+          </div>
+          <div class="form-group form-group-inline">
+              <label clsss="col-xs-2">手动阀发的的</label>
+              <div style="width:200px;">
+              <input type="text" class="form-control" placeholder="Jane Doe"/>
+              </div>
+          </div>
+          <div class="form-group form-group-inline">
+              <label clsss="col-xs-2">手动阀发的的</label>
+              <div>
+              <input type="text" class="form-control" placeholder="Jane Doe"/>
+              </div>
+          </div>
+          <div class="form-group">
+              <label for="exampleInputEmail2">Email</label>
+              <div>
+              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="jane.doe@example.com">
+              </div>
+          </div>
+          <div class="form-group">
+              <label for="exampleInputEmail2">&nbsp;</label>
+              <div style="width:200px;">
+              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="jane.doe@example.com">
+              </div>
+          </div>
+          <div class="form-group">
+              <label for="exampleInputEmail2">&nbsp;</label>
+              <div style="width:200px;">
+                  <select>
+                      <option value="3">上海</option>
+                      <option value="3" disabled>杭州</option>
+                      <option value="3">武汉</option>
+                  </select>
+              </div>
+          </div>
+          <div class="form-group">
+              <label for="exampleInputEmail2">Email</label>
+              <div>
+                  <textarea style="height:5em;">asd</textarea>
+              </div>
+          </div>
+          <button type="submit" class="btn">Send invitation</button>
+      </form>
+      
+      
+      <div class='table'>
+          <table>
+              <tr><th>ID</th><th>用户名<i class="asc"></i><i class="desc"></i></th><th>性别<i class="asc active"></i><i class="desc"></i></th><th>签名</th><th>积分</th><th>评分</th><th>职业</th><th>财富</th></tr>
+              <tr><td><div>阿斯蒂芬啊</div></td><td><div>手动阀大师傅士大夫</div></td><td><div>阿斯蒂芬大师傅啥地方</div></td><td><div>阿斯蒂芬阿斯蒂芬阿斯蒂芬sad</div></td><td><div>阿萨德发斯蒂芬啥地方</div></td><td><div>阿斯蒂芬啥地方啥地方撒</div></td><td><div>发的发斯蒂芬撒</div></td><td><div>阿斯蒂芬萨芬的as</div></td></tr>
+              <tr><td><div>阿斯蒂芬啊</div></td><td><div>手动阀大师傅士大夫</div></td><td><div>阿斯蒂芬大师傅啥地方</div></td><td><div>阿斯蒂芬阿斯蒂芬阿斯蒂芬sad</div></td><td><div>阿萨德发斯蒂芬啥地方</div></td><td><div>阿斯蒂芬啥地方啥地方撒</div></td><td><div>发的发斯蒂芬撒</div></td><td><div>阿斯蒂芬萨芬的as</div></td></tr>
+              <tr><td><div style="text-align: center;">ID</div></td><td><div style="text-align: right;">用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+              <tr><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+              <tr><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+              <tr><td><div>ID</div></td><td><div>用户<br/>名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+              <tr><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+              <tr><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+          </table>
+          <style type="text/css"></style>
+      </div>
+      
+      
+      
+      <button class='btn btn-lg' disabled>禁用</button>
+<button class='btn btn-lg'>大按钮</button>
+<a class='btn btn-lg'>大按钮</a>
+<button class='btn'>按钮</button>
+<a class='btn'>按钮</a>
+<button class='btn btn-sm'>小按钮</button>
+<a class='btn btn-sm'>小按钮</a>
+<button class='btn btn-xs'>微按钮</button>
+<a class='btn btn-xs'>微按钮</a>
+<hr/>
+
+To switch directories, type <kbd>cd</kbd> followed by the name of the directory.<br>
+To edit settings, press <kbd>ctrl + ,</kbd><br/>
+For example, <code>&lt;section&gt;</code> should be wrapped as inline.
+
+
+
+<pre>
+//代码区域
+Lay.fn.event = function(modName, events, params){
+  var that = this, result = null, filter = events.match(/\(.*\)$/)||[]; //提取事件过滤器
+  var set = (events = modName + '.'+ events).replace(filter, ''); //获取事件本体名
+  var callback = function(_, item){
+    var res = item && item.call(that, params);
+    res === false && result === null && (result = false);
+</pre>
+<pre>
+<ul>
+  <li>HTML将不会被解析</li>
+  <li>有木有感觉非常方便</li>
+</ul>
+</pre>
+  </div>
+<script src="jscss/jquery-1.12.4.js"></script>
+<script type="text/javascript">
+'use strict';
+var resizeth = null;
+$(function(){
+    if (navigator.userAgent.match(/iPad|iPhone/i))
+       document.body.style.width = window.screen.availWidth+'px';/*解决IOS被撑大问题*/
+
+    var els = document.getElementsByTagName("pre");
+    for (var i = 0; i < els.length; i++)
+        els[i].innerHTML = els[i].innerHTML.replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+    
+    
+    var style = $('.table>style')[0];
+    if(style !== undefined)
+        style.innerText=localStorage.getItem(location.pathname+'_table');
+    $('.table').on("contextmenu",function(ev){
+        if(ev.target.tagName == 'TH')
+        {
+            //表格标题右键菜单
+            return false;
+        }
+    });
+    $('.table').on("mousedown",function(ev){
+        if(resizeth != null)
+        {
+            var index = 0;
+            resizeth.last = false;
+            var ths = this.querySelectorAll("th");
+            for (var i = 0; i < ths.length; i++)
+            {
+                if(ths[i] == resizeth)
+                {
+                    index = i+1;
+                    break;
+                }
+            }
+            if(index == 0)
+                alert("出现错误");
+            if(ths.length == index)
+                resizeth.last = true;
+            
+            var style = $('.table>style')[0];
+            var sheet = style.sheet || style.styleSheet || {};
+            var rules = sheet.cssRules || sheet.rules;
+            resizeth.oldstyle = null;
+            for (var i = 0; i < rules.length; i++)
+            {
+                var item = rules[i];
+                if(item.selectorText !== ('.table tr > td:nth-child('+index+') > div'))
+                    continue;
+                resizeth.oldstyle = item;
+                break;
+            }
+            if(resizeth.oldstyle == null)
+            {
+                var i = 0;
+                if("insertRule" in sheet) {  
+                    i = sheet.insertRule(".table tr > td:nth-child("+index+") > div{width:auto;}", 0);
+                }  
+                else if("addRule" in sheet) {  
+                    i = sheet.addRule(".table tr > td:nth-child("+index+") > div", "width:auto;");
+                }
+                resizeth.oldstyle = rules[i];
+            }
+            resizeth.mouseDown = true;
+        }
+    });
+    $('.table').on("mouseup",function(ev){
+        if(resizeth != null)
+        {
+            resizeth.mouseDown = false;
+            resizeth = null;
+            var style = $('.table>style')[0];
+            var sheet = style.sheet || style.styleSheet || {};
+            var rules = sheet.cssRules || sheet.rules;
+            var csstxt = '';
+            for (var i = 0; i < rules.length; i++)
+                csstxt+=rules[i].cssText;
+            localStorage.setItem(location.pathname+'_table', csstxt);
+        }
+    });
+    $('.table').on("mousemove",function(ev){
+        if(ev.target.tagName == 'TH')
+        {
+            if(resizeth != null && resizeth.mouseDown)
+            {
+                var e = ev||event;
+                if(resizeth.last)
+                    resizeth.oldstyle.style.width = (e.clientX-resizeth.getBoundingClientRect().left+10) + "px";
+                else
+                    resizeth.oldstyle.style.width = (e.clientX-resizeth.getBoundingClientRect().left) + "px";
+                return;
+            }
+            if(ev.target.clientWidth-ev.offsetX<5)
+            {
+                resizeth = ev.target;
+                ev.target.style.cursor='col-resize';
+            }
+            else
+            {
+                if(resizeth != null)
+                    resizeth.style.cursor='';
+                resizeth = null;
+                if(ev.offsetX<5)
+                {
+                    resizeth = ev.target.previousElementSibling;
+                    if(resizeth != null)
+                        ev.target.style.cursor='col-resize';
+                }
+                else
+                {
+                    ev.target.style.cursor='';
+                }
+            }
+        }
+    });
+
+});
+</script>
+</body></html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html> <html>
+<head>
+<title>Layout Step1</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+<style id="id_theme" type="text/css"></style>
+<style type="text/css">
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,input,button,textarea,p,blockquote,th,td,form,pre{margin: 0; padding: 0; -webkit-tap-highlight-color:rgba(0,0,0,0);box-sizing: border-box;	}
+input,button,textarea,select,optgroup,option,a:active,a:hover{outline:0}
+img{display: inline-block; border: none; vertical-align: middle;}
+li{list-style:none;}
+table{border-collapse: collapse; border-spacing: 0;}
+body{font: 14px Helvetica Neue,Helvetica,PingFang SC,\5FAE\8F6F\96C5\9ED1,Tahoma,Arial,sans-serif;overflow: hidden;}
+a{text-decoration:none; }
+
+.ciy-header-height {
+    height: 4em;/*顶部高度*/
+    line-height: 4em;
+}
+.ciy-header-top {
+    top: 4em;/*顶部高度*/
+}
+.ciy-header-topm {
+    margin-top: 4em;/*顶部高度*/
+}
+.ciy-menu-left {
+    left: 14em;/*菜单宽度*/
+}
+.ciy-menu-width {
+    width: 14em;/*菜单宽度*/
+    transition: all .8s;-webkit-transition: all .8s;
+}
+.ciy-header {
+    border-bottom: 1px solid #f6f6f6;
+    z-index: 1000;
+    background-color: #ffffff;
+    position: fixed;
+    top: 0;
+    right: 0;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+    transition: all .8s;-webkit-transition: all .8s;
+}
+.ciy-header-right{
+    position: fixed;
+    right: 0;
+    top: 0;
+}
+.ciy-side {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1001;
+    overflow-x: hidden;
+    background-color: #20222A;
+    color: #ffffff;
+    box-shadow: 1px 0 2px 0 rgba(0,0,0,.05);
+    transition: all .8s;-webkit-transition: all .8s;
+}
+.ciy-side-scroll {
+    position: relative;
+    width: calc(100% + 18px);
+    height: 100%;
+    overflow-x: hidden;
+}
+.ciy-logo {
+    position: fixed;
+    left: 0;
+    top: 0;
+    text-align: center;
+    color: #ffffff;
+    z-index: 1002;
+    overflow: hidden;
+    background-color: #1E9FFF;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.15);
+}
+.ciy-body {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 998;
+    width: auto;
+    overflow: hidden;
+    overflow-y: auto;
+    transition: all .8s;-webkit-transition: all .8s;
+}
+
+.ciy-body-item {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    display:none;
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+}
+.ciy-body-show{
+    display:block;
+}
+.ciy-body-item>iframe{
+    width: 100%;
+    height: calc(100% - 4px);
+}
+.ciy-body-shade {
+    position: fixed;
+    display: none;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,.3);
+    z-index: 1000;
+}
+.ciy-header-menubtn{
+    display:none;
+}
+.ciy-menu-nav a{
+    color:rgba(255,255,255,0.8);
+    cursor: pointer;
+}
+@media screen and (max-width:992px) {
+    .ciy-side {
+        transform: translate3d(-15em,0,0);
+        -webkit-transform: translate3d(-15m,0,0);
+    }
+    .ciy-menu-left{
+        left: 0;
+    }
+    .ciy-menu-shrink .ciy-side {
+        transform: translate3d(0,0,0);
+        -webkit-transform: translate3d(0,0,0);
+    }
+    .ciy-menu-shrink .ciy-body-shade {
+        display:block;
+    }
+    .ciy-header-menubtn{
+        display: inline;
+    }
+}
+    </style>
+</head>
+<body>
+  <div id="id_body">
+    <div class="ciy-layout">
+      <div class="ciy-header ciy-header-height ciy-menu-left">
+          <div>
+              <a onclick="javascript:shrink();" class="ciy-header-menubtn">菜单</a>
+               按钮1 按钮2
+          </div>
+          <div class="ciy-header-right">
+              <a onclick="javascript:changetheme('#ff0000');">皮肤1</a>
+              <a onclick="javascript:changetheme('#00ff00');">皮肤2</a>
+              退出
+          </div>
+      </div>
+      <!-- 侧边菜单 -->
+      <div class="ciy-side ciy-menu-width">
+        <div class="ciy-side-scroll">
+          <div class="ciy-logo ciy-header-height ciy-menu-width">
+            <span>CiyAdmin</span>
+          </div>
+            <ul class="ciy-menu-nav ciy-header-topm">
+                <li><a data-href="web1.html">菜单1</a></li>
+                <li><a data-href="web2.html">菜单2</a></li>
+                <li><a data-href="http://ciy.cn">众产</a></li>
+                <li><a data-href="http://ciy.cn/code">众产IT</a></li>
+            </ul>
+        </div>
+      </div>
+      <!-- 主体内容 -->
+      <div class="ciy-body ciy-header-top ciy-menu-left">
+        <div class="ciy-body-item ciy-body-show">
+          <iframe src="web.html" frameborder="0"></iframe>
+        </div>
+      </div>
+      <div class="ciy-body-shade" onclick="shrink();"></div>
+    </div>
+  </div>
+
+<script src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    'use strict';
+    $(function(){
+        $('.ciy-menu-nav').on("click","li",function(ev){
+            var href = $(this).children('a').attr('data-href');
+            if(href !== undefined)
+            {
+                var elifr = document.getElementsByTagName('iframe')[0];
+                elifr.setAttribute("src",href);
+                shrink();
+            }
+            var oEvent = ev || event;
+            oEvent.stopPropagation();
+        });
+    });
+    function changetheme(color){
+        var d = document.getElementById("id_theme");
+        if(d !== undefined)
+            d.innerText=".ciy-logo{color:"+color+"!important;}";
+    }
+    function shrink(){
+        $('#id_body').toggleClass("ciy-menu-shrink");
+    }
+</script>
+</body></html>
