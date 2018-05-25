@@ -3,6 +3,7 @@
 ## WEB PHP框架
 这款PHP框架，经历了5年发展，开发了十几个商业项目。  
 众产风格极易理解，目录结构清晰，文件极少，支持前后端分离，DBA与后端逻辑可分离。  
+后端UI演示地址：[前往](http://ciyphp.ciy.cn/examples/layout.html)
 
 ## 目录结构
 >zcommon/  
