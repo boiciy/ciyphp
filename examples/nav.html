@@ -1,0 +1,99 @@
+<!DOCTYPE html> <html>
+<head>
+<title>Nav</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+<link href="jscss/style.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+</style>
+</head>
+<body>
+  <div class="container">
+<blockquote>暗色导航条</blockquote>
+<ul class="ciy-nav">
+  <li>
+    <a>控制台</a>
+  </li>
+  <li>
+    <a>控制台<span class="ciy-badge">999</span></a>
+  </li>
+  <li>
+    <a>个人中心<span class="ciy-badge-dot"></span></a>
+    <ul class="ciy-popmenu" style="top:4em;">
+      <li><a href="javascript:;">功能1</a></li>
+      <li><a href="javascript:;">功能2</a></li>
+    </ul>
+  </li>
+  <li style="float:right;">
+    <a><img src="jscss/face.jpg" style="width: 2em;height: 2em;margin-right: 0.5em;border-radius: 50%;"/>众产<span class="caret caret-white"></span></a>
+    <ul class="ciy-popmenu" style="top:4em;">
+      <li><a href="javascript:;">个人中心</a></li>
+      <li><a href="javascript:;">财务流水</a></li>
+      <li><a href="javascript:;">退出系统</a></li>
+    </ul>
+  </li>
+</ul>
+<br/><br/>
+<blockquote>暗色通栏导航条</blockquote>
+<ul class="ciy-nav ciy-nav-fill">
+  <li>
+    <a>控制台</a>
+  </li>
+  <li>
+    <a>控制台<span class="ciy-badge">999</span></a>
+  </li>
+  <li>
+    <a>个人中心<span class="ciy-badge-dot"></span></a>
+    <ul class="ciy-popmenu" style="top:4em;">
+      <li><a href="javascript:;">功能1</a></li>
+      <li><a href="javascript:;">功能2</a></li>
+    </ul>
+  </li>
+  <li>
+    <a><img src="jscss/face.jpg" style="width: 2em;height: 2em;margin-right: 0.5em;border-radius: 50%;"/>众产<span class="caret caret-white"></span></a>
+    <ul class="ciy-popmenu" style="top:4em;">
+      <li><a href="javascript:;">个人中心</a></li>
+      <li><a href="javascript:;">财务流水</a></li>
+      <li><a href="javascript:;">退出系统</a></li>
+    </ul>
+  </li>
+</ul>
+<br/><br/>
+
+
+<blockquote>亮色导航条</blockquote>
+<ul class="ciy-nav ciy-nav-light">
+  <li>
+    <a>控制台</a>
+  </li>
+  <li>
+    <a>控制台<span class="ciy-badge">999</span></a>
+  </li>
+  <li>
+    <a>个人中心<span class="ciy-badge-dot"></span></a>
+    <ul class="ciy-popmenu" style="top:4em;">
+      <li><a href="javascript:;">功能1</a></li>
+      <li><a href="javascript:;">功能2</a></li>
+    </ul>
+  </li>
+  <li>
+    <a><img src="jscss/face.jpg" style="width: 2em;height: 2em;margin-right: 0.5em;border-radius: 50%;"/>众产<span class="caret caret-white"></span></a>
+    <ul class="ciy-popmenu" style="top:4em;">
+      <li><a href="javascript:;">个人中心</a></li>
+      <li><a href="javascript:;">财务流水</a></li>
+      <li><a href="javascript:;">退出系统</a></li>
+    </ul>
+  </li>
+</ul>
+
+  </div>
+<script src="jscss/jquery-1.12.4.js"></script>
+<script src="jscss/ciy.js"></script>
+<script type="text/javascript">
+'use strict';
+$(function(){
+    ciy_menu(".ciy-nav>li,.btn-menu");
+});
+</script>
+</body></html>

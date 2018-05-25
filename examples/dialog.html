@@ -1,0 +1,159 @@
+<!DOCTYPE html> <html>
+<head>
+<title>Items</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+<link href="jscss/style.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+</style>
+</head>
+<body>
+  <div class="container">
+<blockquote>信息提示效果</blockquote>
+<button class='btn' onclick="ciy_toast('信息提示')">toast</button>
+<button class='btn' onclick="ciy_toast('',{icon:1})">toast1</button>
+<button class='btn' onclick="ciy_toast('加载中...',{icon:2})">toast2</button>
+<button class='btn' onclick="ciy_toast('信息提示信息提示信息提示',{icon:3})">toast3</button>
+<button class='btn' onclick="ciy_toast('',{icon:4})">toast4</button>
+<button class='btn' onclick="ciy_toast('信息提示',{icon:5})">toast5</button>
+<button class='btn' onclick="ciy_toastclose()">关闭提示</button>
+<br/><br/>
+
+<blockquote>顶部静默加载效果</blockquote>
+<button class='btn' onclick="ciy_loading()">静默加载</button>
+<button class='btn' onclick="ciy_loadclose('succ')">加载成功</button>
+<button class='btn' onclick="ciy_loadclose('fail')">加载失败</button>
+<br/><br/>
+
+<blockquote>对话框</blockquote>
+<button class='btn' onclick="ciy_alert('操作完成')">弹出对话框</button>
+<button class='btn' onclick="ciy_alert('尺寸自适应，尺寸自适应，尺寸自适应，尺寸自适应，尺寸自适应，尺寸自适应<br/>尺寸自适应<br/>尺寸自适应<br/>尺寸自适应<br/>')">尺寸自适应对话框</button>
+<button class='btn' onclick="ciy_alert('能自动换行的超长文本能自动换行的超长文本能自动换行的超长文本能自动换行的超长文本能自动换行的超长文本能自动换行的超长文本能自动换行的超长文本能自动换行的超长文本能自动换行的超长文本能自动换行的超长文本能自动换行的超长文本能自动换行的超长文本能自动换行的超长文本能自动换行的超长文本能自动换行的超长文本能自动换行的超长文本能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本<br/>能自动换行的超长文本')">超长文本对话框</button>
+<br/><br/>
+
+<blockquote>自定尺寸对话框</blockquote>
+<button class='btn' onclick="alert0()">自定尺寸对话框</button>
+<br/><br/>
+<script type="text/javascript">
+'use strict';
+function alert0()
+{
+    ciy_alert('自定尺寸对话框',''
+        ,function(btn){}
+        ,{contentstyle:'width:30em;height:20em;'}
+    );
+}
+</script>
+
+<blockquote>多按钮对话框</blockquote>
+<button class='btn' onclick="alert1()">多按钮对话框</button>
+<br/><br/>
+<script type="text/javascript">
+'use strict';
+function alert1()
+{
+    ciy_alert('确定删除？'
+        ,['确定','<a class="btn btn-default">取消</a>','关闭']
+        ,function(btn){
+            ciy_alert('点击：'+btn);
+        }
+    );
+}
+</script>
+
+<blockquote>带输入对话框</blockquote>
+<button class='btn' onclick="alert2()">弹出输入框</button>
+<button class='btn' onclick="alert3()">自定义输入框</button>
+<br/><br/>
+<script type="text/javascript">
+'use strict';
+function alert2()
+{
+    ciy_alert('',''
+        ,function(btn,inputs){
+            ciy_alert('已输入:'+inputs.title);
+        }
+        ,{forms:{'内联':'<input type="text" name="title"/>'}}
+    );
+}
+function alert3()
+{
+    ciy_alert('<div class="form-group"><label>文本框</label><div><input type="text" name="title"/></div></div><div class="form-group"><label>下拉列表框</label><div><select name="sel"><option value="afds">aaaa</option></select></div></div><div class="form-group"><label>多行文本框</label><div><textarea name="text"></textarea></div></div>',null,
+    function(btn,inputs){
+        ciy_alert('已输入input:'+inputs.title+"<br/>select:"+inputs.sel+"<br/>textarea:"+inputs.text);
+    });
+}
+</script>
+
+<blockquote>iframe对话框</blockquote>
+<button class='btn' onclick="alert4()">嵌入网页对话框</button>
+<br/><br/>
+<script type="text/javascript">
+'use strict';
+function alert4()
+{
+    ciy_alert('',''
+        ,function(btn){}
+        ,{contentstyle:'width:50em;height:40em;',frame:'demo.php'}
+    );
+}
+</script>
+
+<blockquote>自定义对话框</blockquote>
+<button class='btn' onclick="alert10()">自定义标题</button>
+<button class='btn' onclick="alert11()">无标题栏对话框</button>
+<button class='btn' onclick="alert12()">无按钮对话框</button>
+<br/><br/>
+<script type="text/javascript">
+'use strict';
+function alert10()
+{
+    ciy_alert('看上面↑',''
+        ,function(btn,inputs){}
+        ,{title:'自定义标题'}
+    );
+}
+function alert11()
+{
+    ciy_alert('没有标题栏',''
+        ,function(btn,inputs){}
+        ,{notitle:true}
+    );
+}
+function alert12()
+{
+    ciy_alert('没有按钮',''
+        ,function(btn,inputs){}
+        ,{nobutton:true}
+    );
+}
+</script>
+
+<blockquote>其他对话框</blockquote>
+<button class='btn' onclick="alert20()">最大化对话框</button>
+<button class='btn' onclick="alert21()">点空白不关闭</button>
+<br/><br/>
+<script type="text/javascript">
+'use strict';
+function alert20()
+{
+    ciy_alert('最大化对话框',''
+        ,function(btn,inputs){}
+        ,{max:true}
+    );
+}
+function alert21()
+{
+    ciy_alert('点空白不关闭',''
+        ,function(btn,inputs){}
+        ,{nomaskclose:true}
+    );
+}
+</script>
+<br/><br/>
+  </div>
+<div class="ciy-mask"></div>
+<script src="jscss/jquery-1.12.4.js"></script>
+<script src="jscss/ciy.js"></script>
+</body></html>

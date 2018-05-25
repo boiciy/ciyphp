@@ -1,19 +1,10 @@
 <!DOCTYPE html> <html>
 <head>
-<title>Items</title>
+<title>12 Grid</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
-<style id="id_theme" type="text/css"></style>
 <style type="text/css">
-@font-face {
-  font-family: 'ciyfont';  /* http://www.iconfont.cn/ 生成 */
-  src: url('font/iconfont.eot');
-  src: url('font/iconfont.eot?#iefix') format('embedded-opentype'),
-  url('font/iconfont.woff') format('woff'),
-  url('font/iconfont.ttf') format('truetype'),
-  url('font/iconfont.svg#ciyfont') format('svg');
-}
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,input,button,textarea,p,blockquote,th,td,form,pre{margin: 0; padding: 0; -webkit-tap-highlight-color:rgba(0,0,0,0);box-sizing: border-box;}
 input,button,textarea,select,optgroup,option,a:active,a:hover{outline:0}
 img{display: inline-block; border: none; vertical-align: middle;}
@@ -21,12 +12,7 @@ li{list-style:none;}
 table{border-collapse: collapse; border-spacing: 0;}
 body{font: 14px Helvetica Neue,Helvetica,PingFang SC,\5FAE\8F6F\96C5\9ED1,Tahoma,Arial,sans-serif;}
 a{text-decoration:none; }
-.icon{font-family: ciyfont;font-style: normal;}
 cite{font-style: normal;}
-::-webkit-scrollbar {width: 8px;height: 8px;}
-::-webkit-scrollbar-track,::-webkit-scrollbar-thumb {border-radius: 999px;border: 1px solid transparent;}
-::-webkit-scrollbar-track {box-shadow: 1px 1px 3px rgba(0,0,0,.2) inset;}
-::-webkit-scrollbar-thumb {background-clip: content-box;box-shadow: 0 0 0 5px rgba(0,0,0,.2) inset;}
 .container{
     padding:15px;
 }
@@ -99,52 +85,53 @@ cite{font-style: normal;}
     .col-lg-11{width:91.66666667%;}
     .col-lg-12{width:100%;}
 }
+
+.showme>.row div{padding:1em 0.5em;}
     </style>
 </head>
 <body>
-  <div class='container'>
-<div class="row show-grid">
-    <div class="col-xs-3 col-md-1">xs1</div>
-    <div class="col-xs-3 col-md-1">xs1</div>
-    <div class="col-xs-3 col-md-1">xs1</div>
-    <div class="col-xs-3 col-md-1">xs1</div>
-    <div class="col-xs-4 col-md-1">xs1</div>
-    <div class="col-xs-4 col-md-1">xs1</div>
-    <div class="col-xs-4 col-md-1">xs1</div>
-    <div class="col-xs-5 col-md-1">xs1</div>
-    <div class="col-xs-3 col-md-1">xs1</div>
-    <div class="col-xs-4 col-md-1">xs1</div>
-    <div class="col-xs-6 col-md-1">xs1</div>
-    <div class="col-xs-6 col-md-1">xs1</div>
-  </div>
-  <div class="row show-grid">
-    <div class="col-xs-8">xs8</div>
-    <div class="col-xs-4">xs4</div>
-  </div>
-  <div class="row show-grid">
-    <div class="col-xs-4">xs4</div>
-    <div class="col-xs-4">xs4</div>
-    <div class="col-xs-4">xs4</div>
-  </div>
-  <div class="row show-grid">
-    <div class="col-xs-6">xs6</div>
-    <div class="col-xs-6">xs6</div>
-  </div>
-  <div class="row show-grid">
-    <div class="col-xs-1">xs1</div>
-    <div class="col-xs-11">
-        <div class="row show-grid">
-          <div class="col-xs-6">Nxs6</div>
-          <div class="col-xs-6">Nxs6</div>
-        </div>
+  <div class='container showme'>
+      响应式:
+    <div class="row">
+      <div class="col-xs-3 col-md-1" style="background:#1E9FFF;">xs3 md1</div>
+      <div class="col-xs-3 col-md-1" style="background:#0ff000;">xs3 md1</div>
+      <div class="col-xs-3 col-md-1" style="background:#00ff00;">xs3 md1</div>
+      <div class="col-xs-3 col-md-1" style="background:#000ff0;">xs3 md1</div>
+      <div class="col-xs-4 col-md-1" style="background:#0000ff;">xs4 md1</div>
+      <div class="col-xs-4 col-md-1" style="background:#f0000f;">xs4 md1</div>
+      <div class="col-xs-4 col-md-1" style="background:#fff000;">xs4 md1</div>
+      <div class="col-xs-5 col-md-1" style="background:#0fff00;">xs5 md1</div>
+      <div class="col-xs-3 col-md-1" style="background:#00fff0;">xs3 md1</div>
+      <div class="col-xs-4 col-md-1" style="background:#000fff;">xs4 md1</div>
+      <div class="col-xs-6 col-md-1" style="background:#f000ff;">xs6 md1</div>
+      <div class="col-xs-6 col-md-1" style="background:#ff000f;">xs6 md1</div>
+    </div>
+      66%，33%:
+    <div class="row">
+      <div class="col-xs-8" style="background:#1E9FFF;">xs8</div>
+      <div class="col-xs-4" style="background:#0ff000;">xs4</div>
+    </div>
+      33%，33%，33%:
+    <div class="row">
+      <div class="col-xs-4" style="background:#1E9FFF;">xs4</div>
+      <div class="col-xs-4" style="background:#0ff000;">xs4</div>
+      <div class="col-xs-4" style="background:#00ff00;">xs4</div>
+    </div>
+      50%，50%:
+    <div class="row">
+      <div class="col-xs-6" style="background:#1E9FFF;">xs6</div>
+      <div class="col-xs-6" style="background:#0ff000;">xs6</div>
+    </div>
+      嵌套效果:
+    <div class="row">
+      <div class="col-xs-3 col-md-1" style="background:#1E9Fff;">xs3 md1</div>
+      <div class="col-xs-9 col-md-11" style="background:#0ff000;">
+            xs9 md11
+          <div class="row">
+            <div class="col-xs-6" style="background:#f000ff;">Nxs6</div>
+            <div class="col-xs-6" style="background:#ff000f;">Nxs6</div>
+          </div>
+      </div>
     </div>
   </div>
-  </div>
-    <div style='height:50em;'>a</div>
-<script src="../jscss/jquery-1.12.4.js"></script>
-<script type="text/javascript">
-    'use strict';
-    $(function(){
-    });
-</script>
 </body></html>

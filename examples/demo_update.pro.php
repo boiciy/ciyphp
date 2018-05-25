@@ -5,10 +5,10 @@ $rsuser = verify();
 //    dieshowhtmlalert('您还未登陆');
 ciy_runJSON();
 $id = (int)get('id');
-$btnname = '更新';
+$btnname = '　更新　';
 $updaterow = $mydata->getone('d_test', 'id=' . $id);
 if($updaterow == null || $updaterow === false)
-    $btnname = '新增';
+    $btnname = '　新增　';
 
 function json_update() {
     global $mydata;

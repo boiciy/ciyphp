@@ -1,0 +1,136 @@
+<!DOCTYPE html> <html>
+<head>
+<title>Items</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+<link href="jscss/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <div class="container">
+      <blockquote>引用laydate.js，更多设置，请访问<a href="http://www.layui.com/laydate" target="_blank">http://www.layui.com/laydate</a></blockquote>
+          <div class="form-group">
+              <label>只选择日期</label>
+              <div style="width:7em;">
+              <input type="text" name="odate" value="2018-05-27">
+              </div>
+          </div>
+          <div class="form-group">
+              <label>日期区间</label>
+              <div style="width:13em;">
+              <input type="text" name="rdate" value="2018-05-27 ~ 2018-05-30">
+              </div>
+          </div>
+          <div class="form-group">
+              <label>月区间</label>
+              <div style="width:10em;">
+              <input type="text" name="rmonth" value="2018-05 ~ 2018-08">
+              </div>
+          </div>
+          <div class="form-group">
+              <label>年区间</label>
+              <div style="width:8em;">
+              <input type="text" name="ryear" value="2016 ~ 2018">
+              </div>
+          </div>
+          <div class="form-group">
+              <label>时间+日期</label>
+              <div style="width:11em;">
+              <input type="text" name="otime" value="2018-05-27 05:30:08">
+              </div>
+          </div>
+          <div class="form-group">
+              <label>时间日期区间</label>
+              <div style="width:21em;">
+              <input type="text" name="rtime" value="2018-05-27 05:30:08 ~ 2018-05-30 01:30:45">
+              </div>
+          </div>
+          <div class="form-group">
+              <label>时间区间</label>
+              <div style="width:11em;">
+              <input type="text" name="rclock" value="05:30:08 ~ 14:30:45">
+              </div>
+          </div>
+          <div class="form-group">
+              <label>自定义日历</label>
+              <div style="width:7em;">
+              <input type="text" name="rldate" value="2018-05-27">
+              </div>
+          </div>
+          <div class="form-group">
+              <label>日期事件</label>
+              <div style="width:13em;">
+              <input type="text" name="dateevent" value="">
+              </div>
+          </div>
+        <div id="dateevent_tip" style="height:8em;"></div>
+  </div>
+<script src="jscss/jquery-1.12.4.js"></script>
+<script src="jscss/ciy.js"></script>
+<script src="jscss/laydate.js"></script>
+<script type="text/javascript">
+'use strict';
+$(function(){
+    laydate.render({
+      elem: document.getElementsByName('odate')[0]
+      ,type: 'date'
+    });
+    laydate.render({
+      elem: document.getElementsByName('rdate')[0]
+      ,type: 'date'
+      ,range: '~'
+    });
+    laydate.render({
+      elem: document.getElementsByName('rmonth')[0]
+      ,type: 'month'
+      ,range: '~'
+    });
+    laydate.render({
+      elem: document.getElementsByName('ryear')[0]
+      ,type: 'year'
+      ,range: '~'
+    });
+    laydate.render({
+      elem: document.getElementsByName('otime')[0]
+      ,type: 'datetime'
+    });
+    laydate.render({
+      elem: document.getElementsByName('rtime')[0]
+      ,type: 'datetime'
+      ,range: '~'
+    });
+    laydate.render({
+      elem: document.getElementsByName('rclock')[0]
+      ,type: 'time'
+      ,range: '~'
+    });
+    
+    laydate.render({
+        elem: document.getElementsByName('rldate')[0]
+        ,type: 'date'
+        ,mark: {
+          '0-10-10': '生日'
+          ,'0-0-15': '工资'
+        }
+        ,calendar: true
+    });
+    
+    var ins1 = laydate.render({
+        elem: document.getElementsByName('dateevent')[0]
+        ,type: 'date'
+        ,range: '~'
+        ,ready: function(date){
+            document.getElementById("dateevent_tip").innerHTML = '触发ready<br/>date对象：' + JSON.stringify(date);
+        }
+        ,change: function(value, date){
+            ins1.hint(value);
+            document.getElementById("dateevent_tip").innerHTML = '触发change<br/>选择的日期：' + value + '<br/>date对象：' + JSON.stringify(date);
+        }
+        ,done: function(value, date){
+            document.getElementById("dateevent_tip").innerHTML = '触发done<br/>选择的日期：' + value + '<br/>date对象：' + JSON.stringify(date);
+        }
+    });
+    
+});
+</script>
+</body></html>

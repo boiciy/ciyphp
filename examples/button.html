@@ -1,0 +1,134 @@
+<!DOCTYPE html> <html>
+<head>
+<title>Items</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+<link href="jscss/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <div class="container">
+      
+<blockquote>普通按钮</blockquote>
+<button class='btn'>按钮</button>
+<a class='btn'>按钮</a>
+<br/><br/>
+
+<blockquote>禁用按钮</blockquote>
+<button class='btn' disabled>禁用</button>
+<br/><br/>
+
+      
+<blockquote>各种尺寸按钮</blockquote>
+<button class='btn btn-lg'>大按钮</button>
+<a class='btn btn-lg'>大按钮</a>
+<button class='btn'>按钮</button>
+<a class='btn'>按钮</a>
+<button class='btn btn-sm'>小按钮</button>
+<a class='btn btn-sm'>小按钮</a>
+<button class='btn btn-xs'>微按钮</button>
+<a class='btn btn-xs'>微按钮</a>
+<br/><br/>
+
+<blockquote>自定样式按钮</blockquote>
+<button class='btn btn-default'>按钮</button><br/>
+<button class='btn' style='background: #359802;color:#ffffff;'>按钮</button>
+<button class='btn' style='background: #980202;color:#ffffff;'>按钮</button>
+<button class='btn' style='background: #810298;color:#ffffff;'>按钮</button>
+<button class='btn' style='background: #efff00;color:#000000;'>按钮</button>
+<br/><br/>
+
+<blockquote>图标+文字按钮</blockquote>
+<button class='btn'><i>&#xe6b9</i>按钮</button>
+<br/><br/>
+
+<blockquote>只带图标按钮</blockquote>
+<button class='btn'><i>&#xe6b9</i></button>
+<br/><br/>
+
+<blockquote>左右连体按钮</blockquote>
+<div class="btn-group">
+  <button type="button" class="btn">Left</button>
+  <button type="button" class="btn">Middle</button>
+  <button type="button" class="btn">Right</button>
+</div>
+<br/><br/>
+
+<blockquote>上下连体按钮</blockquote>
+<div class="btn-group-vertical">
+  <button type="button" class="btn">Left</button>
+  <button type="button" class="btn">Middle</button>
+  <button type="button" class="btn">Right</button>
+</div>
+<br/><br/>
+
+<blockquote>JS控制下拉菜单按钮</blockquote>
+<a class='btn btn-menu btn-menu-caret'>
+    按钮
+    <ul class="ciy-popmenu" style="top:2em;">
+        <li onclick="javascript:alert('ccktt')">aaa</li>
+        <li>aaa</li>
+        <li>aaa</li>
+        <li>aaa</li>
+        <li>aaa</li>
+    </ul>
+</a>
+<br/><br/>
+
+<blockquote>连体+上拉菜单按钮</blockquote>
+<div class="btn-group">
+  <button type="button" class="btn">Left</button>
+  <button type="button" class="btn">Middle</button>
+  <a class='btn btn-menu'>
+      <ul class="ciy-popmenu" style="bottom:2em;">
+          <li onclick="javascript:alert('ccktt')">aaa</li>
+          <li>aaa</li>
+          <li>aaa</li>
+          <li>aaa</li>
+          <li>aaa</li>
+      </ul>
+      <span class="caret"></span>
+  </a>
+</div>
+<br/><br/>
+
+<blockquote>CSS控制下拉菜单按钮</blockquote>
+<label class='btn'>
+    按钮
+    <input type="checkbox" />
+    <ul class="ciy-popmenu" style="top:2em;">
+        <li onclick="javascript:alert('ccktt')">aaa</li>
+        <li>aaa</li>
+        <li>aaa</li>
+    </ul>
+    <span class="caret"></span>
+</label>
+<br/><br/>
+
+
+<blockquote>CSS控制上拉菜单按钮</blockquote>
+<label class='btn'>
+    按钮
+    <input type="checkbox" />
+    <ul class="ciy-popmenu" style="bottom:2em;">
+        <li onclick="javascript:alert('ccktt')">aaa</li>
+        <li>aaa</li>
+        <li>aaa</li>
+        <li>aaa</li>
+        <li>aaa</li>
+    </ul>
+    <span class="caret"></span>
+</label>
+<br/><br/>
+
+
+  </div>
+<script src="jscss/jquery-1.12.4.js"></script>
+<script src="jscss/ciy.js"></script>
+<script type="text/javascript">
+'use strict';
+$(function(){
+    ciy_menu(".ciy-nav>li,.btn-menu");
+});
+</script>
+</body></html>

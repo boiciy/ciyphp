@@ -1,0 +1,449 @@
+<!DOCTYPE html> <html>
+<head>
+<title>Form</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+<style type="text/css">
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,input,button,textarea,p,blockquote,th,td,form,pre{margin: 0; padding: 0; -webkit-tap-highlight-color:rgba(0,0,0,0);box-sizing: border-box;}
+input,button,textarea,select,optgroup,option,a:active,a:hover{outline:0}
+img{display: inline-block; border: none; vertical-align: middle;}
+li{list-style:none;}
+table{border-collapse: collapse; border-spacing: 0;}
+body{font: 14px Helvetica Neue,Helvetica,PingFang SC,\5FAE\8F6F\96C5\9ED1,Tahoma,Arial,sans-serif;}
+a{text-decoration:none; }
+.icon{font-family: ciyfont;font-style: normal;}
+cite{font-style: normal;}
+@keyframes ciy-scale {
+  0% {opacity: 0.5; transform: scale(.5);}
+  80% {opacity: 0.8; transform: scale(1.1);}
+  100% {opacity: 1; transform: scale(1);}
+}
+
+.container{
+    padding:15px;
+    line-height:2em;
+}
+.btn {
+    position: relative;
+    background: #1E9FFF;
+    color:#ffffff;
+    display: inline-block;
+    padding: 0.5em;
+    font-size:1em;
+    line-height:1em;
+    margin:1px;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 4px;
+    transition: all .2s;-webkit-transition: all .2s;
+}
+.btn-default {
+    background: #ffffff;
+    color:#333333;
+    border: 1px solid rgba(0,0,0,0.15);
+}
+.btn:hover {
+    box-shadow: 0 0 2px #ffffff inset;
+}
+.btn:active {
+    box-shadow: 0 0 5px rgba(0,0,0,0.2) inset;
+}
+.btn>i {
+    font-family: ciyfont;font-style: normal;
+    margin:0 0.3em;
+}
+.btn-menu{
+    position: relative;
+}
+.btn-menu-caret:after,.caret {
+    content:"";
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin: 0 4px;
+    vertical-align: middle;
+    border-top: 4px solid #000000;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    transition: all .3s; -webkit-transition: all .3s;
+}
+.caret-white {
+    border-top-color: #ffffff;
+}
+.btn>input {
+    display: none;
+}
+.btn>input:checked+ul,.btn.show>ul {
+    display: block;
+}
+.btn>input:checked+ul+.caret,.btn.show>.caret {
+    transform:rotate(180deg);
+}
+
+.btn-group-vertical{
+    position: relative;
+    display:inline-block;
+    vertical-align: middle;
+}
+.btn-group-vertical>.btn{
+    margin:-1px 1px;
+    display:block;
+    border-radius: 0;
+    width: 100%;
+}
+.btn-group-vertical>.btn:first-child{
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+.btn-group-vertical>.btn:last-child{
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.btn-group>.btn{
+    float:left;
+    margin:1px -1px;
+    border-radius: 0;
+}
+.btn-group>.btn:first-child{
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+.btn-group>.btn:last-child{
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.btn-group:after,.btn-group-vertical:after{
+    display: table;
+    content: " ";
+    clear:both;
+}
+
+.btn-lg {
+    font-size:1.3em;
+}
+.btn-sm {
+    font-size:0.8em;
+}
+.btn-xs {
+    font-size:0.8em;
+    padding: 0.3em 0.5em;
+}
+textarea[disabled],select[disabled],input[disabled],input[disabled]+i, .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
+    cursor: not-allowed!important;
+    opacity: .65!important;
+}
+
+.form-group.form-group-inline{
+    display:inline-block!important;
+    float:left!important;
+    width:auto!important;
+}
+.form-group.form-group-inline>div{
+    width:auto;
+}
+.form-group{
+    margin-bottom: 15px;
+    margin-left:-15px;
+    display:block;
+}
+.form-group>div{
+    width:calc(100% - 7em);
+    margin-left: 7em;
+    padding:0.3em 0.5em;
+}
+.form-group>label{
+    width:6em;
+    float:left;
+    display: inline-block;
+    text-align:right;
+    padding:0.3em 0.5em;
+}
+.form-group.form-group-short>div{
+    width:calc(100% - 4em);
+    margin-left: 4em;
+}
+.form-group.form-group-short>label{
+    width:3em;
+}
+.form-group.form-group-long>div{
+    width:calc(100% - 10em);
+    margin-left: 10em;
+}
+.form-group.form-group-long>label{
+    width:9em;
+}
+.form-group>div>label{
+    white-space: nowrap;
+    display: inline-block;
+}
+.form-group:before,.form-group:after{
+    display: table;
+    content: " ";
+    clear:both;
+}
+
+form:after {
+    display: table;
+    content: " ";
+    clear:both;
+}
+select {
+    appearance:none;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+    padding-right:1.8em;
+    background: url(data:image/png;base64,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) no-repeat scroll right center transparent;
+}
+textarea {
+    padding:0.5em;
+    line-height:1.6em;
+    min-height:5em;
+}
+select::-ms-expand { display: none; }
+select,textarea,input[type=text],input[type=email],input[type=url],input[type=number],input[type=range],input[type=search],input[type=color],input[type=date],input[type=datetime],input[type=time]{
+    display: inline-block;
+    width: 100%;
+    height: 2.5em;
+    padding-left:0.5em;
+    color: #555555;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    transition: box-shadow .5s;-webkit-transition: box-shadow .5s;
+}
+textarea:focus,select:focus,input[type=text]:focus{
+    border: 1px solid rgba(82,168,236,.8);
+    -webkit-box-shadow: 0 0 8px rgba(82,168,236,.6);
+    box-shadow: 0 0 8px rgba(82,168,236,.6);
+}
+input[type=checkbox],input[type=radio]{
+    zoom:1.5;
+    vertical-align: middle;
+}
+.formi{
+    position: relative;
+}
+.formi>input{
+    display:none;
+}
+.formi>input+i{
+    display: inline-block;
+    margin:0 0.5em;
+    cursor: pointer;
+    width: 0.8em;
+    height: 0.8em;
+    border-radius: 100%;
+    background: #f6f6f6;
+    border:0.2em solid #f6f6f6;
+    box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.3), 0 0 1px rgba(255, 255, 255, 0.4) inset;
+    transition: all .5s;-webkit-transition: all .5s;
+}
+.formi>input[type=checkbox]+i{
+    border-radius: 4px;
+}
+.formi>input:checked+i{
+    background: #1e9fff;
+    border:0.2em solid #ffffff;
+    -webkit-animation: ciy-scale 0.5s;-ms-animation: ciy-scale 0.5s; animation-name: ciy-scale 0.5s;
+}
+
+
+.formswitch{
+    position: relative;
+    display: inline-block;
+}
+.formswitch>input{
+    display:none;
+}
+.formswitch>input+y,.formswitch>input+y+n{
+    display: none;
+    min-width:4em;
+    height: 1.8em;
+    line-height:1.8em;
+    padding-left:1em;
+    border-radius: 1em;
+    background: #f6f6f6;
+    border:0.2em solid #f6f6f6;
+    box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.3), 0 0 1px rgba(255, 255, 255, 0.4) inset;
+    transition: all .5s;-webkit-transition: all .5s;
+}
+.formswitch>input+y{
+    display:none;
+}
+.formswitch>input+y+n{
+    text-indent: 1.2em;
+    display:inline-block;
+}
+.formswitch>input:checked+y{
+    display:inline-block;
+}
+.formswitch>input:checked+y+n{
+    display:none;
+}
+.formswitch>input+y+n+i{
+    content: ' ';
+    cursor: pointer;
+    position: absolute;
+    margin-left:0;
+    left:0.4em;
+    top:0.2em;
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 100%;
+    background: #f6f6f6;
+    border:0.2em solid #ffffff;
+    box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.3), 0 0 1px rgba(255, 255, 255, 0.4) inset;
+    transition: all .5s;-webkit-transition: all .5s;
+}
+.formswitch>input:checked+y+n+i{
+    margin-left:3em;
+    background: #1E9FFF;
+}
+.form-input-group{
+    height:3em;
+}
+.form-input-group>div{
+    display:inline-block;
+    float:left;
+    height:100%;
+    border:1px solid #cccccc;
+    background-color: #eeeeee;
+    padding:0 0.5em;
+    line-height:2.2em;
+    overflow: hidden;
+}
+.form-input-group>input{
+    display:inline-block;
+    border-radius:0;
+    height:100%;
+    float:left;
+    width:auto;
+}
+input.form-success{
+    border: 1px solid #3c763d;
+    background:#eaffeb;
+}
+input.form-error{
+    border: 1px solid #b11310;
+    background:#fff7ea;
+}
+input.form-warning{
+    border: 1px solid #c57f05;
+    background:#feffde;
+}
+
+    </style>
+</head>
+<body>
+  <div class="container">
+      <form>
+          <div class="form-group">
+              <label>复选框</label>
+              <div>
+                  <label class="formi"><input type="checkbox"/><i></i>爱迪生</label>
+                  <label class="formi"><input type="checkbox" checked="checked"/><i></i>特斯拉</label>
+                  <label class="formi"><input type="checkbox" disabled/><i></i>收银台</label>
+                  <label><input type="checkbox"/>天鹅绒</label>
+                  <label><input type="checkbox"/>结构化南飞雁</label>
+              </div>
+          </div>
+          <div class="form-group">
+              <label>单选框</label>
+              <div>
+                  <label class="formi"><input type="radio" name="xxx"/><i></i>爱迪生</label>
+                  <label class="formi"><input type="radio" name="xxx"/><i></i>天鹅绒</label>
+                  <label><input type="radio" name="xxx"/>特斯拉</label>
+                  <label><input type="radio" name="xxx"/>结构化南飞雁</label>
+              </div>
+          </div>
+          <div class="form-group">
+              <label>短文本框</label>
+              <div style="width:200px;">
+              <input type="text" placeholder="http://"/>
+              </div>
+          </div>
+          <div class="form-group">
+              <label>文本框</label>
+              <div>
+              <input type="text" placeholder="ciy.cn">
+              </div>
+          </div>
+          <div class="form-group">
+              <label>&nbsp;</label>
+              <div>
+                  <input type="text" style="width:200px;"> 无标题
+              </div>
+          </div>
+          <div class="form-group">
+              <label>禁用</label>
+              <div>
+                  <input type="text" disabled placeholder="@ciy.cn" style="width:200px;">
+              </div>
+          </div>
+          <div class="form-group">
+              <label>下拉列表框</label>
+              <div style="width:100px;">
+                  <select>
+                      <option value="3">上海</option>
+                      <option value="3" disabled>杭州</option>
+                      <option value="3">武汉</option>
+                  </select>
+              </div>
+          </div>
+          <div class="form-group">
+              <label>开关按钮</label>
+              <div class="form-group-inline">
+                  <label class="formswitch"><input type="checkbox" name="xxx"/><y>ON</y><n>OFF</n><i></i></label>
+                  <label class="formswitch"><input type="checkbox" name="xxx" checked='true'/><y>开</y><n>关</n><i></i></label>
+                  <label class="formswitch"><input type="checkbox" name="xxx"/><y>启用</y><n>禁用</n><i></i></label>
+              </div>
+          </div>
+          <div class="form-group">
+              <label>连体文本框</label>
+              <div class="form-group-inline form-input-group"><div>￥</div><input type="text" style='width:50px;'/><div>元</div></div>
+          </div>
+          <div class="form-group">
+              <label>区间框</label>
+              <div><input type="text" style='width:100px;'> - <input type="text" style='width:100px;'></div>
+          </div>
+          <div class="form-group">
+              <label>多行文本框</label>
+              <div>
+                  <textarea style="height:5em;"></textarea>
+              </div>
+          </div>
+          <div class="form-group form-group-inline">
+              <label>success框</label>
+              <div>
+              <input type="text" class="form-success">
+              </div>
+          </div>
+          <div class="form-group form-group-inline">
+              <label>warning框</label>
+              <div>
+              <input type="text" class="form-warning">
+              </div>
+          </div>
+          <div class="form-group form-group-inline">
+              <label>error框</label>
+              <div>
+              <input type="text" class="form-error">
+              </div>
+          </div>
+          <div class="form-group">
+            <label> </label>
+              <div>
+                <button type="submit" class="btn">Send Button</button>
+              </div>
+          </div>
+      </form>
+  </div>
+</body></html>

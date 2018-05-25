@@ -4,11 +4,11 @@ $GLOBALS['cachedir'] = PATH_ROOT.'cache/';//实现application功能。用来保�
 
 $GLOBALS['db_1']['type'] = 'mysql';//mysql-tab 多主多从读写分离+分库模式；mysql-ms 单库多主多从读写分离模式。详见data.php注释
 $GLOBALS['db_1']['charset'] = 'utf8';
-$GLOBALS['db_1']['name'] = 'ddgame';
+$GLOBALS['db_1']['name'] = 'ciyphp';
 $GLOBALS['db_1']['port'] = 3306;
-$GLOBALS['db_1']['host'] = 'localhost';//填写web URL地址，则为json方式访问远程数据库。远程服务器增加dbjson.php即可。localhost
-$GLOBALS['db_1']['user'] = 'root';
-$GLOBALS['db_1']['pass'] = 'sdtss5A4';
+$GLOBALS['db_1']['host'] = '127.0.0.1';//填写web URL地址，则为json方式访问远程数据库。远程服务器增加dbjson.php即可。localhost
+$GLOBALS['db_1']['user'] = 'ciyphp';
+$GLOBALS['db_1']['pass'] = 'CiyPHP';
 
 //$GLOBALS['db_2']...   第二个数据库服务器集群
 
@@ -18,5 +18,5 @@ $GLOBALS['db_1']['pass'] = 'sdtss5A4';
 //如果您发现xx.local本地域名访问时很慢(延迟3-4秒)，请使用xx.local.ciy.cn作为本地域名，*.local.ciy.cn已经永久的指向到了127.0.0.1
 if(stripos($_SERVER['HTTP_HOST'],'local') !== false)
 {
-    $GLOBALS['db_1']['pass'] = 'wkxroot';
+    $GLOBALS['db_1']['pass'] = 'CiyPHP';
 }

@@ -30,15 +30,11 @@ function csv_cc()//Excel CSV数据导出函数，ciy_runCSV()调用。
     return $ret;
 }
 
-function json_setact() {//Ajax交互函数，ciy_runJSON()调用。
+function json_del() {//Ajax交互函数，ciy_runJSON()调用。
     global $mydata;
-    $act = post('act');
-    if($act === 'del')
-    {
-        $execute = $mydata->delete('d_test', 'id in (' . post('ids') . ')', 'backup');
-        if ($execute === null)
-            return errjson('操作失败:'.$mydata->error);
-    }
+    $execute = $mydata->delete('d_test', 'id in (' . post('id') . ')', 'backup');
+    if ($execute === null)
+        return errjson('操作失败:'.$mydata->error);
     $ret = array();
     $ret['result'] = true;
     return $ret;
