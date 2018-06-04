@@ -42,7 +42,7 @@ class ciy_data {
     function connect($master) {
         if($this->linkmaster === false)
         {
-            $cfg = (new ciy_config())->getdb($this->dbindex);
+            $cfg = ciy_config::getdb($this->dbindex);
             if(stripos($cfg['host'],'http') === 0)
             {
                 
