@@ -28,12 +28,12 @@
 */
 class ciy_data {
     public $linkmaster;//写服务器驱动层类实例。
-    public $config;//指定数据库集群，参数在config.php中配置，可配置多个数据库服务器集群。
+    public $dbindex;//指定数据库集群，参数在config.php中配置，可配置多个数据库服务器集群。
     public $error;
 
-    function __construct($config = 'db_1') {
+    function __construct($dbindex = 1) {
         $this->linkmaster = false;
-        $this->config = $config;
+        $this->dbindex = $dbindex;
         $this->error = '';
     }
 /**
@@ -42,17 +42,19 @@ class ciy_data {
     function connect($master) {
         if($this->linkmaster === false)
         {
-            if(stripos($GLOBALS[$this->config]['host'],'http') === 0)
+            $cfg = (new ciy_config())->getdb($this->dbindex);
+            if(stripos($cfg['host'],'http') === 0)
             {
+                
                 require_once 'dbajax.php';
                 $this->linkmaster = new ciy_dbajax();
-                $this->linkmaster->connect($GLOBALS[$this->config]['host'],$GLOBALS[$this->config]['user'], $GLOBALS[$this->config]['pass']);
+                $this->linkmaster->connect($cfg['host'],$cfg['user'], $cfg['pass']);
             }
             else
             {
                 require_once 'mysql.php';
                 $this->linkmaster = new ciy_mysql();
-                $this->linkmaster->connect($GLOBALS[$this->config]['type'],$GLOBALS[$this->config]['host'], $GLOBALS[$this->config]['user'], $GLOBALS[$this->config]['pass'], $GLOBALS[$this->config]['name'], $GLOBALS[$this->config]['port'],$GLOBALS[$this->config]['charset']);
+                $this->linkmaster->connect($cfg['type'],$cfg['host'], $cfg['user'], $cfg['pass'], $cfg['name'], $cfg['port'],$cfg['charset']);
             }
         }
         return $this->linkmaster;

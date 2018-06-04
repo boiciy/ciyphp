@@ -14,6 +14,9 @@ table{border-collapse: collapse; border-spacing: 0;}
 body{font: 14px Helvetica Neue,Helvetica,PingFang SC,\5FAE\8F6F\96C5\9ED1,Tahoma,Arial,sans-serif;}
 a{text-decoration:none; }
 .icon{font-family: ciyfont;font-style: normal;}
+
+.clearfix:after{height:0;display:block;visibility:hidden;content:"";clear:both;}
+.clearfix{display:block;}
 cite{font-style: normal;}
 @media (min-width:992px) {/*电脑*/
     ::-webkit-scrollbar {width: 10px;height: 10px;}
@@ -644,7 +647,7 @@ textarea[disabled],select[disabled],input[disabled],input[disabled]+i, .btn.disa
     overflow-y:hidden;
     border-left:1px solid #cccccc;
 }
-th{
+.table th{
     position: relative;
     background:#f0f0f0;
     padding:0.5em 1em;
@@ -655,23 +658,23 @@ th{
     text-shadow: 0 0 3px #ffffff;
     white-space: nowrap;
 }
-tr{
+.table tr{
     transition: all 1s;-webkit-transition: all 1s;
 }
-td{
+.table td{
     border-bottom: 1px solid #cccccc;
     border-right:  1px solid #cccccc;
 }
-td>div{
+.table td>div{
     padding:0.5em;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-tr:nth-child(odd){
+.table tr:nth-child(odd){
     background:#fafafa;
 }
-tr:hover{
+.table tr:hover{
     background:#daedf4;
 }
 .table th>i{

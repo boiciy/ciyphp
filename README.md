@@ -39,20 +39,19 @@
 ### config.php 配置文件。
 配置一个或多个数据库服务器连接参数，配置加密因子。
 ```php
-$GLOBALS['commonkey'] = 'zid4Akto8';//做数据加解密时的加密因子，请自行更改。
-$GLOBALS['cachedir'] = PATH_ROOT.'cache/';//实现application功能。用来保存临时数据。
-$GLOBALS['db_1']['type'] = 'mysql';//mysql-tab 多主多从读写分离+分库模式；mysql-ms 单库多主多从读写分离模式。
-$GLOBALS['db_1']['charset'] = 'utf8';
-$GLOBALS['db_1']['name'] = 'dbname';
-$GLOBALS['db_1']['port'] = 3306;
-$GLOBALS['db_1']['host'] = '127.0.0.1';//填写web URL地址，则为json方式访问远程serverdata.php。
-$GLOBALS['db_1']['user'] = 'root';
-$GLOBALS['db_1']['pass'] = 'password';
-//$GLOBALS['db_2']...   第二个数据库服务器集群
+$conmmonkey = 'zid4Akto8';//做数据加解密时的加密因子，请自行更改。
+$cfg['type'] = 'mysql';//mysql-tab 多主多从读写分离+分库模式；mysql-ms 单库多主多从读写分离模式。
+$cfg['charset'] = 'utf8';
+$cfg['name'] = 'dbname';
+$cfg['port'] = 3306;
+$cfg['host'] = '127.0.0.1';//填写web URL地址，则为json方式访问远程serverdata.php。
+$cfg['user'] = 'root';
+$cfg['pass'] = 'password';
+//可定义多个数据库服务器
 
 if(stripos($_SERVER['HTTP_HOST'],'local') !== false)//本地调试时的差异配置。
 {
-    $GLOBALS['db_1']['pass'] = 'wkxroot';
+    $cfg['pass'] = '';
 }
 ```
 

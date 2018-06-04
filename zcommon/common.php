@@ -485,14 +485,14 @@ function img2thumb($src_img, $dst_img, $width = 75, $height = 75, $cut = false,$
  * 与Application不同，保存数据永久有效。
  */
 function getapplication($name, $defvalue='') {
-    if (!is_file($GLOBALS['cachedir'] . $name . '.alt'))
+    if (!is_file(PATH_ROOT.'cache/' . $name . '.alt'))
         return $defvalue;
-    return file_get_contents($GLOBALS['cachedir'] . $name . '.alt');
+    return file_get_contents(PATH_ROOT.'cache/' . $name . '.alt');
 }
 function setapplication($name, $value) {
-    if (!is_dir($GLOBALS['cachedir']))
-        mkdir($GLOBALS['cachedir'], 0777);
-    $fp = fopen($GLOBALS['cachedir'] . $name . '.alt', 'w');
+    if (!is_dir(PATH_ROOT.'cache/'))
+        mkdir(PATH_ROOT.'cache/', 0777);
+    $fp = fopen(PATH_ROOT.'cache/' . $name . '.alt', 'w');
     fwrite($fp, $value);
     fclose($fp);
 }
