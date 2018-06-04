@@ -502,7 +502,7 @@ function setapplication($name, $value) {
  */
 function savelogfile($types,$msg,$isrequest=false,$path='log/')
 {
-    $filename = $GLOBALS['cachedir'].$path.$types.'.log';
+    $filename = PATH_ROOT.'cache/'.$path.$types.'.log';
     if (makedir(dirname($filename))) {
         if ($fp = fopen($filename, 'a')) {
             if($isrequest)
