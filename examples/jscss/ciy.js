@@ -1,12 +1,30 @@
 'use strict';
 var dodrag = null;
+function uperr(err){
+    console.error(err);
+    var postparam = {};
+    postparam.app = 'admin';
+    postparam.err = err.message;
+    postparam.stack = err.stack;
+    callfunc("uperr",postparam,function(){},{murl:'ajax.php',error:function(){}});
+}
 function callfunc(funcname, post, successfunc,opt)//opt  error,complete,headers,timeout
 {
     opt = opt || {};
     opt.murl = opt.murl || "";
     opt.success = function(data,xhr){
+        try{
         var json = JSON.parse(data);
-        if(json.result)
+        }catch(err){uperr(err);}
+        if(json === undefined)
+        {
+            ciy_loadclose('fail');
+            if(typeof opt.error === 'function')
+                opt.error(data,xhr);
+            else
+                ciy_alert(data);
+        }
+        else if(json.result)
         {
             ciy_loadclose('succ');
             successfunc(json,xhr);
@@ -155,7 +173,24 @@ function ciy_getform(dom)
     }
     return retdata;
 }
-function ciy_layout(){
+function ciy_urlparam(url){
+    var obj = {};
+    url = url||document.location.search;
+    if(url[0] != '?')
+        return obj;
+    var pairs = url.substring(1).split('&');
+    for(var p in pairs)
+    {
+        var ind = pairs[p].indexOf('=');
+        if(ind > -1)
+            obj[decodeURIComponent(pairs[p].substring(0,ind))] = decodeURIComponent(pairs[p].substring(ind + 1));
+        else
+            obj[pairs[p]] = '';
+    }
+    return obj; 
+}
+function ciy_layout(act){
+    var lmenuact = act;
     $('#id_headertabs_ul').on("click","i",function(ev){
         var domtab = $(this).parents('li');
         if(domtab.hasClass("active"))
@@ -190,11 +225,14 @@ function ciy_layout(){
         else
         {
             //关闭上次打开菜单
-            if($(this).parents('ul').length == 1)
+            if(lmenuact != 'close')
             {
-                $('.ciy-menu-nav ._ulshow').removeClass("_ulshow").slideUp(400);
-                $('.ciy-menu-nav .show').removeClass("show");
-                $(this).children('ul').addClass("_ulshow");
+                if($(this).parents('ul').length == 1)
+                {
+                    $('.ciy-menu-nav ._ulshow').removeClass("_ulshow").slideUp(400);
+                    $('.ciy-menu-nav .show').removeClass("show");
+                    $(this).children('ul').addClass("_ulshow");
+                }
             }
             //关闭上次打开菜单 end
             $(this).children('ul').slideDown(400);
@@ -503,6 +541,62 @@ function ciy_retable(dom){
             }
         }
     });
+}
+function ciy_select_init(dom)
+{
+    $(dom).on("click",'tr[data-id]',function(ev){
+        console.log(ev);
+        $(ev.currentTarget).toggleClass('selected');
+    });
+}
+function ciy_select_all(dom)
+{
+    $('tr[data-id]',dom).each(function () {
+        $(this).addClass("selected");
+    });
+}
+function ciy_select_diff(dom)
+{
+    $('tr[data-id]',dom).each(function () {
+        $(this).toggleClass("selected");
+    });
+}
+function ciy_select_act(dom,act,confirmmsg,postparam,successfunc)
+{
+    if(typeof(postparam) != 'object')
+        postparam = {};
+    postparam.act = act;
+    var array = new Array();
+    $('tr[data-id]',dom).each(function () {
+        if ($(this).hasClass("selected"))
+            array.push($(this).attr("data-id"));
+    })
+    postparam.ids = array.join(",");
+    if(postparam.ids == "")
+        return ciy_toast("请至少选择一条信息");
+    if(confirmmsg !== undefined)
+    {
+        ciy_alert(confirmmsg,["继续","取消"],function(btn){
+            if(btn == "继续")
+            {
+                callfunc("setact",postparam,function(json){
+                    if(typeof(successfunc) === "function")
+                        successfunc();
+                    else
+                        location.reload();
+                });
+            }
+        });
+    }
+    else
+    {
+        callfunc("setact",postparam,function(json){
+            if(typeof(successfunc) === "function")
+                successfunc();
+            else
+                location.reload();
+        });
+    }
 }
 function ciy_alert(content, btns, cb, option){
     if(window.parent != window)
