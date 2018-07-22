@@ -578,7 +578,7 @@ function pr($var) {
         echo 'int:' . $var;
     else if (is_string($var))
     {
-        if(empty($var))
+        if(strlen($var) == 0)
             echo 'str:---空----';
         else
             echo 'str:' . $var;

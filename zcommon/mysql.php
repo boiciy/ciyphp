@@ -69,7 +69,6 @@ class ciy_mysql {
             $this->sql.=' where '.$where;
         if(!empty($order))
             $this->sql.=' order by '.$order;
-        $this->sql.=' limit 0,1';
         $rs = $this->link->query($this->sql);
         if($rs === false)
             return $this->errmysql(false, $this->link->error . '[' . __class__ . ':' . __FUNCTION__ . ']');
