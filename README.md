@@ -39,19 +39,34 @@
 ### config.php 配置文件。
 配置一个或多个数据库服务器连接参数，配置加密因子。
 ```php
-$conmmonkey = 'zid4Akto8';//做数据加解密时的加密因子，请自行更改。
-$cfg['type'] = 'mysql';//mysql-tab 多主多从读写分离+分库模式；mysql-ms 单库多主多从读写分离模式。
-$cfg['charset'] = 'utf8';
-$cfg['name'] = 'dbname';
-$cfg['port'] = 3306;
-$cfg['host'] = '127.0.0.1';//填写web URL地址，则为json方式访问远程serverdata.php。
-$cfg['user'] = 'root';
-$cfg['pass'] = 'password';
-//可定义多个数据库服务器
-
-if(stripos($_SERVER['HTTP_HOST'],'local') !== false)//本地调试时的差异配置。
-{
-    $cfg['pass'] = '';
+class ciy_config {
+    public static $conmmonkey = 'zid4Akto8';//做数据加解密时的加密因子，每个项目都不要相同。
+    public static function getdb($index = 1)
+    {
+        //一般的，本地调试连接本地数据库，数据库密码一般会不同，您可以单独配置，便于本地调试。
+        //如果您只有一个Web项目，可以访问localhost，多个web项目，建议使用 xx.local的本地域名，统一使用80端口调试。(配置C:\Windows\System32\drivers\etc\hosts)
+        //如果您发现xx.local本地域名访问时很慢(延迟3-4秒)，请使用xx.local.ciy.cn作为本地域名，*.local.ciy.cn已经永久的指向到了127.0.0.1
+        $ret = array();
+        if($index == 1)
+        {
+            $ret['type'] = 'mysql';//mysql-tab 多主多从读写分离+分库模式；mysql-ms 单库多主多从读写分离模式。详见data.php注释
+            $ret['charset'] = 'utf8';
+            $ret['name'] = 'ciyphp';
+            $ret['port'] = 3306;
+            $ret['host'] = '127.0.0.1';//填写web URL地址，则为json方式访问远程数据库。远程服务器增加dbjson.php即可。localhost
+            $ret['user'] = 'ciyphp';
+            $ret['pass'] = 'CiyPHP';
+            if(stripos($_SERVER['HTTP_HOST'],'local') !== false)
+            {
+                $ret['pass'] = 'CiyPHP';
+            }
+        }
+        else if($index == 2)
+        {
+            //$ret['type']...   第二个数据库服务器集群
+        }
+        return $ret;
+    }
 }
 ```
 
@@ -76,7 +91,7 @@ require PATH_PROGRAM . 'appcommon.php';
 //demo.php
 <?php
 require 'init.php';
-require PATH_PROGRAM . '/' . NAME_SELF . '.pro.php';
+require PATH_PROGRAM . NAME_SELF . '.pro.php';
 ?><!DOCTYPE html>
 <html>
 ...
@@ -108,10 +123,10 @@ web根目录下拷贝zcommon目录，更改config.php配置文件。即可完成
 文件名命名习惯：  
 ```php
 *.php  /  *.pro.php  成对出现。*.php引用*.pro.php，前端Ajax调用。都在*.pro.php中完成。*.pro.php直接访问无效。  
-*.html /  *.php  　  成对出现。*.html通过Ajax初始化及数据请求。  
+*.html /  *.pro.php  　  成对出现。*.html通过Ajax初始化及数据请求。  
 ```
 
-后端变量取名，建议getone函数使用$xx`row`，get函数使用$xx`rows`。  
+后端变量取名，建议getone函数使用$xx`row`表示一条数据，get函数使用$xx`rows`表示多条数据。  
 ```php
 $xxrow = getone();//返回单条数据
 $xxrows = get();//返回多条数据
