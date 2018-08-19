@@ -1,6 +1,6 @@
 <?php
 require 'init.php';
-require PATH_PROGRAM . '/' . NAME_SELF . '.pro.php';
+require PATH_PROGRAM . NAME_SELF . '.pro.php';
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -34,9 +34,9 @@ else{
             <tr>
                 <th>ID</th>
                 <th>头像</th>
-                <th>姓名</th>
-                <th>分数</th>
-                <th>日期</th>
+                <th>姓名<?php echo showorder('truename');?></th>
+                <th>分数<?php echo showorder('scores');?></th>
+                <th>日期<?php echo showorder('addtimes');?></th>
                 <th>IP</th>
                 <th>操作</th>
             </tr>
@@ -45,7 +45,7 @@ foreach($rows as $row)
 {
     $id = (int)$row['id'];
 ?>
-    <tr>
+    <tr data-id="<?php echo $id;?>">
         <td><div><?php echo enid($id);?></div></td>
         <td><div><img src="<?php echo $row['icon'];?>" style="max-height:3em;"/></div></td>
         <td><div><?php echo $row['truename'];?></div></td>
@@ -61,7 +61,13 @@ foreach($rows as $row)
           </table>
           <style type="text/css"></style>
       </div>
-      <?php echo '第'.$pageno.'页/共'.$pagecount.'页 '.$mainrowcount.'条'; ?>
+    <div class="ciy_tabbtn">
+        <a class="btn btn-default" onclick="ciy_select_all('.table')">全选</a>
+        <a class="btn btn-default" onclick="ciy_select_diff('.table')">反选</a>
+        |
+        <a class="btn btn-default" onclick="ciy_select_act('.table','read')">分数+1</a>
+    </div>
+      <?php echo showpage($pageno,$pagecount,$mainrowcount);?>
 </div>
 <script src="jscss/jquery-1.12.4.min.js" type="text/javascript"></script>
 <script src="jscss/ciy.js" type="text/javascript"></script>
@@ -69,6 +75,7 @@ foreach($rows as $row)
 'use strict';
 $(function(){
     ciy_retable('.table');
+    ciy_select_init('.table');
 });
 function edit(id)
 {

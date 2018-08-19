@@ -9,8 +9,9 @@ $where = '';
 $val = get('truename');
 if(!empty($val))
     $where .= ' and truename like \'%'.$val.'%\'';
+$order = get('order','id desc');
 (strpos($where,' and ') === 0) && $where = substr($where,5);
-$rows = $mydata->get($pageno,$pagecount, $table, $where,'id desc');
+$rows = $mydata->get($pageno,$pagecount, $table, $where,$order);
 $mainrowcount = (int)$mydata->getonescalar($table, $where);
 function csv_cc()//Excel CSV数据导出函数，ciy_runCSV()调用。
 {
@@ -38,4 +39,15 @@ function json_del() {//Ajax交互函数，ciy_runJSON()调用。
     $ret = array();
     $ret['result'] = true;
     return $ret;
+}
+function json_setact() {
+    global $mydata;
+    $act = post('act');
+    if($act === 'read')
+    {
+        $execute = $mydata->execute('update d_test set scores=scores+1 where id in ('.post('ids').')');
+        if ($execute === false)
+            return errjson('操作失败:'.$mydata->error);
+    }
+    return succjson();
 }

@@ -772,6 +772,8 @@ textarea[disabled],select[disabled],input[disabled],input[disabled]+i, .btn.disa
 .form-group>div>label{
     white-space: nowrap;
     display: inline-block;
+    height: 2.5em;
+    line-height: 2.5em;
 }
 .form-group:before,.form-group:after{
     display: table;
@@ -1207,7 +1209,7 @@ animation: rotation 3s linear infinite;
 .ciy-tab>ul{
     position: relative;
     left: 0;
-    min-height: 3.1em;
+    height: 3.1em;
     white-space: nowrap;
     border-bottom: 1px solid #cccccc;
     width:100%;
@@ -1308,17 +1310,17 @@ fieldset.ciy-fieldset-tips>div>ul>li{
     list-style: decimal;
     margin-top:0.5em;
 }
-.ciy_page {
+.ciy-page {
 height: 1.5em;
 margin:5px;
 float: right;
 }
-.ciy_page_txt {
+.ciy-page-txt {
 color: #969696;
 line-height: 1.5em;
 display:inline-block;
 }
-.ciy_page .current {
+.ciy-page .current {
 color: #FFFFFF;
 font-weight: bold;
 margin-left: 5px;
@@ -1326,17 +1328,17 @@ padding: 6px 10px;
 background-color: #1E9FFF!important;
 cursor: pointer;
 }
-.ciy_page a {
+.ciy-page a {
 border: 1px solid #DDDDDD;
 color: #000000;
 margin-left: 5px;
 padding: 5px 9px;
 text-decoration: none;
 }
-.ciy_page a:hover {
+.ciy-page a:hover {
 background-color: #e1edf7;
 }
-.ciy_tabbtn {
+.ciy-tabbtn {
 height: 1.5em;
 margin:5px;
 float: left;

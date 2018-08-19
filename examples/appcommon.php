@@ -24,7 +24,7 @@ function dieshowhtmlalert($msg) {
 }
 
 function showpage($pageno,$pagecount, $rowcount, $showpages = 5) {
-    $pagestr= '<div class="records">'.$rowcount.'条 '.$pagecount.'条/页</div>';
+    $pagestr= '<div class="ciy-page"><div class="ciy-page-txt">'.$rowcount.'条 '.$pagecount.'条/页</div>';
     $pagemax = ceil($rowcount / $pagecount);
     if ($pageno > $pagemax)
         $pageno = $pagemax;
@@ -32,8 +32,8 @@ function showpage($pageno,$pagecount, $rowcount, $showpages = 5) {
         $pageno = 1;
     if ($pageno > 1)
     {
-        $pagestr.= '<a href="' . urlparam('', array('page' => 1)) . '">&lt;&lt;</a>';
-        $pagestr.= '<a href="' . urlparam('', array('page' => ($pageno - 1))) . '">&lt;</a>';
+        $pagestr.= '<a href="' . urlparam('', array('pageno' => 1)) . '">&lt;&lt;</a>';
+        $pagestr.= '<a href="' . urlparam('', array('pageno' => ($pageno - 1))) . '">&lt;</a>';
     }
     $spage = 1;
     if ($pageno > $showpages)
@@ -43,20 +43,34 @@ function showpage($pageno,$pagecount, $rowcount, $showpages = 5) {
         $epage = $pageno + $showpages;
     for ($i = $spage; $i <= $epage; $i++) {
         if ($i == $pageno)
-            $pagestr.= '<div class="current">' . $i . '</div>';
+            $pagestr.= '<a class="current">' . $i . '</a>';
         else
-            $pagestr.= '<a href="' . urlparam('', array('page' => $i)) . '">' . $i . '</a>';
+            $pagestr.= '<a href="' . urlparam('', array('pageno' => $i)) . '">' . $i . '</a>';
     }
     if ($pageno < $pagemax)
     {
-        $pagestr.= '<a href="' . urlparam('', array('page' => ($pageno + 1))) . '">&gt;</a>';
-        $pagestr.= '<a href="' . urlparam('', array('page' => $pagemax)) . '">&gt;&gt;</a>';
+        $pagestr.= '<a href="' . urlparam('', array('pageno' => ($pageno + 1))) . '">&gt;</a>';
+        $pagestr.= '<a href="' . urlparam('', array('pageno' => $pagemax)) . '">&gt;&gt;</a>';
     }
     if($pagemax > $showpages)
-        $pagestr.= '<input class="n" type="text" name="topage" value="'.$pageno.'" style="width:40px;height:30px;text-align:center;margin:0 4px;"/><span onclick="location.href=\''.urlparam('', array('page' => '[topage]')).'\'.replace(\'[topage]\',$(\'input[name=topage]\').val());" style="width:30px;height:20px;line-height:20px;color:#000000;font-size:12px;border:1px solid #cccccc;text-align:center;margin:0 4px;cursor:pointer;background:#eeeeee;display:inline-block;">GO</span>';
+        $pagestr.= '<input class="n" type="text" name="topage" value="'.$pageno.'" style="width:3em;height:30px;text-align:center;margin:0 4px;"/><button onclick="location.href=\''.urlparam('', array('pageno' => '[topage]')).'\'.replace(\'[topage]\',$(\'input[name=topage]\').val());" class="btn btn-default">GO</button>';
+    $pagestr.= '</div><div class="clearfix"></div>';
     return $pagestr;
 }
-
+function showorder($field)
+{
+    $order = get('order');
+    $asc = '';
+    $desc = '';
+    if(strpos($order,$field) === 0)
+    {
+        if(strpos($order,' desc')>0)
+            $desc = ' active';
+        else
+            $asc = ' active';
+    }
+    return '<i class="asc'.$asc.'" title="从小到大，升序排序" onclick="location.href=\''.urlparam('', array('order' => $field)).'\';"></i><i class="desc'.$desc.'" title="从大到小，降序排序" onclick="location.href=\''.urlparam('', array('order' => $field.' desc')).'\';"></i>';
+}
 /* * *******************************************************************
  * 函数名称:encrypt
  * 函数作用:加密解密字符串

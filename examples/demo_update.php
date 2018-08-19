@@ -1,4 +1,4 @@
-<?php require 'init.php'; require PATH_PROGRAM.'/'.NAME_SELF.'.pro.php'; ?><!DOCTYPE html> <html>
+<?php require 'init.php'; require PATH_PROGRAM.NAME_SELF.'.pro.php'; ?><!DOCTYPE html> <html>
 <head>
 <title>数据提交</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
