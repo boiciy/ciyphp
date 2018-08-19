@@ -145,7 +145,10 @@ class ciy_mysql {
             $set = '';
             foreach ($updata as $key => $val) {
                 if ($key == 'id')
+                {
+                    $id = (int)$val;
                     continue;
+                }
                 if (!empty($set))
                     $set.=',';
                 if(is_array($val))
@@ -162,7 +165,7 @@ class ciy_mysql {
             if ($execute === false)
                 return $this->errmysql(false, $this->link->error . '[' . __class__ . ':' . __FUNCTION__ . ']');
             if($id == 0)
-                $id = (int)$this->getonescalar($table, $where,'id','');
+                $id = $execute;
             return $id;
         }
     }
