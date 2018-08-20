@@ -549,7 +549,6 @@ function ciy_retable(dom){
 function ciy_select_init(dom)
 {
     $(dom).on("click",'tr[data-id]',function(ev){
-        console.log(ev);
         $(ev.currentTarget).toggleClass('selected');
     });
 }
