@@ -77,6 +77,8 @@ $(document).ready(function(){
 });
 function formsubmit(dom)
 {
+                ciy_ifrclose();
+                return;
     var postparam = ciy_getform(dom);
     console.log(postparam);
     if (postparam.truename === "") {

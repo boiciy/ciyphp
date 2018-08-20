@@ -323,6 +323,8 @@ function ciy_ifrclose(domtab)
             if (frames[i].contentWindow == window)
             {
                 window.parent.ciy_ifrclose(frames[i].getAttribute('data-tit'));
+                if(typeof(frames[i].closecb) == 'function')
+                    frames[i].closecb();
                 return;
             }
         }
@@ -347,10 +349,10 @@ function ciy_ifrclose(domtab)
     },100);
     domtab.remove();
 }
-function ciy_ifropen(url,txt,ableclose){
+function ciy_ifropen(url,txt,ableclose,closecb){
     if(window.parent != window)
     {
-        window.parent.ciy_ifropen(url,txt,ableclose);
+        window.parent.ciy_ifropen(url,txt,ableclose,closecb);
         return;
     }
     var elifms = document.getElementById("id_ifms");
@@ -371,6 +373,8 @@ function ciy_ifropen(url,txt,ableclose){
         //滚动到最后
         var div = document.getElementById('id_headertabs');
         div.scrollLeft = div.clientWidth+$(div).width();
+        var domifm = $("#id_ifms>iframe[data-tit='"+txt+"']");
+        domifm[0].closecb = closecb;
     }
     else
     {//激活

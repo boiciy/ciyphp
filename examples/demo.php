@@ -19,7 +19,7 @@ require PATH_PROGRAM . NAME_SELF . '.pro.php';
         </div>
         <div class="form-group form-group-inline form-group-btn">
             <button class="btn" type="submit">查询</button>
-            <a class="btn" onclick="ciy_ifropen('demo_update.php','新增数据')">新增</a>
+            <a class="btn" onclick="ciy_ifropen('demo_update.php','新增数据',false,function(){location.reload();})">新增</a>
             <a href="<?php echo urlparam('', array('csv' => 'true','func' => 'cc','prefix' => '导出'));?>" class="btn" target="_blank">导出到Excel</a>
         </div>
     </form>
