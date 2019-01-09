@@ -22,7 +22,7 @@ function json_update() {
     $updatainsert['addtimes'] = getnow();
     $updatainsert['ip'] = getip();
     $execute = $mydata->set($updata, 'd_test', 'id=' . $id,'auto',$updatainsert);
-    if ($execute === null)
+    if ($execute === false)
         return errjson('操作数据库失败.' . $mydata->error);
     return succjson();
 }

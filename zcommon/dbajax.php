@@ -19,7 +19,7 @@ class ciy_dbajax {
         return true;
     }
     function getone($table, $where,$order='',$column='*') {
-        $json = file_get_contents($this->url . '&func=getone&table='.urlencode($table).'&where='.urlencode($where).'&column='.urlencode($column).'&order='.urlencode($order));
+        $json = file_get_contents($this->url . '&func=sqlgetone&table='.urlencode($table).'&where='.urlencode($where).'&column='.urlencode($column).'&order='.urlencode($order));
         $json = json_decode($json,true);
         if(@$json['result'] != 'true')
             return $this->errmsg(null, @$json['msg']);

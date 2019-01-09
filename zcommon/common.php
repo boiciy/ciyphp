@@ -134,7 +134,10 @@ function urlparam($baseurl, $keyarray) {
     $arr = $keyarray + $_GET;
     $url = $baseurl.'?';
     foreach ($arr as $key => $value)
-        $url .= $key . '=' . $value . '&';
+    {
+        if(!empty($value))
+            $url .= $key . '=' . $value . '&';
+    }
     $url = substr($url, 0, -1);
     return $url;
 }

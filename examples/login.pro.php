@@ -7,7 +7,7 @@ function json_login() {
     $userrow = $mydata->getone('d_user', 'user=\'' . post('user') . '\'');//仅为代码，请自行建表
     if (!is_array($userrow))
         return errjson('用户名不存在');
-    if ($userrow['pass'] != md5(post('password').'3ASDtkw'))
+    if ($userrow['pass'] != md5(post('password').ciy_config::$conmmonkey))
         return errjson('用户名或密码错误.');
     $id = $userrow['id'];
     $sid = uniqid();

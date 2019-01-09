@@ -133,7 +133,10 @@ function encrypt($string, $operation, $key = '') {
 * ******************************************************************* */
 function enid($id)
 {
-    $strid = $id.'';
+    if($id<10)
+        $strid = '0'.$id;
+    else
+        $strid = $id.'';
     $id = (int)$id;
     if($id == 0)
         return 0;

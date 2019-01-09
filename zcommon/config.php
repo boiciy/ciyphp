@@ -14,7 +14,7 @@ class ciy_config {
             $ret['charset'] = 'utf8';
             $ret['name'] = 'ciyphp';
             $ret['port'] = 3306;
-            $ret['host'] = '127.0.0.1';//填写web URL地址，则为json方式访问远程数据库。远程服务器增加dbjson.php即可。localhost
+            $ret['host'] = '127.0.0.1';//填写web URL地址，则为json方式访问远程数据库。远程服务器增加serverdata.php即可。localhost
             $ret['user'] = 'ciyphp';
             $ret['pass'] = 'CiyPHP';
             if(stripos($_SERVER['HTTP_HOST'],'local') !== false)

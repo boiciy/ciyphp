@@ -15,7 +15,10 @@ function callfunc(funcname, post, successfunc,opt)//opt  error,complete,headers,
     opt.success = function(data,xhr){
         try{
         var json = JSON.parse(data);
-        }catch(err){uperr(err);}
+        }catch(err){
+            if(funcname!='uperr')
+                uperr(err);
+        }
         if(json === undefined)
         {
             ciy_loadclose('fail');
@@ -124,7 +127,10 @@ function ciy_getform(dom)
         if(els[i].tagName == 'SELECT')
         {
             retdata[els[i].name] = els[i].value;
-            retdata[els[i].name+"_name"] = els[i].options[els[i].options.selectedIndex].text;
+            if(els[i].options.selectedIndex == -1)
+                retdata[els[i].name+"_name"] = '';
+            else
+                retdata[els[i].name+"_name"] = els[i].options[els[i].options.selectedIndex].text;
         }
         else if(els[i].getAttribute('type') == 'radio')
         {
@@ -241,10 +247,15 @@ function ciy_layout(act){
         var href = $(this).children('a').attr('data-href');
         if(href !== undefined)
         {
-            if($(this).children('a').children('cite').length==1)
-                ciy_ifropen(href,$(this).children('a').children('cite').text());
-            else
-                ciy_ifropen(href,$(this).children('a').text());
+            var txt = $(this).children('a').attr('data-title');
+            if(txt === undefined)
+            {
+                if($(this).children('a').children('cite').length==1)
+                    txt = $(this).children('a').children('cite').text();
+                else
+                    txt = $(this).children('a').text();
+            }
+            ciy_ifropen(href,txt);
             $('.ciy-menu-nav li').removeClass("active");
             $(this).addClass("active");
             if(window.innerWidth < 992)
@@ -369,7 +380,7 @@ function ciy_ifropen(url,txt,ableclose,closecb){
             ableclose = '';
         else
             ableclose = '<i><svg t="1527035202927" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1146" xmlns:xlink="http://www.w3.org/1999/xlink"><defs></defs><path d="M512 0C229.216 0 0 229.216 0 512s229.216 512 512 512 512-229.216 512-512S794.784 0 512 0zM723.2 642.752c22.112 22.112 22.112 58.336 0 80.448s-58.336 22.112-80.448 0L512 592.448 381.248 723.2c-22.112 22.112-58.336 22.112-80.448 0s-22.112-58.336 0-80.448L431.552 512 300.8 381.248c-22.112-22.112-22.112-58.336 0-80.448s58.336-22.112 80.448 0L512 431.552 642.752 300.8c22.112-22.112 58.336-22.112 80.448 0s22.112 58.336 0 80.448L592.448 512 723.2 642.752z" p-id="1147"></path></svg></i>';
-        $(eltabs).append("<li class='active' data-tit='"+txt+"'><a>"+txt+"</a>"+ableclose+"</li>");
+        $(eltabs).append("<li class='active' data-tit='"+txt+"' title='"+url+"'><a>"+txt+"</a>"+ableclose+"</li>");
         //滚动到最后
         var div = document.getElementById('id_headertabs');
         div.scrollLeft = div.clientWidth+$(div).width();
@@ -385,6 +396,8 @@ function ciy_ifropen(url,txt,ableclose,closecb){
         $("#id_ifms>iframe").removeClass('active');
         $(eltab).addClass('active');
         $(elifm).addClass('active');
+        if(url != '')
+            elifm.src = url;
         //自动滚动到能看到选中
         var div = document.getElementById('id_headertabs');
         var vsta = $(eltab).offset().left+div.scrollLeft-$(div).offset().left;
@@ -425,7 +438,7 @@ function ciy_refresh(){
     }
     var domifm = $("#id_ifms>iframe.active");
     if(domifm.length == 1)
-        domifm.attr('src', domifm.attr('src'));
+        domifm[0].contentWindow.location.reload();//domifm.attr('src', domifm.attr('src'));
 }
 function ciy_fix(){
     if (navigator.userAgent.match(/iPad|iPhone/i))
@@ -436,12 +449,13 @@ function ciy_repre(){
     for (var i = 0; i < els.length; i++)
         els[i].innerHTML = els[i].innerHTML.replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
 }
-function ciy_retable(dom){
+function ciy_retable(dom,pathname){
     if('ontouchend' in window)
         return;
+    pathname = pathname||location.pathname;
     var style = $(dom+'>style')[0];
     if(style !== undefined)
-        style.innerText=localStorage.getItem(location.pathname+'_table');
+        style.innerText=localStorage.getItem(pathname+'_table');
     if($('table',dom).css('width') < $(dom).css('width'))
         $(dom).css('border-right','');
     else
@@ -503,7 +517,7 @@ function ciy_retable(dom){
             var csstxt = '';
             for (var i = 0; i < rules.length; i++)
                 csstxt+=rules[i].cssText;
-            localStorage.setItem(location.pathname+'_table', csstxt);
+            localStorage.setItem(pathname+'_table', csstxt);
         }
     });
     $(dom).on("mousemove",function(ev){
@@ -611,7 +625,7 @@ function ciy_alert(content, btns, cb, option){
     if(typeof(option.forms) == 'object')
     {
         if(option.formclass == undefined)
-            option.formclass = "form-group-short";
+            option.formclass = "form-group-short4";
         for(var i in option.forms)
             content+='<div class="form-group '+option.formclass+'"><label>'+i+'</label><div>'+option.forms[i]+'</div></div>';
     }
@@ -868,7 +882,7 @@ function ciy_menu(dom){
         });
     }
 }
-function ciy_tab(){
+function ciy_tab(afterfunc){
     $(".ciy-tab>ul>li").on("click",function(ev){
         var tab = $(this).parents('.ciy-tab');
         $(this).siblings(".active").removeClass('active');
@@ -876,6 +890,8 @@ function ciy_tab(){
         var index = $(this).prevAll().length;
         tab.children('div').children('div').removeClass('active');
         tab.children('div').children('div').eq(index).addClass('active');
+        if(typeof(afterfunc) == 'function')
+            afterfunc(index,this);
     });
     $(".ciy-tab>ul").each(function(){
         var uldom = $(this);

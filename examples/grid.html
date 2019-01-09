@@ -91,6 +91,29 @@ cite{font-style: normal;}
 </head>
 <body>
   <div class='container showme'>
+      <pre>
+&lt;div class="row"&gt;
+    &lt;div class="col-*"&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+col-xs-*             width:?%
+col-xs-offset-*  margin-left:?%
+
+xs  手机
+sm  平板 >768px
+md  电脑 >992px
+lg  大屏幕 >1200px
+
+屏幕越小越隐藏
+.hidden-dn-sm {display: none!important;}/*手机 隐藏*/
+.hidden-dn-md {display: none!important;}/*手机 平板 隐藏*/
+.hidden-dn-lg {display: none!important;}/*手机 平板 电脑 隐藏*/
+屏幕越大越隐藏
+.hidden-up-sm {display: none!important;}/*平板 电脑 大屏幕 隐藏*/
+.hidden-up-md {display: none!important;}/*电脑 大屏幕 隐藏*/
+.hidden-up-lg {display: none!important;}/*大屏幕 隐藏*/
+
+      </pre>
       响应式:
     <div class="row">
       <div class="col-xs-3 col-md-1" style="background:#1E9FFF;">xs3 md1</div>

@@ -34,11 +34,9 @@ function csv_cc()//Excel CSV数据导出函数，ciy_runCSV()调用。
 function json_del() {//Ajax交互函数，ciy_runJSON()调用。
     global $mydata;
     $execute = $mydata->delete('d_test', 'id in (' . post('id') . ')', 'backup');
-    if ($execute === null)
+    if ($execute === false)
         return errjson('操作失败:'.$mydata->error);
-    $ret = array();
-    $ret['result'] = true;
-    return $ret;
+    return succjson();
 }
 function json_setact() {
     global $mydata;

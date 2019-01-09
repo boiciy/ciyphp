@@ -24,13 +24,13 @@ require PATH_PROGRAM . NAME_SELF . '.pro.php';
         </div>
     </form>
     
-      <div class='table'>
-          <table>
 <?php
 if(count($rows) == 0)
-    echo '<tr><td style="border-top: 1px solid #cccccc;text-align:center;"><div>无数据</div></td></tr>';
+    echo '<div class="table-nodata">无数据</div>';
 else{
 ?>
+      <div class='table'>
+          <table>
             <tr>
                 <th>ID</th>
                 <th>头像</th>
@@ -57,7 +57,7 @@ foreach($rows as $row)
                 <a class="btn" onclick="del(<?php echo $id;?>)">删除</a>
         </div></td>
         </tr>
-<?php }} ?>
+<?php } ?>
           </table>
           <style type="text/css"></style>
       </div>
@@ -68,6 +68,7 @@ foreach($rows as $row)
         <a class="btn btn-default" onclick="ciy_select_act('.table','read')">分数+1</a>
     </div>
       <?php echo showpage($pageno,$pagecount,$mainrowcount);?>
+<?php } ?>
 </div>
 <script src="jscss/jquery-1.12.4.min.js" type="text/javascript"></script>
 <script src="jscss/ciy.js" type="text/javascript"></script>
