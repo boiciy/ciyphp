@@ -2,27 +2,30 @@
 /* =================================================================================
  * 版权声明：保留开源作者及版权声明前提下，开源代码可进行修改及用于任何商业用途。
  * 开源作者：众产国际产业公会  http://ciy.cn/code
- * 版本：0.5.2
+ * 版本：0.6.0
 ====================================================================================*/
 /*
  * common.php 常用公共函数库
  * 
  * diegoto                              页面302跳转
- * get/post/request/isset/cookie        获取用户输入数据
+ * get/post/request/cookie              获取用户输入数据
  * ciy_runJSON/succjson/errjson         本页面Ajax请求处理函数及快捷返回函数
  * g_substr/g_strlen                    汉字字符串处理函数
  * urlparam                             Url参数拼接函数
- * getnow/getip                         数据库转换时间和IP的快捷函数
+ * getnow/getip/todate                  数据库转换时间和IP的快捷函数，建议用bigint替代datetime存储
  * getstrparam/setstrparam              比json还简化的多数据保存方式，一般用于单列多项设置的数据库保存。
  * file_down/img2thumb                  文件下载到本地和生成图片缩略图
  * makedir/savefile/savelogfile/delfile 创建多层新文件夹/保存文本文件/本地保存LOG/文件静默删除（影响程序稳定较多的地方，做了一个单独封装）
  * getapplication/setapplication        全局永久保存数据函数。类似ASP的Application对象。
  * pr/var_dump                          PHP调试变量界面打印。
  * ciy_runCSV                           导出到Excel，CSV格式。
+ * ciy_post                             payload json参数处理类
  * 
  * 版本更新：
- * 2018-5-5 开源版本
- * 2014-6-1 初始版本
+ * 0.6.0  2019-01-18 POST接口更新
+ * 0.5.2  2018-09-09 配置接口更新
+ * 0.5.0  2018-05-05 源码开源
+ * 0.1.0  2014-06-01 初始版本
 
  */
 //jsonstr_decode 在smile\datasync.pro.php用过
@@ -142,14 +145,25 @@ function urlparam($baseurl, $keyarray) {
     return $url;
 }
 
+function todate($time,$format = 'i')
+{
+    if($format == 'H')
+        return date('Y-m-d H',$time);
+    if($format == 'd')
+        return date('Y-m-d',$time);
+    if($format == 'm')
+        return date('Y-m',$time);
+    return date('Y-m-d H:i',$time);
+}
 /**
  * 返回mysql数据库所用的标准datetime格式字符串。
  * 用非mysql数据库，请注意修改该函数。
  *   例：getnow() = '2018-01-20 14:54:34'
+ * 重要：mysql存储时间建议使用bigint取代datetime
  */
 function getnow($time = null) {
     if($time === null)
-        $time = time();
+        return date('Y-m-d H:i:s');
     return date('Y-m-d H:i:s', $time);
 }
 /**
@@ -229,7 +243,7 @@ function setstrparam($parr, $split = '|') {
  * 函数返回array数组。
  */
 function ciy_runJSON($isform = false) {
-    if (!isget('json'))
+    if (!isset($_GET['json']))
         return;
     $funcname = 'json_' . get('func');
     if (!function_exists($funcname))
@@ -253,7 +267,7 @@ function ciy_runJSON($isform = false) {
  * 函数返回array数组。第一行包含.csv，则为CSV文件名。
  */
 function ciy_runCSV() {
-    if (!isget('csv'))
+    if (!isset($_GET['csv']))
         return;
     $filename = date('Y-m-d_H-i-s', time()) . '.csv';
     $funcname = 'csv_' . get('func');
@@ -316,7 +330,6 @@ function ciy_runCSV() {
     }
     exit;
 }
-
 function get($name, $defvalue = '') {
     return isset($_GET[$name]) ? $_GET[$name] : $defvalue;
 }
@@ -328,13 +341,8 @@ function cookie($name, $defvalue = '') {
 function post($name, $defvalue = '') {
     return isset($_POST[$name]) ? $_POST[$name] : $defvalue;
 }
-
 function request($name, $defvalue = '') {
     return isset($_REQUEST[$name]) ? $_REQUEST[$name] : $defvalue;
-}
-
-function isget($name) {
-    return isset($_GET[$name]);
 }
 
 /**
@@ -505,7 +513,7 @@ function setapplication($name, $value) {
  */
 function savelogfile($types,$msg,$isrequest=false,$path='log/')
 {
-    $filename = PATH_ROOT.'cache/'.$path.$types.'.log';
+    $filename = PATH_ROOT.$path.$types.'.log';
     if (makedir(dirname($filename))) {
         if ($fp = fopen($filename, 'a')) {
             if($isrequest)
@@ -595,4 +603,65 @@ function pr($var) {
     echo '</pre>'."\n";
     @ob_flush();
     flush();
+}
+/**
+ * payload json参数处理类
+ * $post = new ciy_post();
+ * $post->get('act');
+ * $post->getarray('lists');
+ * $post->getint('lists>id');//语法糖，不大建议使用
+ */
+class ciy_post {
+    public $post;
+    function __construct() {
+        $this->post = json_decode(file_get_contents('php://input'), true);
+        if($this->post === null)
+            $this->post = $_POST;
+    }
+    function getraw($key,$defvalue = null) {
+        if(strpos($key,'>') === false)
+        {
+            if(!isset($this->post[$key]))
+                return $defvalue;
+            return $this->post[$key];
+        }
+        $ks = explode('>', $key);
+        if(!isset($this->post[$ks[0]]))
+            return $defvalue;
+        $data = $this->post[$ks[0]];
+        $i = 0;
+        $cnt = count($ks);
+        while(true)
+        {
+            $i++;
+            if($i >= $cnt)
+                return $data;
+            if(!isset($data[$ks[$i]]))
+                return $defvalue;
+            $data = $data[$ks[$i]];
+        }
+    }
+    function getarray($key) {
+        $data = $this->getraw($key);
+        if(!is_array($data))
+            return array();
+        return $data;
+    }
+    function get($key,$defvalue = '') {
+        $data = $this->getraw($key,$defvalue);
+        //过滤XSS、注入等漏洞字符串
+        return $data;
+    }
+    function getint($key,$defvalue = 0) {
+        return (int)$this->getraw($key,$defvalue);
+    }
+    function getfloat($key,$defvalue = 0) {
+        return (float)$this->getraw($key,$defvalue);
+    }
+    function getbool($key,$defvalue = false) {
+        $data = $this->getraw($key,$defvalue);
+        if($data === 'false')
+            return false;
+        return (bool)$data;
+    }
 }

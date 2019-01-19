@@ -3,25 +3,29 @@ $mydata = new ciy_data();
 $rsuser = verify();
 //if(!$rsuser)
 //    dieshowhtmlalert('您还未登陆');
+$table = 'd_test';
 ciy_runJSON();
 $id = (int)get('id');
-$btnname = '　更新　';
-$updaterow = $mydata->getone('d_test', 'id=' . $id);
+$btnname = '更新';
+$updaterow = $mydata->getone($table, 'id=' . $id);
 if($updaterow == null || $updaterow === false)
-    $btnname = '　新增　';
+    $btnname = '新增';
 
 function json_update() {
     global $mydata;
     global $rsuser;
+    global $table;
+    $post = new ciy_post();
     $updata = array();
     $updatainsert = array();
-    $id = (int) post('id');
-    $updata['truename'] = post('truename');
-    $updata['icon'] = post('icon');
-    $updata['scores'] = post('scores');
-    $updatainsert['addtimes'] = getnow();
+    $id = $post->getint('id');
+    $updata['truename'] = $post->get('truename');
+    $updata['icon'] = $post->get('icon');
+    $updata['scores'] = $post->getint('scores');
+    $updata['activetime'] = time();
+    $updatainsert['addtimes'] = time();
     $updatainsert['ip'] = getip();
-    $execute = $mydata->set($updata, 'd_test', 'id=' . $id,'auto',$updatainsert);
+    $execute = $mydata->set($updata, $table, 'id=' . $id,'auto',$updatainsert);
     if ($execute === false)
         return errjson('操作数据库失败.' . $mydata->error);
     return succjson();

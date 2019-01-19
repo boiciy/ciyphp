@@ -1,11 +1,10 @@
 <!DOCTYPE html> <html>
 <head>
-<title>Ciy Layout</title>
+<title>CiyPHP 后台效果展示</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
-<style id="id_theme" type="text/css"></style>
-<link href="jscss/style.css" rel="stylesheet" type="text/css" />
+<link href="/jscss/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
   <div id="id_body">
@@ -23,8 +22,13 @@
               <svg t="1527057563466" style="width:1.5em;height:1.5em;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="32035" xmlns:xlink="http://www.w3.org/1999/xlink"><defs></defs><path d="M697.210184 182.366507L514.526187 454.13832l107.184772-5.333839c3.873383 109.534201 0.888973 248.912502-173.98476 368.923887-4.444866 3.492395-18.858932 11.683648-13.2711 10.604181 342.064196-73.784777 364.098033-321.490816 361.748603-387.338333l109.407205-5.460835-208.400723-253.166874zM337.430022 833.920381L520.241015 562.212065l-107.311768 5.270341c-3.873383-109.470703-0.634981-248.912502 174.238752-368.796891 4.31787-3.492395 18.731936-11.683648 13.2711-10.60418-341.9372 73.657781-365.748983 321.300322-363.272557 387.147838l-108.137243 5.333839 208.400723 253.357369z m678.350066-325.808686a507.857702 507.857702 0 1 1-1015.52491 0 507.857702 507.857702 0 0 1 1015.52491 0z" p-id="32036"></path></svg>
             </a>
           </li>
+          <li>
+            <a onclick="javascript:ciy_ifropen('index_grid.html','自定义');">
+              自定义按钮
+            </a>
+          </li>
           <li style="float:right">
-            <a><img src="jscss/face.jpg" style="width: 2em;height: 2em;margin-right: 0.5em;border-radius: 50%;"/>众产<span class="caret"></span></a>
+            <a><img src="/jscss/face.png" style="width: 2em;height: 2em;margin-right: 0.5em;border-radius: 50%;"/>众产<span class="caret"></span></a>
             <ul class="ciy-popmenu" style="top:4em;right:0.1em;left:auto;">
               <li><a onclick="ciy_alert('退出');">退出系统</a></li>
             </ul>
@@ -34,7 +38,6 @@
             <ul class="ciy-popmenu" style="top:4em;">
               <li><a onclick="ciy_alert('ccc');">个人中心</a></li>
               <li><a href="javascript:;">财务流水</a></li>
-              <li><a href="javascript:;">退出系统</a></li>
             </ul>
           </li>
         </ul>
@@ -55,6 +58,9 @@
               <span class="ciy-menu-more"></span>
               <ul>
                 <li>
+                  <a data-href="index_demo.html">效果展示</a>
+                </li>
+                <li>
                   <a data-href="welcome.html">控制台</a>
                 </li>
               </ul>
@@ -66,29 +72,32 @@
               </a>
               <span class="ciy-menu-more"></span>
               <ul>
-                <li><a data-href="grid.html">栅格</a></li>
+                <li><a data-href="index_grid.html">栅格</a></li>
                 <li>
                   <a>表格</a>
                   <span class="ciy-menu-more"></span>
                   <ul>
-                    <li><a data-href="table.html">纯CSS表格</a></li>
-                    <li><a data-href="table2.html">可调整列宽表格</a></li>
+                    <li><a data-href="table_css.html">纯CSS表格</a></li>
+                    <li><a data-href="table_adjust.html">可调整列宽表格</a></li>
+                    <li><a data-href="table_edit.html">可编辑表格</a></li>
                   </ul>
                 </li>
                 <li>
                   <a>表单</a>
                   <span class="ciy-menu-more"></span>
                   <ul>
-                    <li><a data-href="form.html">纯CSS美化</a></li>
-                    <li><a data-href="formlayout.html">布局效果</a></li>
-                    <li><a data-href="button.html">按钮</a></li>
-                    <li><a data-href="date.html">日期时间</a></li>
+                    <li><a data-href="form_css.html">纯CSS美化</a></li>
+                    <li><a data-href="form_layout.html">表单布局效果</a></li>
+                    <li><a data-href="form_submit.html">表单提交演示</a></li>
+                    <li><a data-href="form_button.html">按钮</a></li>
+                    <li><a data-href="form_date.html">日期时间</a></li>
                   </ul>
                 </li>
-                <li><a data-href="parts.html">部件</a></li>
-                <li><a data-href="dialog.html">弹框</a></li>
-                <li><a data-href="nav.html">导航</a></li>
-                <li><a data-href="tab.html">选项卡</a></li>
+                <li><a data-href="plug_parts.html">部件</a></li>
+                <li><a data-href="plug_dialog.html">弹框</a></li>
+                <li><a data-href="plug_nav.html">导航</a></li>
+                <li><a data-href="plug_tab.html">选项卡</a></li>
+                <li style="display:none;"><a data-href="plug_js.html">JS功能</a></li>
               </ul>
             </li>
             <li>
@@ -100,20 +109,39 @@
               <ul>
                 <li><a data-href="demo.php">增删改查上传文件</a></li>
                 <li><a data-href="csvdb.php">CSV导入导出</a></li>
-                <li><a data-href="chart.html">Chart图表</a></li>
+                <li><a data-href="index_chart.html">Chart图表</a></li>
                 <li><a href="login.php" target="_blank">注册登录</a></li>
+                <li><a data-href="index_grid.html" data-title="grid标签">自定义标签</a></li>
                 <li><a data-href="http://www.baidu.com/">外部链接</a></li>
                 <li><a href="javascript:alert('JS');">调用JS</a></li>
               </ul>
             </li>
             <li>
+              <a>
+                <i class="icon">&#xe603;</i>
+                <cite>框架分解</cite>
+              </a>
+              <span class="ciy-menu-more"></span>
+              <ul>
+                <li><a href="layout_step1.html" target="_blank">第一步</a></li>
+                <li><a href="layout_step2.html" target="_blank">第二步</a></li>
+                <li><a href="layout_step3.html" target="_blank">第三步</a></li>
+              </ul>
+            </li>
+            <li>
               <a data-href="http://ciy.cn/code">
                 <i class="icon">&#xe603;</i>
-                <cite>关于</cite>
+                <cite>全栈工程师</cite>
+              </a>
+            </li>
+            <li>
+              <a data-href="http://ciy.cn">
+                <i class="icon">&#xe603;</i>
+                <cite>众产国际</cite>
               </a>
             </li>
           </ul>
-          <span class="layui-nav-bar"></span>
+          <span class="ciy-nav-bar"></span>
         </div>
       </div>
       <!-- 页面标签 -->
@@ -146,12 +174,12 @@
     </div>
   </div>
 <div class="ciy-mask"></div>
-<script src="jscss/jquery-1.12.4.js"></script>
-<script src="jscss/ciy.js"></script>
+<script src="/jscss/jquery-1.12.4.min.js"></script>
+<script src="/jscss/ciy.js"></script>
 <script type="text/javascript">
     'use strict';
     $(function(){
-        ciy_ifropen('welcome.html','控制台',true);
+        ciy_ifropen('index_demo.html','效果展示',true);
         ciy_layout();
         ciy_menu(".ciy-nav>li,.btn-menu");
     });

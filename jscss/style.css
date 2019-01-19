@@ -1,5 +1,6 @@
+/*http://www.iconfont.cn/ 生成，实际为空，本框架没有依赖ciyfont*/
 @font-face {
-  font-family: 'ciyfont';  /* http://www.iconfont.cn/ 生成，实际为空，本框架没有依赖ciyfont */
+  font-family: 'ciyfont';
   src: url('font/iconfont.eot');
   src: url('font/iconfont.eot?#iefix') format('embedded-opentype'),
   url('font/iconfont.woff') format('woff'),
@@ -238,7 +239,7 @@ li.show>.ciy-menu-more{
     top: 1em;
     border-color: transparent transparent #fff;
 }
-.layui-nav-bar{
+.ciy-nav-bar{
     position: absolute;
     left: 0;
     top: 0;
@@ -249,7 +250,7 @@ li.show>.ciy-menu-more{
     -webkit-transition: all .2s;
 }
 @media (min-width:992px) {/*电脑*/
-    .ciy-menu-shrink .ciy-side cite,.ciy-menu-shrink .ciy-side .ciy-menu-more,.ciy-menu-shrink .layui-nav-bar{
+    .ciy-menu-shrink .ciy-side cite,.ciy-menu-shrink .ciy-side .ciy-menu-more,.ciy-menu-shrink .ciy-nav-bar{
         display:none;
     }
     .ciy-menu-shrink .ciy-side{
@@ -373,6 +374,9 @@ li.show>.ciy-menu-more{
     padding:15px;
     line-height:2em;
 }
+.crumbs{
+    font-size:0.8em;
+}
 .row{
     margin-bottom: 1em;
 }
@@ -382,27 +386,20 @@ li.show>.ciy-menu-more{
 }
 .row:after, .row:before {
     display: table;
-    content: " ";
+    content: "";
 }
 .row:after {
     clear:both;
 }
 
-
-.bgcolor-primary{color:#428bca;}
-.bgcolor-success{color:#5cb85c;}
-.bgcolor-info{color:#5bc0de;}
-.bgcolor-warning{color:#f0ad4e;}
-.bgcolor-danger{color:#d9534f;}
-
 @media(min-width: 768px) {
-    .hidden-up-sm {display: none!important;}/*平板 电脑 大屏幕 隐藏*/
+    .hidden-up-sm {display: none!important;}/*平板 电脑 巨幕 隐藏*/
 }
 @media(min-width: 992px) {
-    .hidden-up-md {display: none!important;}/*电脑 大屏幕 隐藏*/
+    .hidden-up-md {display: none!important;}/*电脑 巨幕 隐藏*/
 }
 @media(min-width: 1200px) {
-    .hidden-up-lg {display: none!important;}/*大屏幕 隐藏*/
+    .hidden-up-lg {display: none!important;}/*巨幕 隐藏*/
 }
 @media(max-width: 767px) {
     .hidden-dn-sm {display: none!important;}/*手机 隐藏*/
@@ -487,7 +484,7 @@ li.show>.ciy-menu-more{
     .col-md-offset-10{margin-left:83.33333333%;}
     .col-md-offset-11{margin-left:91.66666667%;}
 }
-@media(min-width: 1200px) {/*lg 大屏幕*/
+@media(min-width: 1200px) {/*lg 巨幕(超大屏幕)*/
     .col-lg-1{width: 8.33333333%;}
     .col-lg-2{width:16.66666667%;}
     .col-lg-3{width:25%;}
@@ -517,6 +514,7 @@ code, kbd, pre, samp {
 }
 kbd {
     padding: 2px 4px;
+    margin:0 4px;
     font-size: 0.8em;
     color: #ffffff;
     background-color: #333;
@@ -526,6 +524,7 @@ kbd {
 }
 code {
     padding: 2px 4px;
+    margin:0 4px;
     font-size: 0.8em;
     color: #c7254e;
     background-color: #f9f2f4;
@@ -643,14 +642,14 @@ pre {
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
 }
-.btn-group:after,.btn-group-vertical:after{
+.br:after{
     display: table;
     content: " ";
     clear:both;
 }
 
 .btn-lg {
-    font-size:1.3em;
+    font-size:1.3em;padding-left:1.5em;padding-right:1.5em;
 }
 .btn-sm {
     font-size:0.8em;
@@ -664,6 +663,9 @@ textarea[disabled],select[disabled],input[disabled],input[disabled]+i, .btn.disa
     opacity: .65!important;
 }
 
+
+.ciy-tree-dot{display:inline-block;transition: all .2s;-webkit-transition: all .2s;}
+.ciy-tree-spread .ciy-tree-dot{transform:rotate(90deg);}
 
 .table-nodata{
     width: 100%;
@@ -733,98 +735,33 @@ textarea[disabled],select[disabled],input[disabled],input[disabled]+i, .btn.disa
     background:#fffec5;
 }
 
-.form-group.form-text>div{
-    line-height: 1.8em;
-}
-.form-group.form-text>label{
-    height:1.8em;
-    line-height:1.8em;
-}
-.form-group.form-group-inline{
-    display:inline-block!important;
-    float:left!important;
-    width:auto!important;
-}
-.form-group.form-group-btn{
-    margin-left:0!important;
-    padding:0.3em 0.5em;
-}
-.form-group.form-group-inline>div{
-    width:auto;
-}
 .form-group{
     margin-top: 5px;
     margin-bottom: 5px;
-    /*margin-left:-15px;*/
-    display:block;
+    display:flex;
+    line-height: 2.5em;
 }
 .form-group>div{
-    width:calc(100% - 7.5em);
-    margin-left: 7.5em;
-    padding:0.3em 0.5em;
-    line-height: 2.5em;
+    display:inline-block;
+    flex:12;
+    padding:0 0.3em;
 }
 .form-group>label{
     width:7.5em;
-    float:left;
-    display: inline-block;
     text-align:right;
-    padding:0.3em 0;
-    height:2.5em;
-    line-height:2.5em;
-}
-.form-group.form-group-short1>div{
-    width:calc(100% - 1.5em);
-    margin-left: 1.5em;
-}
-.form-group.form-group-short1>label{
-    width:1.5em;
-}
-.form-group.form-group-short2>div{
-    width:calc(100% - 2.5em);
-    margin-left: 2.5em;
-}
-.form-group.form-group-short2>label{
-    width:2.5em;
-}
-.form-group.form-group-short3>div{
-    width:calc(100% - 3.5em);
-    margin-left: 3.5em;
-}
-.form-group.form-group-short3>label{
-    width:3.5em;
-}
-.form-group.form-group-short4>div{
-    width:calc(100% - 4.5em);
-    margin-left: 4.5em;
-}
-.form-group.form-group-short4>label{
-    width:4.5em;
-}
-.form-group.form-group-short5>div{
-    width:calc(100% - 5.5em);
-    margin-left: 5.5em;
-}
-.form-group.form-group-short5>label{
-    width:5.5em;
-}
-.form-group.form-group-long>div{
-    width:calc(100% - 10em);
-    margin-left: 10em;
-}
-.form-group.form-group-long>label{
-    width:10em;
+    padding:0;
 }
 .form-group>div>label{
     white-space: nowrap;
     display: inline-block;
-    height: 2.5em;
-    line-height: 2.5em;
 }
-.form-group:before,.form-group:after{
-    display: table;
-    content: " ";
-    clear:both;
+.form-group.inline{
+    float:left!important;
+    width:auto!important;
+}
+.form-group.inline>label{
+    width:auto;
+    padding-left:0.8em;
 }
 
 form:after {
@@ -849,7 +786,8 @@ select,textarea,input[type=text],input[type=password],input[type=email],input[ty
     display: inline-block;
     width: 100%;
     height: 2.5em;
-    padding-left:0.5em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
     color: #555555;
     background-color: #ffffff;
     border: 1px solid #cccccc;
@@ -946,38 +884,6 @@ input[type=checkbox],input[type=radio]{
     margin-left:3em;
     background: #1E9FFF;
 }
-.form-input-group{
-    height:3em;
-}
-.form-input-group>div{
-    display:inline-block;
-    float:left;
-    height:100%;
-    border:1px solid #cccccc;
-    background-color: #eeeeee;
-    padding:0 0.5em;
-    line-height:2.2em;
-    overflow: hidden;
-}
-.form-input-group>input{
-    display:inline-block;
-    border-radius:0;
-    height:100%;
-    float:left;
-    width:auto;
-}
-input.success{
-    border: 1px solid #3c763d;
-    background:#eaffeb;
-}
-input.error{
-    border: 1px solid #b11310;
-    background:#fff7ea;
-}
-input.warning{
-    border: 1px solid #c57f05;
-    background:#feffde;
-}
 input.imp{
     border: 1px solid #1f2129;
 }
@@ -996,13 +902,6 @@ input.imp{
   100%{ background-position: 2em 0; }
 }
 
-.Rotation{
--webkit-transform: rotate(360deg);
-animation: rotation 3s linear infinite;
--moz-animation: rotation 3s linear infinite;
--webkit-animation: rotation 3s linear infinite;
--o-animation: rotation 3s linear infinite;
-}
 .progress>div {
     float: left;
     height: 100%;
@@ -1125,16 +1024,10 @@ animation: rotation 3s linear infinite;
 .ciy-loading.fail {background:#ff0000;width:100%;transition: all 0.5s;-webkit-transition:all 0.5s;}
 .ciy-loading.succ {background:#1eca00;width:100%;transition: all 0.5s;-webkit-transition:all 0.5s;}
 
-
-
 .ciy-nav {
     position: relative;
     background-color: #393D49;
     color: #ffffff;
-}
-.ciy-nav.ciy-nav-fill {
-    margin-left:-15px;
-    margin-right:-15px;
 }
 .ciy-nav>li {
     position: relative;
@@ -1334,29 +1227,38 @@ fieldset{
     padding: 0;
     border-top: 1px solid #eeeeee;
 }
-fieldset.ciy-fieldset-box{
-    padding: 0;
-    border: 1px solid #cccccc;
-    border-radius: 0.3em;
-}
 fieldset>legend {
     margin-left: 1em;
     padding: 0 0.3em;
     font-size: 1.5em;
     font-weight: 300;
 }
-fieldset.ciy-fieldset-tips{
+fieldset.box{
+    padding: 0;
+    border: 1px solid #cccccc;
+    border-radius: 0.3em;
+}
+fieldset.tips{
     padding: 0;
     border: 1px solid #cccccc;
     border-radius: 8px;
+    display:inline-block;
+    margin:0 auto;
 }
-fieldset.ciy-fieldset-tips>div{
+fieldset.tips>legend{
+    padding: 0.1em 1em;
+    font-size:1.2em;
+    background:#fffee0;
+    border: 1px solid #ffe296;
+    border-radius: 1em;
+}
+fieldset.tips>div{
     padding:1em 1em 0.5em 2em;
 }
-fieldset.ciy-fieldset-tips>div>ul{
+fieldset.tips>div>ul{
     list-style-type: decimal;
 }
-fieldset.ciy-fieldset-tips>div>ul>li{
+fieldset.tips>div>ul>li{
     list-style: decimal;
     margin-top:0.5em;
 }

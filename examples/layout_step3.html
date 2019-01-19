@@ -1,6 +1,6 @@
 <!DOCTYPE html> <html>
 <head>
-<title>Layout 3</title>
+<title>框架分解 第三步</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
@@ -8,11 +8,11 @@
 <style type="text/css">
 @font-face {
   font-family: 'ciyfont';  /* http://www.iconfont.cn/ 生成 */
-  src: url('font/iconfont.eot');
-  src: url('font/iconfont.eot?#iefix') format('embedded-opentype'),
-  url('font/iconfont.woff') format('woff'),
-  url('font/iconfont.ttf') format('truetype'),
-  url('font/iconfont.svg#ciyfont') format('svg');
+  src: url('/jscss/font/iconfont.eot');
+  src: url('/jscss/font/iconfont.eot?#iefix') format('embedded-opentype'),
+  url('/jscss/font/iconfont.woff') format('woff'),
+  url('/jscss/font/iconfont.ttf') format('truetype'),
+  url('/jscss/font/iconfont.svg#ciyfont') format('svg');
 }
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,input,button,textarea,p,blockquote,th,td,form,pre{margin: 0; padding: 0; -webkit-tap-highlight-color:rgba(0,0,0,0);box-sizing: border-box;}
 input,button,textarea,select,optgroup,option,a:active,a:hover{outline:0}
@@ -213,7 +213,7 @@ li.show>.ciy-menu-more{
     top: 1em;
     border-color: transparent transparent #fff;
 }
-.layui-nav-bar{
+.ciy-nav-bar{
     position: absolute;
     left: 0;
     top: 0;
@@ -224,7 +224,7 @@ li.show>.ciy-menu-more{
     -webkit-transition: all .2s;
 }
 @media (min-width:992px) {/*电脑*/
-    .ciy-menu-shrink .ciy-side cite,.ciy-menu-shrink .ciy-side .ciy-menu-more,.ciy-menu-shrink .layui-nav-bar{
+    .ciy-menu-shrink .ciy-side cite,.ciy-menu-shrink .ciy-side .ciy-menu-more,.ciy-menu-shrink .ciy-nav-bar{
         display:none;
     }
     .ciy-menu-shrink .ciy-side{
@@ -355,7 +355,7 @@ li.show>.ciy-menu-more{
         <div class="ciy-side-scroll">
           <div class="ciy-logo ciy-header-height ciy-menu-width">
             <i class="icon" style='font-size:2em;vertical-align: middle;'>&#xe603;</i>
-            <cite>CiyAdmin</cite>
+            <cite>第三步</cite>
           </div>
           <ul class="ciy-menu-nav ciy-header-topm">
             <li>
@@ -391,13 +391,19 @@ li.show>.ciy-menu-more{
               </ul>
             </li>
             <li>
-              <a data-href="http://ciy.cn">
+              <a href="layout_step1.html">
                 <i class="icon">&#xe603;</i>
-                <cite>关于</cite>
+                <cite>第一步</cite>
+              </a>
+            </li>
+            <li>
+              <a href="layout_step2.html">
+                <i class="icon">&#xe603;</i>
+                <cite>第二步</cite>
               </a>
             </li>
           </ul>
-          <span class="layui-nav-bar"></span>
+          <span class="ciy-nav-bar"></span>
         </div>
       </div>
       <!-- 页面标签 -->
@@ -429,7 +435,7 @@ li.show>.ciy-menu-more{
 <script type="text/javascript">
     'use strict';
     $(function(){
-        ifropen('welcome.html','控制台',true);
+        ifropen('layout_welcome.html','控制台',true);
         $('#id_headertabs_ul').on("click","i",function(ev){
             var domtab = $(this).parents('li');
             if(domtab.hasClass("active"))
@@ -509,7 +515,7 @@ li.show>.ciy-menu-more{
                     top += $(ev.target).parents('li').offset().top;
                 else
                     top += $(ev.target).offset().top;
-                $(".layui-nav-bar").css('top',top);
+                $(".ciy-nav-bar").css('top',top);
             }
         });
     });

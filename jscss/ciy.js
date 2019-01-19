@@ -1,29 +1,57 @@
 'use strict';
-var dodrag = null;
-function uperr(err){
+function uperr(err,msg){
     console.error(err);
     var postparam = {};
-    postparam.app = 'admin';
+    postparam.tit = 'admin';
     postparam.err = err.message;
     postparam.stack = err.stack;
-    callfunc("uperr",postparam,function(){},{murl:'ajax.php',error:function(){}});
+    postparam.msg = msg;
+    ciy_ajax({
+        url:"ajax.php?json=true&func=uperr",
+        data:postparam
+    });
 }
-function callfunc(funcname, post, successfunc,opt)//opt  error,complete,headers,timeout
+function ciy_fastfunc(confirmmsg,func,postparam,succfunc)
+{
+    if(!confirmmsg)
+        return cfunc();
+    ciy_alert(confirmmsg,function(btn){
+        if(btn == "继续")
+            cfunc();
+    },{btns:["继续","取消"]});
+    function cfunc()
+    {
+        callfunc(func,postparam,function(json){
+            if(succfunc == 'reload')
+            {
+                ciy_toast('操作成功',{done:function(){
+                    location.reload();
+                }});
+            }
+            else if(typeof(succfunc) == 'function')
+                succfunc(json);
+            else
+                ciy_toast('操作成功');
+        });
+    }
+}
+function callfunc(funcname, post, successfunc, opt)//opt  fail,complete,headers,timeout
 {
     opt = opt || {};
     opt.murl = opt.murl || "";
+    opt.url = opt.murl + "?json=true&func="+funcname;
+    opt.data = post;
     opt.success = function(data,xhr){
         try{
         var json = JSON.parse(data);
         }catch(err){
-            if(funcname!='uperr')
-                uperr(err);
+            uperr(err,data);
         }
         if(json === undefined)
         {
             ciy_loadclose('fail');
-            if(typeof opt.error === 'function')
-                opt.error(data,xhr);
+            if(typeof opt.fail === 'function')
+                opt.fail(data,xhr);
             else
                 ciy_alert(data);
         }
@@ -35,54 +63,80 @@ function callfunc(funcname, post, successfunc,opt)//opt  error,complete,headers,
         else
         {
             ciy_loadclose('fail');
-            if(typeof opt.error === 'function')
-                opt.error(json.msg,xhr);
+            if(typeof(opt.fail) === 'function')
+                opt.fail(json.msg,xhr);
             else
                 ciy_alert(json.msg);
         }
     }
     ciy_loading();
-    ciy_ajax(opt.murl + "?json=true&func="+funcname, post, opt);
+    ciy_ajax(opt);
 }
-function ciy_ajax(url,post,opt)//IE8 OK
+function ciy_ajax(opt)//IE8 OK
 {
     opt = opt || {};
-    if((typeof(opt)=='string')) opt = {};
-    var request = new XMLHttpRequest();
-    if(!post)
-        request.open('GET',url,true);
-    else
-        request.open('POST',url,true);
-    if(typeof(opt.headers) == 'object')
+    var header = opt.header || {};
+    if(!header['Content-Type'])//header:{'Content-Type':'application/x-www-form-urlencoded'},
+        header['Content-Type'] = 'application/json';
+    var url = opt.url || '';
+    var timeout = opt.timeout || 10000;
+    if(timeout < 1000)
+        timeout = 3000;
+    var method = opt.method || 'POST';
+    method = method.toUpperCase();
+    if(method == 'GET' && typeof(opt.data) == 'object')
     {
-        for (var i in opt.headers ) {
-            if (opt.headers[i] !== undefined )
-                request.setRequestHeader(i, opt.headers[i] + "");
-        }
-    }
-    if(!post)
-        request.send();//GET
-    else
-    {
-        if(post[0] == "{")
-            request.send(post);//直接使用payload方式。
+        var datastr = "";
+        for (var p in opt.data)
+            datastr += "&" + encodeURIComponent(p) + "=" + encodeURIComponent(opt.data[p]);
+        if(url.indexOf('?') == -1)
+            url += '?' + datastr.substr(1);
         else
-        {
-            request.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-            if(typeof(post) != 'object')
-                request.send(post);
-            else
-            {
-                var poststr = "";
-                for (var prefix in post) {
-                    if(poststr != "")
-                        poststr += "&";
-                    poststr += encodeURIComponent(prefix) + "=" + encodeURIComponent(post[prefix]);
-                }
-                request.send(poststr);
-            }
+            url += datastr;
+    }
+    var request = new XMLHttpRequest();
+    request.open(method,url,true);
+    if(typeof(header) == 'object')
+    {
+        for (var i in header) {
+            if (header[i] !== undefined)
+                request.setRequestHeader(i, "" + header[i]);
         }
     }
+    var sendstr = null;
+    if(method == 'POST' || method == 'PUT')
+    {
+        if(typeof(opt.data) == 'object')
+        {
+            if(header['Content-Type'] == 'application/x-www-form-urlencoded')
+            {
+                var sendstr = "";
+                for (var p in opt.data)
+                    sendstr += "&" + encodeURIComponent(p) + "=" + encodeURIComponent(opt.data[p]);
+                sendstr = sendstr.substr(1);
+            }
+            else
+                sendstr = JSON.stringify(opt.data);
+        }
+        else if(opt.data)
+        {
+            if(header['Content-Type'] == 'application/json')
+            {
+                var json = {};
+                var ds = opt.data.split('&');
+                for(var d in ds)
+                {
+                    var ind = ds[d].indexOf('=');
+                    if(ind > 0)
+                        json[ds[d].substr(0,ind)] = ds[d].substr(ind+1);
+                }
+                sendstr = JSON.stringify(json);
+            }
+            else
+                sendstr = "" + opt.data;
+        }
+    }
+    request.send(sendstr);
     request.onreadystatechange = function() {
         if(this.readyState === 4){
             clearTimeout(aborttime);
@@ -90,7 +144,7 @@ function ciy_ajax(url,post,opt)//IE8 OK
                 if(typeof opt.success === 'function')
                     opt.success(this.responseText,this);
             }else{
-                if(typeof opt.error === 'function')
+                if(typeof opt.fail === 'function')
                 {
                     var errtxt = '';
                     if(this.status == 200)
@@ -101,24 +155,24 @@ function ciy_ajax(url,post,opt)//IE8 OK
                         errtxt ="Server No Response.";
                     else
                         errtxt = 'ErrCode:'+this.status+","+this.statusText;
-                    opt.error(errtxt,this);
+                    opt.fail(errtxt,this);
                 }
             }
             if(typeof opt.complete === 'function')
                 opt.complete(this);
         }
     }
-    if(!opt.timeout || opt.timeout<500)opt.timeout=30000;
-    var aborttime = window.setTimeout( function() {request.abort("timeout");}, opt.timeout);
-    request = null;
+    var aborttime = window.setTimeout( function() {request.abort("timeout");}, timeout);
 }
-function ciy_getform(dom)
+function ciy_getform(dom,parentTag)
 {
     while(true)
     {
-        dom = dom.parentNode;
+        if(parentTag && dom.tagName == parentTag)
+            break;
         if(dom.tagName == 'BODY' || dom.tagName == 'FORM' || dom == null)
             break;
+        dom = dom.parentNode;
     }
     var retdata = {};
     var els = dom.querySelectorAll("input,textarea,select");
@@ -280,7 +334,7 @@ function ciy_layout(act){
                 top += $(ev.target).parents('li').offset().top;
             else
                 top += $(ev.target).offset().top;
-            $(".layui-nav-bar").css('top',top);
+            $(".ciy-nav-bar").css('top',top);
         }
     });
 }
@@ -362,10 +416,7 @@ function ciy_ifrclose(domtab)
 }
 function ciy_ifropen(url,txt,ableclose,closecb){
     if(window.parent != window)
-    {
-        window.parent.ciy_ifropen(url,txt,ableclose,closecb);
-        return;
-    }
+        return window.parent.ciy_ifropen(url,txt,ableclose,closecb);
     var elifms = document.getElementById("id_ifms");
     var eltabs = document.getElementById("id_headertabs_ul");
     var elifm = elifms.querySelector("[data-tit='"+txt+"']");
@@ -412,11 +463,6 @@ function ciy_ifropen(url,txt,ableclose,closecb){
         //自动滚动到能看到选中 end
     }
 }
-function ciy_changetheme(color){
-    var d = document.getElementById("id_theme");
-    if(d !== undefined)
-        d.innerText=".ciy-logo{color:"+color+"!important;}";
-}
 function ciy_shrink(){
     $('#id_body').toggleClass("ciy-menu-shrink");
 }
@@ -432,10 +478,7 @@ function ciy_headertabscroll(act){
 }
 function ciy_refresh(){
     if(window.parent != window)
-    {
-        window.parent.ciy_refresh();
-        return;
-    }
+        return window.parent.ciy_refresh();
     var domifm = $("#id_ifms>iframe.active");
     if(domifm.length == 1)
         domifm[0].contentWindow.location.reload();//domifm.attr('src', domifm.attr('src'));
@@ -449,113 +492,234 @@ function ciy_repre(){
     for (var i = 0; i < els.length; i++)
         els[i].innerHTML = els[i].innerHTML.replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
 }
-function ciy_retable(dom,pathname){
-    if('ontouchend' in window)
+
+function ciy_table_adjust(domname,pathname){
+    var dom = document.querySelector(domname);
+    if(dom == null)
         return;
     pathname = pathname||location.pathname;
-    var style = $(dom+'>style')[0];
-    if(style !== undefined)
-        style.innerText=localStorage.getItem(pathname+'_table');
-    if($('table',dom).css('width') < $(dom).css('width'))
-        $(dom).css('border-right','');
-    else
-        $(dom).css('border-right','1px solid #cccccc');
-    //PC端调整列
-    $(dom).on("mousedown",function(ev){
-        if(dodrag != null)
+    pathname = 'table_'+pathname;
+    var style = document.createElement('style');
+    style.type = 'text/css';
+    dom.appendChild(style);
+    var itext = localStorage.getItem(pathname);
+    var trs = dom.querySelectorAll("th");
+    if(itext == null)
+    {
+        itext = '';
+        for(var i=0;i<trs.length;i++)
         {
-            var index = 0;
-            dodrag.last = false;
-            var ths = this.querySelectorAll("th");
-            for (var i = 0; i < ths.length; i++)
-            {
-                if(ths[i] == dodrag)
+            if(trs[i].style.width != '')
+                itext+=domname+" tr > td:nth-child("+(i+1)+") > div { width: "+trs[i].style.width+" }";
+        }
+    }
+    else
+    {
+        var itms = itext.split(',');
+        itext = '';
+        for(var i=0;i<trs.length;i++)
+        {
+            if(itms[i] && itms[i] != '')
+                itext+=domname+" tr > td:nth-child("+(i+1)+") > div { width: "+itms[i]+" }";
+        }
+    }
+    for (var i = 0; i < trs.length; i++)
+      trs[i].style.width = null;
+    style.innerText=itext;
+    if(dom.scrollWidth <= dom.clientWidth)
+        dom.style.borderRight = null;
+    else
+        dom.style.borderRight = '1px solid #cccccc';
+    if('ontouchend' in window)
+    {
+        var longtime = null;
+        dom.addEventListener("touchstart",function(ev){
+            if(ev.target.tagName != 'TH')
+                return;
+            longtime = setTimeout(function(){
+                var index = 0;
+                for (var i = 0; i < trs.length; i++)
                 {
-                    index = i+1;
+                    if(trs[i] == ev.target)
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+                var sheet = style.sheet || style.styleSheet || {};
+                var rules = sheet.cssRules || sheet.rules;
+                var opstyle = null;
+                for (var i = 0; i < rules.length; i++)
+                {
+                    var item = rules[i];
+                    if(item.selectorText !== (domname+" tr > td:nth-child("+(index+1)+") > div"))
+                        continue;
+                    opstyle = item;
+                    break;
+                }
+                if(opstyle == null)
+                {
+                    var i = 0;
+                    if("insertRule" in sheet)
+                        i = sheet.insertRule(domname+" tr > td:nth-child("+(index+1)+") > div{}", 0);
+                    else if("addRule" in sheet)
+                        i = sheet.addRule(domname+" tr > td:nth-child("+(index+1)+") > div", "");
+                    opstyle = rules[i];
+                }
+                if(ev.touches[0].clientX-ev.target.offsetLeft+dom.scrollLeft > (ev.target.clientWidth>>1))
+                    opstyle.style.width = parseInt(ev.target.clientWidth*1.2)+"px";
+                else
+                    opstyle.style.width = parseInt(ev.target.clientWidth*0.8)+"px";
+                
+                var wids = [];
+                for (var i = 0; i < rules.length; i++)
+                {
+                    var tmpstr = rules[i].selectorText.substr(rules[i].selectorText.indexOf('nth-child(')+10);
+                    wids[parseInt(tmpstr.substr(0,tmpstr.indexOf(')')))-1] = rules[i].style.width;
+                }
+                var csstxt = '';
+                for (var i = 0; i < trs.length; i++)
+                {
+                    csstxt += ',';
+                    if(wids[i])
+                        csstxt += wids[i];
+                }
+                localStorage.setItem(pathname, csstxt.substr(1));
+                
+            },1000);
+        });
+        dom.addEventListener("touchmove",function(ev){
+            clearTimeout(longtime);
+        });
+        dom.addEventListener("touchend",function(ev){
+            clearTimeout(longtime);
+        });
+    }
+    else
+    {
+        var dodrag = null;
+        document.addEventListener("mousedown",function(ev){
+            if(dodrag == null)
+                return;
+            var index = 0;
+            for (var i = 0; i < trs.length; i++)
+            {
+                if(trs[i] == dodrag)
+                {
+                    index = i;
                     break;
                 }
             }
-            if(index == 0)
-                alert("出现错误");
-            if(ths.length == index)
-                dodrag.last = true;
-            
-            var style = $(dom+'>style')[0];
             var sheet = style.sheet || style.styleSheet || {};
             var rules = sheet.cssRules || sheet.rules;
-            dodrag.oldstyle = null;
+            dodrag.opstyle = null;
             for (var i = 0; i < rules.length; i++)
             {
                 var item = rules[i];
-                if(item.selectorText !== (dom+" tr > td:nth-child("+index+") > div"))
+                if(item.selectorText !== (domname+" tr > td:nth-child("+(index+1)+") > div"))
                     continue;
-                dodrag.oldstyle = item;
+                dodrag.opstyle = item;
                 break;
             }
-            if(dodrag.oldstyle == null)
+            if(dodrag.opstyle == null)
             {
                 var i = 0;
-                if("insertRule" in sheet) {  
-                    i = sheet.insertRule(dom+" tr > td:nth-child("+index+") > div{width:auto;}", 0);
-                }  
-                else if("addRule" in sheet) {  
-                    i = sheet.addRule(dom+" tr > td:nth-child("+index+") > div", "width:auto;");
-                }
-                dodrag.oldstyle = rules[i];
+                if("insertRule" in sheet)
+                    i = sheet.insertRule(domname+" tr > td:nth-child("+(index+1)+") > div{}", 0);
+                else if("addRule" in sheet)
+                    i = sheet.addRule(domname+" tr > td:nth-child("+(index+1)+") > div", "");
+                dodrag.opstyle = rules[i];
             }
             dodrag.mouseDown = true;
-        }
-    });
-    $(dom).on("mouseup",function(ev){
-        if(dodrag != null)
-        {
-            dodrag.mouseDown = false;
-            dodrag = null;
-            var style = $(dom+'>style')[0];
-            var sheet = style.sheet || style.styleSheet || {};
-            var rules = sheet.cssRules || sheet.rules;
-            var csstxt = '';
-            for (var i = 0; i < rules.length; i++)
-                csstxt+=rules[i].cssText;
-            localStorage.setItem(pathname+'_table', csstxt);
-        }
-    });
-    $(dom).on("mousemove",function(ev){
-        if(ev.target.tagName == 'TH')
-        {
+        });
+        document.addEventListener("mouseup",function(ev){
+            if(dodrag != null)
+            {
+                dodrag.mouseDown = false;
+                dodrag = null;
+                var sheet = style.sheet || style.styleSheet || {};
+                var rules = sheet.cssRules || sheet.rules;
+                var wids = [];
+                for (var i = 0; i < rules.length; i++)
+                {
+                    var tmpstr = rules[i].selectorText.substr(rules[i].selectorText.indexOf('nth-child(')+10);
+                    wids[parseInt(tmpstr.substr(0,tmpstr.indexOf(')')))-1] = rules[i].style.width;
+                }
+                var csstxt = '';
+                for (var i = 0; i < trs.length; i++)
+                {
+                    csstxt += ',';
+                    if(wids[i])
+                        csstxt += wids[i];
+                }
+                localStorage.setItem(pathname, csstxt.substr(1));
+            }
+        });
+        document.addEventListener("mousemove",function(ev){
             if(dodrag != null && dodrag.mouseDown)
             {
                 var e = ev||event;
-                if(dodrag.last)
-                    dodrag.oldstyle.style.width = (e.clientX-dodrag.getBoundingClientRect().left+10) + "px";
+                dodrag.opstyle.style.width = (e.clientX-dodrag.getBoundingClientRect().left) + "px";
+                if(dom.scrollWidth <= dom.clientWidth)
+                    dom.style.borderRight = null;
                 else
-                    dodrag.oldstyle.style.width = (e.clientX-dodrag.getBoundingClientRect().left) + "px";
-                if($('table',dom).css('width') < $(dom).css('width'))
-                    $(dom).css('border-right','');
-                else
-                    $(dom).css('border-right','1px solid #cccccc');
+                    dom.style.borderRight = '1px solid #cccccc';
                 return;
             }
-            if(ev.target.clientWidth-ev.offsetX<5)
+            if(ev.target.tagName == 'TH')
             {
-                dodrag = ev.target;
-                ev.target.style.cursor='col-resize';
+                if(ev.target.clientWidth-ev.offsetX<5)
+                {
+                    dodrag = ev.target;
+                    ev.target.style.cursor='col-resize';
+                }
+                else
+                {
+                    if(dodrag != null)
+                        dodrag.style.cursor=null;
+                    dodrag = null;
+                    if(ev.offsetX<5)
+                    {
+                        dodrag = ev.target.previousElementSibling;
+                        if(dodrag != null)
+                            ev.target.style.cursor='col-resize';
+                    }
+                    else
+                    {
+                        ev.target.style.cursor=null;
+                    }
+                }
+            }
+        });
+    }
+}
+function ciy_table_tree(domname)
+{
+    $(domname).on("click",'div[data-treeid]',function(ev){
+        $(ev.currentTarget).toggleClass('ciy-tree-spread');
+        var id = $(ev.currentTarget).attr('data-treeid');
+        var min=9999,max=0;
+        $('tr[data-upid='+id+']').each(function(e){
+            var index = $(domname+" tr").index(this);
+            if(min>index)
+                min = index;
+            if(max<index)
+                max = index;
+        });
+        var open = false;
+        if($(ev.currentTarget).hasClass('ciy-tree-spread'))
+            open = true;
+        for(var i=min;i<=max;i++)
+        {
+            if(open)
+            {
+                $(domname+" tr").eq(i).show();
+                $(domname+" tr").eq(i).find('[data-treeid]').addClass('ciy-tree-spread');
             }
             else
             {
-                if(dodrag != null)
-                    dodrag.style.cursor='';
-                dodrag = null;
-                if(ev.offsetX<5)
-                {
-                    dodrag = ev.target.previousElementSibling;
-                    if(dodrag != null)
-                        ev.target.style.cursor='col-resize';
-                }
-                else
-                {
-                    ev.target.style.cursor='';
-                }
+                $(domname+" tr").eq(i).hide();
+                $(domname+" tr").eq(i).find('[data-treeid]').removeClass('ciy-tree-spread');
             }
         }
     });
@@ -593,7 +757,7 @@ function ciy_select_act(dom,act,confirmmsg,postparam,successfunc)
         return ciy_toast("请至少选择一条信息");
     if(confirmmsg !== undefined)
     {
-        ciy_alert(confirmmsg,["继续","取消"],function(btn){
+        ciy_alert(confirmmsg,function(btn){
             if(btn == "继续")
             {
                 callfunc("setact",postparam,function(json){
@@ -603,7 +767,7 @@ function ciy_select_act(dom,act,confirmmsg,postparam,successfunc)
                         location.reload();
                 });
             }
-        });
+        },{btns:["继续","取消"]});
     }
     else
     {
@@ -615,25 +779,20 @@ function ciy_select_act(dom,act,confirmmsg,postparam,successfunc)
         });
     }
 }
-function ciy_alert(content, btns, cb, option){
+function ciy_alert(content, cb, option){
     if(window.parent != window)
+        return window.parent.ciy_alert(content, cb, option);
+    if(typeof(content) == 'object')
     {
-        window.parent.ciy_alert(content, btns, cb, option);
-        return;
+        option = content;
+        content = option.content||"";
+        cb = option.cb;
     }
-    if(option === undefined) option = {};
-    if(typeof(option.forms) == 'object')
-    {
-        if(option.formclass == undefined)
-            option.formclass = "form-group-short4";
-        for(var i in option.forms)
-            content+='<div class="form-group '+option.formclass+'"><label>'+i+'</label><div>'+option.forms[i]+'</div></div>';
-    }
+    option = option||{};
     var htmldom = '<div class="ciy-layer ciy-dialog" style="z-index: 2000;">';
     if(option.notitle !== true)
     {
-        if(option.title == undefined || option.title == null || option.title == "")
-            option.title = "提示窗口";
+        option.title = option.title||"温馨提示";
         htmldom += '<div class="title">'+option.title+'</div>';
         htmldom += '<a class="close"><svg t="1526719117410" style="width:1em;height:1em;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><defs><style/></defs><path d="M1024 91.093333L932.906667 0 512 420.906667 91.093333 0 0 91.093333 420.906667 512 0 932.906667 91.093333 1024 512 603.093333 932.906667 1024 1024 932.906667 603.093333 512 1024 91.093333z" fill="" p-id="1147"></path></svg></a>';
     }
@@ -654,21 +813,40 @@ function ciy_alert(content, btns, cb, option){
     }
     if(option.nobutton !== true)
     {
-        if(btns == undefined || btns == null || !$.isArray(btns))
-            btns = ["确定"];
+        option.btns = option.btns||["确定"];
+        if(!$.isArray(option.btns))
+            option.btns = ["确定"];
         var btn = '';
-        for(var i=0; i<btns.length; i++)
+        for(var i=0; i<option.btns.length; i++)
         {
-            if(btns[i][0] != '<')
-                btn+="<a class='btn'>"+btns[i]+"</a>";
+            if(option.btns[i][0] != '<')
+                btn+="<a class='btn'>"+option.btns[i]+"</a>";
             else
-                btn += btns[i];
+                btn += option.btns[i];
         }
         htmldom += '<div class="buttons">'+btn+'</div>';
     }
     htmldom += '</div>';
     htmldom = $(htmldom);
-    htmldom.on('click','.btn',function(ev){
+    var domifm = $("iframe",htmldom);
+    if(domifm.length > 0)
+    {
+        $(domifm).load(function(e){
+            e.target.contentWindow.alertautoheight = function(height){
+                if(height>document.body.scrollHeight - e.target.offsetTop - 60)
+                    height = document.body.scrollHeight - e.target.offsetTop - 60;
+                domifm.css("height",height+"px");
+            };
+            e.target.contentWindow.alertcb = function(isclose,btn,data){
+                if(isclose)
+                    alertclose();
+                if(typeof(cb) == 'function')
+                    cb(btn,data);
+            };
+        });
+        
+    }
+    htmldom.on('click','.btn',function(){
         var btntit = this.textContent;
         var inputs = [];
         var xx = htmldom.find('input,select,textarea');
@@ -717,12 +895,13 @@ function ciy_alert(content, btns, cb, option){
             return;
         if('ontouchstart' in window)
             return;
+        var dodrag = null;
         htmldom.on('mousedown','.title',function(ev){
             dodrag = {};
             dodrag.offsetX = ev.offsetX;
             dodrag.offsetY = ev.offsetY;
             setTimeout(function(){htmldom.fadeTo(200,0.8);},100);
-            $(document).on('mouseup',function(ev){
+            $(document).on('mouseup',function(){
                 dodrag = null;
                 htmldom.fadeTo(200,1);
                 htmldom.off('mouseup');
@@ -748,22 +927,26 @@ function ciy_alert(content, btns, cb, option){
         }
         htmldom.remove();
     }
+    return false;
 }
 function ciy_alertclose()
 {
     if(window.parent != window)
-    {
-        window.parent.ciy_alertclose();
-        return;
-    }
+        return window.parent.ciy_alertclose();
     $('.ciy-dialog>.close').trigger('click');
+}
+function ciy_alertautoheight()
+{
+    var sitime = setInterval(function(){
+       if(!window.alertautoheight)
+           return;
+       clearInterval(sitime);
+       window.alertautoheight(document.body.clientHeight);
+   },100);
 }
 function ciy_toast(content, option){
     if(window.parent != window)
-    {
-        window.parent.ciy_toast(content, option)
-        return;
-    }
+        return window.parent.ciy_toast(content, option);
     if(option === undefined) option = {};
     var icon = '';
     if(option.icon === 1)
@@ -825,22 +1008,17 @@ function ciy_toast(content, option){
     var iw = window.innerWidth, ih = window.innerHeight;
     htmldom.css('left',(iw-htmldom.outerWidth())/2);
     htmldom.css('top',(ih-htmldom.outerHeight())/3);
+    return false;
 }
 function ciy_toastclose(){
     if(window.parent != window)
-    {
-        window.parent.ciy_toastclose();
-        return;
-    }
+        return window.parent.ciy_toastclose();
     $('.ciy-mask').off('click').hide();
     $('.ciy-toast').remove();
 }
 function ciy_loading(){
     if(window.parent != window)
-    {
-        window.parent.ciy_loading()
-        return;
-    }
+        return window.parent.ciy_loading();
     var htmldom = '<div class="ciy-layer ciy-loading" style="z-index: 2001;"></div>';
     htmldom = $(htmldom);
     $('body').append(htmldom);
@@ -848,10 +1026,7 @@ function ciy_loading(){
 }
 function ciy_loadclose(cls){
     if(window.parent != window)
-    {
-        window.parent.ciy_loadclose(cls)
-        return;
-    }
+        return window.parent.ciy_loadclose(cls);
     $('.ciy-loading').addClass(cls);
     setTimeout(function(){$('.ciy-loading').remove();},600);
     //
@@ -895,18 +1070,14 @@ function ciy_tab(afterfunc){
     });
     $(".ciy-tab>ul").each(function(){
         var uldom = $(this);
-        var ulindex = uldom.attr('data-index');
-        if(ulindex == undefined)
-        {
-            if(uldom.children('li.active').length == 0)
-                ulindex = 0;
-        }
-        uldom.children('li').each(function(index,item){
-            if(index == ulindex)
-                $(item).trigger('click');
-            if(item.offsetTop>1)
+        if(uldom.children('li.active').length == 0)
+            uldom.children('li:first').addClass('active');
+        uldom.children('li').each(function(){
+            if($(this).hasClass("active"))
+                $(this).trigger('click');
+            if(this.offsetTop>1)
                 uldom.css('height','6.1em');
-            if(item.offsetTop>45)
+            if(this.offsetTop>45)
                 uldom.css('height','9.1em');
         });
     });

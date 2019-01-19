@@ -2,10 +2,10 @@
 /* =================================================================================
  * 版权声明：保留开源作者及版权声明前提下，开源代码可进行修改及用于任何商业用途。
  * 开源作者：众产国际产业公会  http://ciy.cn/code
- * 版本：0.5.2
+ * 版本：0.6.0
 ====================================================================================*/
 /*
- * acommon.php 扩展函数库。每个子应用相对独立，一般在program目录下。
+ * acommon.php 扩展函数库。
  * 
  * dieshowhtmlalert     页面级报错输出
  * encrypt  字符串加解密
@@ -15,6 +15,100 @@
  * get_millistime   获取当前微秒数
  * savelog  在数据库保存log信息。与savelogfile类似。
  */
+function create_select($rows, $default, $formname,$opt = null)
+{
+    if(!is_array($opt)) $opt = array();//(!is_array($opt)) && $opt = array();
+    if(!isset($opt['showcode'])) $opt['showcode'] = 'codeid';
+    if(!isset($opt['showtitle'])) $opt['showtitle'] = 'title';
+    $showcode = $opt['showcode'];
+    $showtitle = $opt['showtitle'];
+    echo '<select name="'.$formname.'" '.@$opt['ext'].'>';
+    if(isset($opt['showdef']))
+        array_unshift($rows, array($showcode=>@$opt['showdefval'],$showtitle=>$opt['showdef']));
+    foreach ($rows as $row) {
+        echo '<option value="'.$row[$showcode].'"';
+        if($default == $row[$showcode])
+            echo ' selected="true"';
+        echo '>'.$row[$showtitle].'</option>';
+    }
+    echo '</select>';
+}
+function create_checkbox($rows, $default, $formname,$opt = null)
+{
+    if(!is_array($opt)) $opt = array();
+    $showtitle = isset($opt['showtitle']) ? $opt['showtitle'] : 'title';
+    $showcode = isset($opt['showcode']) ? $opt['showcode'] : 'codeid';
+    $dot = isset($opt['dot']) ? $opt['dot'] : '';
+    $ext = @$opt['ext'];
+    foreach ($rows as $row) {
+        echo '<label class="formi"><input type="checkbox" name="'.$formname.'" '.$ext.' value="'.$row[$showcode].'"';
+        if(strpos($default,$dot.$row[$showcode].$dot) !== false)
+            echo ' checked="checked"';
+        echo '/><i></i>'.$row[$showtitle].'</label>';
+    }
+}
+function create_queryone($rows, $default, $formname,$opt = null)
+{
+    if(!is_array($opt)) $opt = array();//(!is_array($opt)) && $opt = array();
+    if(!isset($opt['showtitle'])) $opt['showtitle'] = 'title';
+    if(!isset($opt['showcode'])) $opt['showcode'] = 'title';
+    $showtitle = $opt['showtitle'];
+    $showcode = $opt['showcode'];
+    echo '<a href="'.urlparam('', array($formname=>'','pageno'=>1)).'" class="nm-query';
+        if(get($formname) == '')
+            echo ' active';
+    echo '">不限</a>';
+    foreach ($rows as $row) {
+        echo '<a href="'.urlparam('', array($formname=>$row[$showcode],'pageno'=>1)).'" class="nm-query';
+        if($row[$showcode] == get($formname))
+            echo ' active';
+        echo '">'.$row[$showtitle].'</a>';
+    }
+}
+function getcodes($code)
+{
+    global $mydata;
+    $catarows = $mydata->get(0,0,'p_cata', 'types=\''.$code.'\'','nums desc,id');
+    return $catarows;
+}
+function ccode($rows,$code,$showcode = 'codeid',$showtitle = 'title')
+{
+    foreach($rows as $row)
+    {
+        if($code == $row[$showcode])
+            return $row[$showtitle];
+    }
+    return $code;
+}
+function treerows_sort(&$rows,$upfield = 'upid',$upid=0,$deep=0)//树形排序
+{
+    $ret = array();
+    $cnt = count($rows);
+    for($i=0;$i<$cnt;$i++)
+    {
+        if($rows[$i][$upfield] == $upid)
+        {
+            $subrows = treerows_sort($rows,$upfield,$rows[$i]['id'],$deep+1);
+            $rows[$i]['_count'] = count($subrows);
+            $rows[$i]['_deep'] = $deep;
+            $ret[] = $rows[$i];
+            $ret = array_merge($ret,$subrows);
+        }
+    }
+    if($deep == 0)
+    {
+        for($i=0;$i<$cnt;$i++)
+        {
+            if(!isset($rows[$i]['_deep']))
+            {
+                $rows[$i]['_count'] = 0;
+                $rows[$i]['_deep'] = 0;
+                $ret[] = $rows[$i];
+            }
+        }
+    }
+    return $ret;
+}
 function dieshowhtmlalert($msg) {
     echo '<!DOCTYPE html><html><head><meta http-equiv="Content-type" content="text/html; charset=utf-8">';
     echo '<title>提示信息</title><meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/><meta name="format-detection" content="telephone=no,email=no"/>';
@@ -70,6 +164,35 @@ function showorder($field)
             $asc = ' active';
     }
     return '<i class="asc'.$asc.'" title="从小到大，升序排序" onclick="location.href=\''.urlparam('', array('order' => $field)).'\';"></i><i class="desc'.$desc.'" title="从大到小，降序排序" onclick="location.href=\''.urlparam('', array('order' => $field.' desc')).'\';"></i>';
+}
+/*
+db.power: .xxx.
+    if(nopower('admin,xxx'))
+        return errjson('您无权操作');
+ */
+function nopower($rig)
+{
+    global $rsuser;
+    if(!$rsuser)
+        return true;
+    $power = @$rsuser['power'];
+    if(empty($power))
+        return true;
+    if(strpos($rig,',') === false)
+        return (strpos($power,'.'.$rig.'.') === false);
+    $rigs = explode(',', $rig);
+    foreach($rigs as $r)
+    {
+        if(strpos($power,'.'.$r.'.') !== false)
+            return false;
+    }
+    return true;
+}
+function power_trans($rows,$power)
+{
+    foreach($rows as $row)
+        $power = str_replace('.'.$row['codeid'].'.','.'.$row['title'].'.',$power);
+    return $power;
 }
 /* * *******************************************************************
  * 函数名称:encrypt
@@ -178,6 +301,10 @@ function id_calnumber($num, $key = 224,$len = 2) {
     return sprintf('%0'.$len.'d',$ret);
 }
 
+function ismobile($mob)
+{
+    return preg_match( '/^1\d{10}$/',$mob);
+}
 function isweixin()
 {
     $useragent = strtolower($_SERVER["HTTP_USER_AGENT"]);
@@ -186,7 +313,6 @@ function isweixin()
         return true;
     return false;
 }
-
 function get_millistime()
 {
     $microtime = microtime();
@@ -194,19 +320,44 @@ function get_millistime()
     return sprintf('%d%03d', $comps[1], $comps[0] * 1000);
 }
 
-function verify() {
+function savelogdb($types,$oldrow, $newrow, $msg = ''){
     global $mydata;
-    $uid = deid(cookie('uid'));
-    $userrow = $mydata->getone('d_user', 'id=' . $uid);
-    if ($userrow === null || $userrow === false)
-        return false;
-    if (cookie('sid') != $userrow['sid'])
-        return false;
-    return $userrow;
+    if(is_array($oldrow) && is_array($newrow))
+    {
+        $msg .= '更新数据';
+        $modify = false;
+        foreach($newrow as $f=>$v)
+        {
+            if($oldrow[$f] != $v)
+            {
+                $msg .= '，'.$f.'='.$oldrow[$f].'→'.$v;
+                $modify = true;
+            }
+        }
+        if(!$modify)
+            $msg .= '，无';
+    }
+    else if(is_array($newrow))
+    {
+        $msg .= '新增数据';
+        foreach($newrow as $f=>$v)
+            $msg .= '，'.$f.'='.$v;
+    }
+    else if(is_array($oldrow))
+    {
+        $msg .= '删除数据';
+        foreach($oldrow as $f=>$v)
+            $msg .= '，'.$f.'='.$v;
+    }
+    else
+    {
+        $msg .= '未删除数据';
+    }
+    savelog($types,$msg);
 }
-
 function savelog($types,$msg,$isrequest=false){
     global $mydata;
+    global $rsuser;
     if($isrequest)
     {
         $msg.=' GET:';
@@ -218,8 +369,26 @@ function savelog($types,$msg,$isrequest=false){
     }
     $updata = array();
     $updata['types'] = $types;
+    $updata['userid'] = (int)@$rsuser['id'];
     $updata['logs'] = $msg;
-    $updata['addtimes'] = Getnow();
-    $updata['ip'] = Getip();
+    $updata['addtimes'] = time();
+    $updata['ip'] = getip();
     $mydata->set($updata, 'p_log', '', 'insert');
+}
+
+function verifyadmin() {
+    global $mydata;
+    $oid = cookie('aoid');
+    $uid = deid(cookie('auid'));
+    $onlinerow = $mydata->getone('p_adminonline', 'id=' . $oid);
+    if ($onlinerow === null || $onlinerow === false)
+        return null;
+    if (cookie('asid') != $onlinerow['sid'])
+        return null;
+    if ($uid != $onlinerow['userid'])
+        return null;
+    $userrow = $mydata->getone('p_admin', 'id=' . $uid);
+    if ($userrow === null || $userrow === false)
+        return null;
+    return $userrow;
 }

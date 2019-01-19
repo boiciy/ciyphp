@@ -1,0 +1,74 @@
+<!DOCTYPE html><html>
+<head>
+<title>Items</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+<link href="/jscss/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class='container'>
+    <div class='table'>
+        <table>
+            <tr>
+                <th style="width:4em;">ID</th>
+                <th>用户名<i class="asc"></i><i class="desc"></i></th>
+                <th>性别<i class="asc active"></i><i class="desc"></i></th>
+                <th>签名</th>
+                <th>积分</th>
+                <th>评分</th>
+            </tr>
+            <tr>
+                <td><div style="text-align: center;"><label class="formi"><input type="checkbox" name="ccheck"/><i></i></label></div></td>
+                <td><div><input type="text" name="cuser"></div></td>
+                <td><div><label class="formswitch"><input type="checkbox" name="cswitch"/><y>男</y><n>女</n><i style="top:0.2em;"></i></label></div></td>
+                <td><div><select name="cselect" style="width:7em;">
+                            <option value="3">上海</option>
+                            <option value="3" disabled>杭州</option>
+                            <option value="3">武汉</option>
+                        </select></div></td>
+                <td><div><input type="text" name="ctext" placeholder="ciy@ciy.cn"></div></td>
+                <td><div><a class='btn' onclick="update(this,'reload');">行编辑</a><input type="hidden" name="cid" value="1"/></div></td>
+            </tr>
+            <tr>
+                <td><div style="text-align: center;"><label class="formi"><input type="checkbox" name="ccheck"/><i></i></label></div></td>
+                <td><div><input type="text" name="cuser"></div></td>
+                <td><div><label class="formswitch"><input type="checkbox" name="cswitch"/><y>男</y><n>女</n><i style="top:0.2em;"></i></label></div></td>
+                <td><div><select name="cselect" style="width:7em;">
+                            <option value="3">上海</option>
+                            <option value="3" disabled>杭州</option>
+                            <option value="3">武汉</option>
+                        </select></div></td>
+                <td><div><input type="text" name="ctext" placeholder="ciy@ciy.cn"></div></td>
+                <td><div><a class='btn' onclick="update(this,'reload');">行编辑</a><input type="hidden" name="cid" value="2"/></div></td>
+            </tr>
+        </table>
+    </div>
+      
+    <fieldset class="tips" style="min-width:35em;">
+        <legend>使用说明</legend>
+        <div>
+            可编辑表格，无需初始化，直接使用。<br/>
+            <ul>
+                <li>主要利用ciy_getform(this,'TR')来获取参数，用ciy_fastfunc/ciy_callfunc提交更新。</li>
+                <li>您可以在F12调试模式中，点击“行编辑”，查看console.log打印的输入框信息。</li>
+                <li>注意参考本页面update函数。</li>
+            </ul>
+        </div>
+    </fieldset>
+</div>
+<script src="/jscss/jquery-1.12.4.min.js"></script>
+<script src="/jscss/ciy.js"></script>
+<script type="text/javascript">
+'use strict';
+$(function(){
+    ciy_table_adjust(".table");
+});
+function update(dom,act)
+{
+    var param = ciy_getform(dom,'TR');
+    console.log(param);
+    //ciy_fastfunc('确认更新？','update',param,act);
+}
+</script>
+</body></html>

@@ -4,90 +4,7 @@
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
-<style type="text/css">
-body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,input,button,textarea,p,blockquote,th,td,form,pre{margin: 0; padding: 0; -webkit-tap-highlight-color:rgba(0,0,0,0);box-sizing: border-box;}
-input,button,textarea,select,optgroup,option,a:active,a:hover{outline:0}
-img{display: inline-block; border: none; vertical-align: middle;}
-li{list-style:none;}
-table{border-collapse: collapse; border-spacing: 0;}
-body{font: 14px Helvetica Neue,Helvetica,PingFang SC,\5FAE\8F6F\96C5\9ED1,Tahoma,Arial,sans-serif;}
-a{text-decoration:none; }
-cite{font-style: normal;}
-.container{
-    padding:15px;
-}
-.row{
-    margin-bottom: 1em;
-}
-.row>div{
-    float:left;
-    position: relative;
-    background:#cccccc;
-}
-.row:after, .row:before {
-    display: table;
-    content: " ";
-}
-.row:after {
-    clear:both;
-}
-.col-xs-1{width: 8.33333333%;}
-.col-xs-2{width:16.66666667%;}
-.col-xs-3{width:25%;}
-.col-xs-4{width:33.33333333%;}
-.col-xs-5{width:41.66666667%;}
-.col-xs-6{width:50%;}
-.col-xs-7{width:58.33333333%;}
-.col-xs-8{width:66.66666667%;}
-.col-xs-9{width:75%;}
-.col-xs-10{width:83.33333333%;}
-.col-xs-11{width:91.66666667%;}
-.col-xs-12{width:100%;}
-@media(min-width: 768px) {
-    .col-sm-1{width: 8.33333333%;}
-    .col-sm-2{width:16.66666667%;}
-    .col-sm-3{width:25%;}
-    .col-sm-4{width:33.33333333%;}
-    .col-sm-5{width:41.66666667%;}
-    .col-sm-6{width:50%;}
-    .col-sm-7{width:58.33333333%;}
-    .col-sm-8{width:66.66666667%;}
-    .col-sm-9{width:75%;}
-    .col-sm-10{width:83.33333333%;}
-    .col-sm-11{width:91.66666667%;}
-    .col-sm-12{width:100%;}
-}
-@media(min-width: 992px) {
-    .col-md-1{width: 8.33333333%;}
-    .col-md-2{width:16.66666667%;}
-    .col-md-3{width:25%;}
-    .col-md-4{width:33.33333333%;}
-    .col-md-5{width:41.66666667%;}
-    .col-md-6{width:50%;}
-    .col-md-7{width:58.33333333%;}
-    .col-md-8{width:66.66666667%;}
-    .col-md-9{width:75%;}
-    .col-md-10{width:83.33333333%;}
-    .col-md-11{width:91.66666667%;}
-    .col-md-12{width:100%;}
-}
-@media(min-width: 1200px) {
-    .col-lg-1{width: 8.33333333%;}
-    .col-lg-2{width:16.66666667%;}
-    .col-lg-3{width:25%;}
-    .col-lg-4{width:33.33333333%;}
-    .col-lg-5{width:41.66666667%;}
-    .col-lg-6{width:50%;}
-    .col-lg-7{width:58.33333333%;}
-    .col-lg-8{width:66.66666667%;}
-    .col-lg-9{width:75%;}
-    .col-lg-10{width:83.33333333%;}
-    .col-lg-11{width:91.66666667%;}
-    .col-lg-12{width:100%;}
-}
-
-.showme>.row div{padding:1em 0.5em;}
-    </style>
+<link href="/jscss/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
   <div class='container showme'>
@@ -99,6 +16,8 @@ cite{font-style: normal;}
 col-xs-*             width:?%
 col-xs-offset-*  margin-left:?%
 
+* : 1-12
+
 xs  手机
 sm  平板 >768px
 md  电脑 >992px
@@ -109,11 +28,10 @@ lg  大屏幕 >1200px
 .hidden-dn-md {display: none!important;}/*手机 平板 隐藏*/
 .hidden-dn-lg {display: none!important;}/*手机 平板 电脑 隐藏*/
 屏幕越大越隐藏
-.hidden-up-sm {display: none!important;}/*平板 电脑 大屏幕 隐藏*/
-.hidden-up-md {display: none!important;}/*电脑 大屏幕 隐藏*/
-.hidden-up-lg {display: none!important;}/*大屏幕 隐藏*/
-
-      </pre>
+.hidden-up-sm {display: none!important;}/*平板 电脑 巨幕 隐藏*/
+.hidden-up-md {display: none!important;}/*电脑 巨幕 隐藏*/
+.hidden-up-lg {display: none!important;}/*巨幕 隐藏*/
+</pre>
       响应式:
     <div class="row">
       <div class="col-xs-3 col-md-1" style="background:#1E9FFF;">xs3 md1</div>

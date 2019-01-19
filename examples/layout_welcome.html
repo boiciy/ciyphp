@@ -1,0 +1,96 @@
+<!DOCTYPE html><html>
+<head>
+    <title>Items</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+    <link href="/jscss/style.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 style="margin:3em;">众产项目开发，希望开发者能够充分了解原理，更容易掌握后端框架。<br/>请按下面步骤尝试从零开发一个主体后端框架。<br/>主体代码仅百余行。</h2>
+        <h3>主体框架采用 多iframe方式，不使用div动态载入</h3>
+<pre>实践证明，div多窗口动态载入，对功能开发要求较高。主要是由于开发不当造成页面间id冲突。
+多iframe方式，在ios上有页面撑大问题，未来苹果应该能够解决，暂时我们通过调用ciy_fix()函数解决。
+多iframe方式，在开发、单页面调试方面，有较大的优势，代码逻辑比较简单，复用性较强。</pre>
+        <br/>
+        <h3>第一步：实现了框架结构布局、载入iframe、简单换肤</h3>
+<pre>左侧菜单显隐，主要依靠shrink相关代码。
+换肤直接操作style，动态添加css属性。请参考id_theme，该功能较为鸡肋。
+为理解方便，我们采用了jquery和原生混合代码编写，建议尽量都用原生写法替代。
+注意灵活使用@media，几个关键分割点：768、992、1200</pre>
+        <br/>
+        <h3>第二步：增加左侧菜单特效</h3>
+<pre>在ciy-menu-nav类上绑定click和mousemove事件，实现特效
+css请灵活使用transition和transform，能够原生的实现丰富的效果。
+未来已来，支持标准的transition和-webkit-transition这样的写法即可。-ms- 和 -moz- 可以不加。</pre>
+        <br/>
+        <h3>第三步：增加多窗口实现和标签左右滚动</h3>
+<pre>对标签栏ul绑定onclick事件，实现关闭和页面切换，关闭100毫秒延迟可以解决部分浏览器内存释放问题。
+通过ifropen函数建立新页面或激活/重载已打开页面</pre>
+    </div>
+    <div class="ciy-mask"></div>
+    <script src="/jscss/jquery-1.12.4.min.js"></script>
+    <script src="/jscss/ciy.js"></script>
+    <script src="/jscss/laydate.js"></script>
+    <script type="text/javascript">
+    'use strict';
+    $(function() {
+        ciy_fix();
+        ciy_repre();
+        ciy_table_adjust(".table");
+        ciy_menu(".ciy-nav>li,.btn-menu");
+        ciy_tab();
+        laydate.render({
+            elem: document.getElementsByName('datess')[0]
+            , type: 'datetime'
+            , range: '~'
+            , calendar: true
+        });
+        laydate.render({
+            elem: document.getElementsByName('dateee')[0]
+            , type: 'date'
+        });
+    });
+    function alerttest(type) {
+        if (type == 1)//多按钮对话框
+        {
+            ciy_alert('确定删除？',
+                    function(btn) {
+                        ciy_alert('点击：' + btn);
+                    }, {btns: ['确定', '<a class="btn btn-default">取消</a>', '关闭']});
+        }
+        if (type == 3)//自定义输入框
+        {
+            ciy_alert('<div class="form-group"><label>文本框</label><div><input type="text" name="title"/></div></div><div class="form-group"><label>下拉列表框</label><div><select name="sel"><option value="afds">aaaa</option></select></div></div><div class="form-group"><label>多行文本框</label><div><textarea name="text"></textarea></div></div>',
+                    function(btn, inputs) {
+                        ciy_alert('已输入input:' + inputs.title + "<br/>select:" + inputs.sel + "<br/>textarea:" + inputs.text);
+                    });
+        }
+        if (type == 4)//最大化对话框
+        {
+            ciy_alert('最大化对话框', null,
+                    function(btn, inputs) {
+                    }, {max: true});
+        }
+        if (type == 5)//自定义标题
+        {
+            ciy_alert('看上面↑', null, {title: '自定义标题'});
+        }
+        if (type == 6)//无标题栏
+        {
+            ciy_alert('没有标题栏', null, {notitle: true});
+        }
+        if (type == 7)//无按钮
+        {
+            ciy_alert('没有按钮', null, {nobutton: true});
+        }
+        if (type == 8)//点空白不关闭
+        {
+            ciy_alert('点空白不关闭', null, {nomaskclose: true});
+        }
+    }
+    </script>
+</body></html>

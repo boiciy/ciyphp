@@ -1,0 +1,80 @@
+<!DOCTYPE html><html>
+<head>
+<title>Items</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+<link href="/jscss/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class='container'>
+    <div class='table'>
+        <table>
+            <tr>
+                <th style="width:4em;">ID</th>
+                <th>用户名<i class="asc"></i><i class="desc"></i></th>
+                <th>性别<i class="asc active"></i><i class="desc"></i></th>
+                <th>签名</th>
+                <th>积分</th>
+                <th>评分</th>
+                <th>职业</th>
+                <th>财富</th>
+            </tr>
+            <tr>
+                <td><div>众产国际</div></td>
+                <td><div>建立无条件的信任秩序</div></td>
+                <td><div>监督上链机制</div></td>
+                <td><div>独立维护公链 - 无币区块链</div></td>
+                <td><div>透明财务、透明分红</div></td>
+                <td><div>独立决策，决策结果奖惩承担机制</div></td>
+                <td><div>白皮书立项，五级目标</div></td>
+                <td><div>用规模反馈消费者，价格体系逐渐降低</div></td>
+            </tr>
+            <tr>
+                <td><div style="text-align: center;"><label class="formi"><input type="checkbox"/><i></i></label></div></td>
+                <td><div><input type="text"></div></td>
+                <td><div><label class="formswitch"><input type="checkbox" name="xxx"/><y>男</y><n>女</n><i style="top:0.2em;"></i></label></div></td>
+                <td><div><select>
+                            <option value="3">上海</option>
+                            <option value="3" disabled>杭州</option>
+                            <option value="3">武汉</option>
+                        </select></div></td>
+                <td><div><input type="text" placeholder="ciy@ciy.cn"></div></td>
+                <td><div><a class='btn'>行编辑</a></div></td>
+                <td><div></div></td>
+                <td><div></div></td>
+            </tr>
+            <tr><td><div style="text-align: center;">居中</div></td><td><div style="text-align: right;">右对齐</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+            <tr><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+            <tr><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+            <tr><td><div>ID</div></td><td><div>换行<br/>显示</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+            <tr><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+            <tr><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+        </table>
+    </div>
+      
+    <fieldset class="tips" style="min-width:35em;">
+        <legend>使用说明</legend>
+        <div>
+            支持移动端长按标题栏和鼠标拖拽。<br/>
+            可调整列宽表格实现仅有200行代码。<br/>
+            初始化和功能代码都在调用ciy_table_adjust函数中。
+            <ul>
+                <li>开启调整列宽功能，调用ciy_table_adjust(".table");</li>
+                <li>注意&lt;td&gt;&lt;/td&gt;中间一定要有个&lt;div&gt;&lt;/div&gt;，用于美化效果，调整列宽。</li>
+                <li>某列增加默认列宽，请在&lt;th&gt;上加style="width:5em;"，设置默认固定列宽。</li>
+                <li>已实现表头的动态排序按钮，详细请参考demo，有PHP后端相关配套代码</li>
+                <li>实现原理：调整列宽后，自动保存所有列宽度到localStrage中。逗号分隔，非常简单</li>
+            </ul>
+        </div>
+    </fieldset>
+</div>
+<script src="/jscss/jquery-1.12.4.min.js"></script>
+<script src="/jscss/ciy.js"></script>
+<script type="text/javascript">
+'use strict';
+$(function(){
+    ciy_table_adjust(".table");
+});
+</script>
+</body></html>

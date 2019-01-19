@@ -4,7 +4,7 @@
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
-<link href="jscss/style.css" rel="stylesheet" type="text/css" />
+<link href="/jscss/style.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
 </style>
 </head>
@@ -23,7 +23,7 @@
 <blockquote>顶部静默加载效果</blockquote>
 <button class='btn' onclick="ciy_loading()">静默加载</button>
 <button class='btn' onclick="ciy_loadclose('succ')">加载成功</button>
-<button class='btn' onclick="ciy_loadclose('fail')">加载失败</button>
+<button class='btn' onclick="ciy_loadclose('fail')">加载失败</button>请看顶部窄条
 <br/><br/>
 
 <blockquote>对话框</blockquote>
@@ -34,72 +34,108 @@
 
 <blockquote>自定尺寸对话框</blockquote>
 <button class='btn' onclick="alert0()">自定尺寸对话框</button>
+<button class='btn' onclick="alert0b()">写法二</button>
 <br/><br/>
 <script type="text/javascript">
 'use strict';
 function alert0()
 {
-    ciy_alert('自定尺寸对话框',''
-        ,function(btn){}
-        ,{contentstyle:'width:30em;height:20em;'}
+    ciy_alert('自定尺寸对话框',null,{contentstyle:'width:30em;height:20em;'}
     );
+}
+function alert0b()
+{
+    ciy_alert({
+        contentstyle:'width:30em;height:20em;',
+        content:'自定尺寸对话框'
+    });
 }
 </script>
 
 <blockquote>多按钮对话框</blockquote>
 <button class='btn' onclick="alert1()">多按钮对话框</button>
+<button class='btn' onclick="alert1b()">写法二</button>
 <br/><br/>
 <script type="text/javascript">
 'use strict';
 function alert1()
 {
-    ciy_alert('确定删除？'
-        ,['确定','<a class="btn btn-default">取消</a>','关闭']
-        ,function(btn){
+    ciy_alert('确定删除？',function(btn){
+            ciy_alert('点击：'+btn);
+        },{btns:['确定','<a class="btn btn-default">取消</a>','关闭']}
+    );
+}
+function alert1b()
+{
+    ciy_alert({
+        btns:['确定','<a class="btn btn-default">取消</a>','关闭'],
+        content:'确定删除？',
+        cb:function(btn){
             ciy_alert('点击：'+btn);
         }
-    );
+    });
 }
 </script>
 
 <blockquote>带输入对话框</blockquote>
-<button class='btn' onclick="alert2()">弹出输入框</button>
 <button class='btn' onclick="alert3()">自定义输入框</button>
+<button class='btn' onclick="alert3b()">写法二</button>
 <br/><br/>
 <script type="text/javascript">
 'use strict';
-function alert2()
-{
-    ciy_alert('',''
-        ,function(btn,inputs){
-            ciy_alert('已输入:'+inputs.title);
-        }
-        ,{forms:{'内联':'<input type="text" name="title"/>'}}
-    );
-}
 function alert3()
 {
-    ciy_alert('<div class="form-group"><label>文本框</label><div><input type="text" name="title"/></div></div><div class="form-group"><label>下拉列表框</label><div><select name="sel"><option value="afds">aaaa</option></select></div></div><div class="form-group"><label>多行文本框</label><div><textarea name="text"></textarea></div></div>',null,
+    ciy_alert('<div class="form-group"><label>文本框</label><div><input type="text" name="title"/></div></div><div class="form-group"><label>下拉列表框</label><div><select name="sel"><option value="afds">aaaa</option></select></div></div><div class="form-group"><label>多行文本框</label><div><textarea name="text"></textarea></div></div>',
     function(btn,inputs){
         ciy_alert('已输入input:'+inputs.title+"<br/>select:"+inputs.sel+"<br/>textarea:"+inputs.text);
+    });
+}
+function alert3b()
+{
+    ciy_alert({
+        content:'<div class="form-group"><label>文本框</label><div><input type="text" name="title"/></div></div><div class="form-group"><label>下拉列表框</label><div><select name="sel"><option value="afds">aaaa</option></select></div></div><div class="form-group"><label>多行文本框</label><div><textarea name="text"></textarea></div></div>',
+        cb:function(btn,inputs){
+            ciy_alert('已输入input:'+inputs.title+"<br/>select:"+inputs.sel+"<br/>textarea:"+inputs.text);
+        }
     });
 }
 </script>
 
 <blockquote>iframe对话框</blockquote>
 <button class='btn' onclick="alert4()">嵌入网页对话框</button>
+<button class='btn' onclick="alert4b()">写法二</button>
 <br/><br/>
 <script type="text/javascript">
 'use strict';
 function alert4()
 {
-    ciy_alert('',''
-        ,function(btn){}
-        ,{contentstyle:'width:50em;height:40em;',frame:'demo.php'}
-    );
+    ciy_alert('',null,{contentstyle:'width:50em;height:40em;',frame:'demo.php'});
+}
+function alert4b()
+{
+    ciy_alert({contentstyle:'width:50em;height:40em;',frame:'demo.php'});
 }
 </script>
 
+<blockquote>iframe对话框回调</blockquote>
+<button class='btn' onclick="alert5()">演示回调</button>
+<br/><br/>
+<script type="text/javascript">
+'use strict';
+function alert5()
+{
+    ciy_alert({
+        title:'演示回调',
+        contentstyle:'width:300px;height:30em;',
+        frame:'plug_dialog_cb.html',
+        nobutton:true,
+        cb:function(btn,data){
+            console.log(btn,data);
+            ciy_alert('回调成功id='+data.id+'，请查看console');
+        }
+    });
+}
+</script>
 <blockquote>自定义对话框</blockquote>
 <button class='btn' onclick="alert10()">自定义标题</button>
 <button class='btn' onclick="alert11()">无标题栏对话框</button>
@@ -109,24 +145,15 @@ function alert4()
 'use strict';
 function alert10()
 {
-    ciy_alert('看上面↑',''
-        ,function(btn,inputs){}
-        ,{title:'自定义标题'}
-    );
+    ciy_alert('看上面↑',null,{title:'自定义标题'});
 }
 function alert11()
 {
-    ciy_alert('没有标题栏',''
-        ,function(btn,inputs){}
-        ,{notitle:true}
-    );
+    ciy_alert('没有标题栏',null,{notitle:true});
 }
 function alert12()
 {
-    ciy_alert('没有按钮',''
-        ,function(btn,inputs){}
-        ,{nobutton:true}
-    );
+    ciy_alert('没有按钮',null,{nobutton:true});
 }
 </script>
 
@@ -138,22 +165,15 @@ function alert12()
 'use strict';
 function alert20()
 {
-    ciy_alert('最大化对话框',''
-        ,function(btn,inputs){}
-        ,{max:true}
-    );
+    ciy_alert('最大化对话框',null,{max:true});
 }
 function alert21()
 {
-    ciy_alert('点空白不关闭',''
-        ,function(btn,inputs){}
-        ,{nomaskclose:true}
-    );
+    ciy_alert('点空白不关闭',null,{nomaskclose:true});
 }
 </script>
 <br/><br/>
   </div>
-<div class="ciy-mask"></div>
-<script src="jscss/jquery-1.12.4.js"></script>
-<script src="jscss/ciy.js"></script>
+<script src="/jscss/jquery-1.12.4.min.js"></script>
+<script src="/jscss/ciy.js"></script>
 </body></html>

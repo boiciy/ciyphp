@@ -1,0 +1,85 @@
+<!DOCTYPE html><html>
+<head>
+    <title>Form Layout</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+    <link href="/jscss/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="container">
+        <fieldset class="box">
+            <legend>表单提交演示</legend>
+            <div style="padding:15px;">
+                <form>
+                    <div class="form-group">
+                        <label>复选框</label>
+                        <div>
+                            <label class="formi"><input type="checkbox" name="ccheck" value="1"/><i></i>爱迪生</label>
+                            <label class="formi"><input type="checkbox" name="ccheck" value="2" checked="checked"/><i></i>特斯拉</label>
+                            <label class="formi"><input type="checkbox" name="ccheck" value="3"/><i></i>收银台</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>单选框</label>
+                        <div>
+                            <label class="formi"><input type="radio" name="cradio" value="v1"/><i></i>爱迪生</label>
+                            <label class="formi"><input type="radio" name="cradio" value="v2" checked="checked"/><i></i>天鹅绒</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>文本框</label>
+                        <div>
+                            <input type="text" name="ctexts" value="文本框内容"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>下拉列表框</label>
+                        <div>
+                            <select style="width:7em;" name="cselect">
+                                <option value="1">上海</option>
+                                <option value="2">杭州</option>
+                                <option value="3">武汉</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>开关按钮</label>
+                        <div>
+                            <label class="formswitch"><input type="checkbox" name="cswitch1"/><y>ON</y><n>OFF</n><i></i></label>
+                            <label class="formswitch"><input type="checkbox" name="cswitch2" checked='checked'/><y>开</y><n>关</n><i></i></label>
+                            <label class="formswitch"><input type="checkbox" name="cswitch3"/><y>启用</y><n>禁用</n><i></i></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>多行文本框</label>
+                        <div>
+                            <textarea style="height:7em;" name="ctextarea">多行文本内容
+内容</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div style='text-align:center;'>
+                        <button type="button" class="btn" onclick="update(this);">提交按钮</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+    </div>
+<script src="/jscss/jquery-1.12.4.min.js" type="text/javascript"></script>
+<script src="/jscss/ciy.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    'use strict';
+    function update(dom) {
+        var postparam = ciy_getform(dom);
+        console.log(postparam);
+        var j = JSON.stringify(postparam);
+        j = j.replace(/,/g,',<br/>');
+        ciy_alert(j+"<br/><code>详细JSON，请F12看console信息</code>");
+//        callfunc("update",postparam,function(json){
+//            console.log('提交成功');
+//        });
+    }
+    </script>
+</body></html>

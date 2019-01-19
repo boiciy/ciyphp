@@ -70,6 +70,7 @@ class ciy_data {
  * }
  */
     function getone($table, $where='', $order='', $column='',$master=false) {
+        (strpos($where,' and ') === 0) && $where = substr($where,5);
         $ret = $this->connect($master)->getone($table, $where,$order,$column);
         if($ret === false || $ret === null)
             return $this->errdata($ret,$master);
@@ -85,6 +86,7 @@ class ciy_data {
  * $username = ''.$mydata->getonescalar('user','id=20','username');
  */
     function getonescalar($table, $where='', $column='', $order='',$master=false) {
+        (strpos($where,' and ') === 0) && $where = substr($where,5);
         $ret = $this->connect($master)->getonescalar($table, $where, $column,$order);
         if($ret === false || $ret === null)
             return $this->errdata($ret,$master);
@@ -114,6 +116,7 @@ if(is_array($rows))
 $rows = $mydata->get(1,20,'sqlshow full fields from table'); //执行 show full fields from table，获取表各个字段数据
  */
     function get($pageno,$pagecount, $table, $where='', $order = '', $column = '',$master=false) {
+        (strpos($where,' and ') === 0) && $where = substr($where,5);
         $ret = $this->connect($master)->get($pageno,$pagecount, $table, $where, $order, $column);
         if($ret === false)
             return $this->errdata($ret,$master);
@@ -138,6 +141,7 @@ $updatainsert['ip'] = getip();
 $newid = $mydata->set($updata, 'users','id=20','auto',$updatainsert);//更新或新增
  */
     function set($updata, $table, $where, $type = 'auto', $insertdata = null) {
+        (strpos($where,' and ') === 0) && $where = substr($where,5);
         $ret = $this->connect(true)->set($updata, $table, $where, $type, $insertdata);
         if($ret === false)
             return $this->errdata($ret,true);
@@ -154,6 +158,7 @@ $newid = $mydata->set($updata, 'users','id=20','auto',$updatainsert);//更新或
 $affected = $mydata->delete('users','id=20','backup');//备份后删除
  */
     function delete($table, $where, $type = '') {//backup
+        (strpos($where,' and ') === 0) && $where = substr($where,5);
         $ret = $this->connect(true)->delete($table, $where, $type);
         if($ret === false)
             return $this->errdata($ret,true);

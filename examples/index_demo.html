@@ -1,0 +1,449 @@
+<!DOCTYPE html><html>
+<head>
+    <title>Items</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+    <link href="/jscss/style.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>源码开发原则：代码精简，易读，易开发，易审核</h3>
+<pre>代码经过大量简化，在UI效果、业务实现、代码复杂度，三者之间做了大量权衡。
+开发建议：
+    确保各个模块、文件调用无状态化；
+    保持代码可读性强，弱耦合，易部署；
+    尽量少的为了极致效果使代码复杂化；
+        
+众产项目开发要求：
+    编写轻封装的软件架构，让普通人都能监督程序代码块
+    源码编译前后，绑定监督员加密入链，保持历史可追溯</pre>
+
+        <br/>
+        <h3>组件效果展示</h3>
+        <br/>
+        <fieldset>
+            <legend>分割线区块</legend>
+        </fieldset>
+        <br/>
+        <fieldset class="box">
+            <legend>box内容区块</legend>
+            <div style="padding:15px;">
+                内容块默认无边界，方便写代码，一般padding:15px;
+            </div>
+        </fieldset>
+        <br/>
+        <fieldset class="tips" style="min-width:35em;">
+            <legend>tips内容区块</legend>
+            <div>
+                一般用于写帮助说明
+                <ul>
+                    <li>第一条，内容文字内容文字内容文字。</li>
+                    <li>第二条，如果嫌弃区块太窄，可以min-width定义最小宽度。</li>
+                    <li>第三条，<br/>
+                        内容。</li>
+                </ul>
+            </div>
+        </fieldset>
+        <br/>
+        <br/>
+        <blockquote>引用区域的文字</blockquote>
+        <br/>
+        <br/>
+        <div class="ciy-tab">
+            <ul>
+                <li>网站设置</li>
+                <li>用户管理</li>
+                <li>权限分配</li>
+                <li>商品管理</li>
+                <li>订单管理</li>
+            </ul>
+            <div>
+                <div>页面中切换，或者跨页面url切换选项卡都可以使用</div>
+                <div>内容2</div>
+                <div>内容3</div>
+                <div>内容4</div>
+                <div>内容5</div>
+            </div>
+        </div>
+        <br/>
+
+        <div class="ciy-tab ciy-tab-card">
+            <ul>
+                <li>网站设置</li>
+                <li class="active">用户管理</li>
+                <li>权限分配</li>
+                <li>商品管理</li>
+                <li>订单管理</li>
+            </ul>
+            <div class="ciy-tab-box">
+                <div>内容1</div>
+                <div>页面中改变默认选项卡</div>
+                <div>内容3</div>
+                <div>内容4</div>
+                <div>内容5</div>
+            </div>
+        </div>
+        <br/>
+
+        <div class="ciy-tab ciy-tab-simple">
+            <ul>
+                <li>网站设置</li>
+                <li>用户管理</li>
+                <li class="active">权限分配</li>
+                <li>商品管理</li>
+                <li>订单管理</li>
+            </ul>
+            <div>
+                url动态改变选项卡
+            </div>
+        </div>
+        <br/>
+        <br/>
+        <br/>
+
+
+        <ul class="ciy-nav ciy-nav-fill">
+            <li>
+                <a>控制台</a>
+            </li>
+            <li>
+                <a>收件箱<span class="ciy-badge">999</span></a>
+            </li>
+            <li>
+                <a>个人中心<span class="ciy-badge-dot"></span></a>
+                <ul class="ciy-popmenu" style="top:4em;">
+                    <li><a onclick="ciy_alert('ccc');">个人中心</a></li>
+                    <li><a href="javascript:;">财务流水</a></li>
+                    <li><a href="javascript:;">退出系统</a></li>
+                </ul>
+            </li>
+            <li>
+                <a><img src="/jscss/face.png" style="width: 2em;height: 2em;margin-right: 0.5em;border-radius: 50%;"/>众产<span class="caret caret-white"></span></a>
+                <ul class="ciy-popmenu" style="top:4em;">
+                    <li><a href="javascript:;">个人中心</a></li>
+                    <li><a href="javascript:;">财务流水</a></li>
+                    <li><a href="javascript:;">退出系统</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <hr/>
+        <button class='btn' onclick="ciy_toast('信息提示')">toast</button>
+        <button class='btn' onclick="ciy_toast('', {icon: 1})">toast1</button>
+        <button class='btn' onclick="ciy_toast('加载中...', {icon: 2})">toast2</button>
+        <button class='btn' onclick="ciy_toast('信息提示信息提示信息提示', {icon: 3})">toast3</button>
+        <button class='btn' onclick="ciy_toast('', {icon: 4})">toast4</button>
+        <button class='btn' onclick="ciy_toast('信息提示', {icon: 5})">toast5</button>
+        <button class='btn' onclick="ciy_loading()">静默加载</button>
+        <button class='btn' onclick="ciy_loadclose('succ')">加载成功</button>
+        <button class='btn' onclick="ciy_loadclose('fail')">加载失败</button>请看顶部窄条
+
+        <hr/>
+        <button class='btn' onclick="ciy_alert('操作完成')">弹出对话框</button>
+        <button class='btn' onclick="ciy_alert('手动阀阿斯蒂芬手动阀阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬安抚阿萨德发顺丰的阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬安抚阿萨德发顺丰的阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬安抚阿萨德发顺丰的阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿斯蒂芬')">弹出自适应对话框</button>
+        <button class='btn' onclick="alerttest(1)">多按钮对话框</button>
+        <button class='btn' onclick="alerttest(3)">自定义输入框</button>
+        <button class='btn' onclick="alerttest(4)">最大化对话框</button>
+        <button class='btn' onclick="alerttest(5)">自定义标题</button>
+        <button class='btn' onclick="alerttest(6)">无标题栏对话框</button>
+        <button class='btn' onclick="alerttest(7)">无按钮对话框</button>
+        <button class='btn' onclick="alerttest(8)">点空白不关闭</button>
+
+        <hr/>
+
+        <div class="progress">
+            <div style="width: 60%;">
+            </div>
+            <span>60%</span>
+        </div>
+
+        <button class='btn'><i>&#xe6b9</i>按钮</button>
+        <button class='btn'><i>&#xe6b9</i></button>
+        <a class='btn btn-menu btn-menu-caret'>下拉菜单<ul class="ciy-popmenu" style="top:2em;"><li onclick="javascript:alert('ccktt')">aaa</li><li>aaa</li><li>aaa</li><li>aaa</li><li>aaa</li></ul></a>
+        <br/>
+        <div class="btn-group">
+            <button type="button" class="btn">Left</button>
+            <button type="button" class="btn">Middle</button>
+            <label class='btn'><input type="checkbox" /><ul class="ciy-popmenu" style="bottom:2em;"><li onclick="javascript:alert('ccktt')">aaa</li><li>aaa</li><li>aaa</li><li>aaa</li><li>aaa</li></ul><span class="caret"></span></label>
+纯CSS代码弹出菜单
+        </div>
+
+        <div class="btn-group-vertical">
+            <button type="button" class="btn">Left</button>
+            <button type="button" class="btn">Middle</button>
+            <button type="button" class="btn">Right</button>
+        </div>
+        <div class="btn-group">
+            <button type="button" class="btn">Left</button>
+            <button type="button" class="btn">Middle</button>
+            <label class='btn'>多列并排弹出菜单<input type="checkbox" /><ul class="ciy-popmenu" style="bottom:2em;width:16em;"><li onclick="javascript:alert('ccktt')" style="width:8em;float:left;">aaa</li><li style="width:8em;float:left;">aaa</li><li style="width:8em;float:left;">aaa</li><li style="width:8em;float:left;">aaa</li><li style="width:8em;float:left;">aaa</li></ul><span class="caret"></span></label>
+        </div>
+        <hr/>
+
+        <form>
+            <div class="form-group">
+                <label>复选框</label>
+                <div>
+                    <label class="formi"><input type="checkbox"/><i></i>爱迪生</label>
+                    <label class="formi"><input type="checkbox" checked="checked"/><i></i>特斯拉</label>
+                    <label class="formi"><input type="checkbox" disabled/><i></i>收银台</label>
+                    <label><input type="checkbox"/>默认效果</label>
+                    <label><input type="checkbox"/>南飞雁</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>单选框</label>
+                <div>
+                    <label class="formi"><input type="radio" name="xxx"/><i></i>爱迪生</label>
+                    <label class="formi"><input type="radio" name="xxx"/><i></i>天鹅绒</label>
+                    <label><input type="radio" name="xxx"/>默认效果</label>
+                    <label><input type="radio" name="xxx"/>南飞雁</label>
+                </div>
+            </div>
+            <div class="form-group inline">
+                <label>内联文本框</label>
+                <div style="width:200px;">
+                    <input type="text" placeholder="http://"/>
+                </div>
+            </div>
+            <div class="form-group inline">
+                <label>内联文本框</label>
+                <div>
+                    <input type="text"/>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-group">
+                <label>长文本框</label>
+                <div>
+                    <input type="text" placeholder="ciy.cn">
+                </div>
+            </div>
+            <div class="form-group">
+                <label></label>
+                <div>
+                    <input type="text" disabled placeholder="@ciy.cn 禁止编辑" style="width:20em;">
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <input type="text" placeholder="去掉label标签，通屏效果">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>下拉列表框</label>
+                <div>
+                    <select style="width:10em;">
+                        <option value="1">上海</option>
+                        <option value="2" disabled>杭州</option>
+                        <option value="3">武汉</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>开关按钮</label>
+                <div>
+                    <label class="formswitch"><input type="checkbox" name="xxx1"/><y>ON</y><n>OFF</n><i></i></label>
+                    <label class="formswitch"><input type="checkbox" name="xxx2" checked='checked'/><y>开</y><n>关</n><i></i></label>
+                    <label class="formswitch"><input type="checkbox" name="xxx3"/><y>启用</y><n>禁用</n><i></i></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>连体文本框</label>
+                <div>￥ <input type="text" style="width:4em;"> 元</div>
+            </div>
+            <div class="form-group">
+                <label>区间框</label>
+                <div><input type="text" style="width:8em;"> - <input type="text" style="width:8em;"></div>
+            </div>
+            <div class="form-group">
+                <label>多行文本框</label>
+                <div>
+                    <textarea style="height:8em;"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>右侧按钮框</label>
+                <div>
+                    <input type="text" placeholder="主flex:12，按比例等分">
+                </div>
+                <div style="flex:3;">
+                    <button type="submit" class="btn">验证码</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>重点输入框</label>
+                <div>
+                    <input type="text" class="imp">
+                </div>
+            </div>
+            <div class="form-group">
+                <div style="text-align:center;">
+                    <button type="submit" class="btn">中间布局按钮</button>
+                </div>
+            </div>
+        </form>
+
+
+        <div class='table'>
+            <table>
+                <tr>
+                    <th style="width:4em;">ID</th>
+                    <th>用户名<i class="asc"></i><i class="desc"></i></th>
+                    <th>性别<i class="asc active"></i><i class="desc"></i></th>
+                    <th>签名</th>
+                    <th>积分</th>
+                    <th>评分</th>
+                    <th>职业</th>
+                    <th>财富</th>
+                </tr>
+                <tr>
+                    <td><div>众产国际</div></td>
+                    <td><div>建立无条件的信任秩序</div></td>
+                    <td><div>监督上链机制</div></td>
+                    <td><div>独立维护公链 - 无币区块链</div></td>
+                    <td><div>透明财务、透明分红</div></td>
+                    <td><div>独立决策，决策结果奖惩承担机制</div></td>
+                    <td><div>白皮书立项，五级目标</div></td>
+                    <td><div>用规模反馈消费者，价格体系逐渐降低</div></td>
+                </tr>
+                <tr>
+                    <td><div style="text-align: center;"><label class="formi"><input type="checkbox"/><i></i></label></div></td>
+                    <td><div><input type="text"></div></td>
+                    <td><div><label class="formswitch"><input type="checkbox" name="xxx"/><y>男</y><n>女</n><i style="top:0.2em;"></i></label></div></td>
+                    <td><div><select>
+                                <option value="3">上海</option>
+                                <option value="3" disabled>杭州</option>
+                                <option value="3">武汉</option>
+                            </select></div></td>
+                    <td><div><input type="text" placeholder="ciy@ciy.cn"></div></td>
+                    <td><div><a class='btn'>行编辑</a></div></td>
+                    <td><div></div></td>
+                    <td><div></div></td>
+                </tr>
+                <tr><td><div style="text-align: center;">居中</div></td><td><div style="text-align: right;">右对齐</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+                <tr><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+                <tr><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+                <tr><td><div>ID</div></td><td><div>换行<br/>显示</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+                <tr><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+                <tr><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+            </table>
+        </div>
+
+
+
+        <button class='btn btn-lg' disabled>禁用</button>
+        <button class='btn btn-lg'>大按钮</button>
+        <a class='btn btn-lg'>大按钮</a>
+        <button class='btn'>按钮</button>
+        <a class='btn'>按钮</a>
+        <button class='btn btn-sm'>小按钮</button>
+        <a class='btn btn-sm'>小按钮</a>
+        <button class='btn btn-xs'>微按钮</button>
+        <a class='btn btn-xs'>微按钮</a>
+        <button class='btn btn-default'>一般按钮</button>
+        <hr/>
+
+        To switch directories, type <kbd>cd</kbd> followed by the name of the directory.<br>
+        To edit settings, press <kbd>ctrl + ,</kbd><br/>
+        For example, <code>&lt;section&gt;</code> should be wrapped as inline.
+
+
+
+        <pre>
+//代码区域
+Lay.fn.event = function(modName, events, params){
+var that = this, result = null, filter = events.match(/\(.*\)$/)||[]; //提取事件过滤器
+var set = (events = modName + '.'+ events).replace(filter, ''); //获取事件本体名
+var callback = function(_, item){
+var res = item && item.call(that, params);
+res === false && result === null && (result = false);
+        </pre>
+<pre>
+<ul>
+<li>调用ciy_repre();</li>
+<li>HTML将不会被解析</li>
+<li>有木有感觉非常方便</li>
+</ul>
+</pre>
+        <div class="form-group">
+            <label>选择区间</label>
+            <div>
+                <input style="width:21em;" type="text" name="datess" value="2019-01-01 05:30:08 ~ 2019-01-30 01:30:45">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>选择日期</label>
+            <div>
+                <input style="width:7em;" type="text" name="dateee" value="2019-01-18">
+            </div>
+        </div>
+        <code>注：仅日期组件引用了外部laydate组件。</code>
+
+        <br/>
+    </div>
+    <script src="/jscss/jquery-1.12.4.min.js"></script>
+    <script src="/jscss/ciy.js"></script>
+    <script src="/jscss/laydate.js"></script>
+    <script type="text/javascript">
+    'use strict';
+    $(function() {
+        ciy_fix();
+        ciy_repre();
+        ciy_table_adjust(".table");
+        ciy_menu(".ciy-nav>li,.btn-menu");
+        ciy_tab();
+        laydate.render({
+            elem: document.getElementsByName('datess')[0]
+            , type: 'datetime'
+            , range: '~'
+            , calendar: true
+        });
+        laydate.render({
+            elem: document.getElementsByName('dateee')[0]
+            , type: 'date'
+        });
+    });
+    function alerttest(type) {
+        if (type == 1)//多按钮对话框
+        {
+            ciy_alert('确定删除？',
+                    function(btn) {
+                        ciy_alert('点击：' + btn);
+                    }, {btns: ['确定', '<a class="btn btn-default">取消</a>', '关闭']});
+        }
+        if (type == 3)//自定义输入框
+        {
+            ciy_alert('<div class="form-group"><label>文本框</label><div><input type="text" name="title"/></div></div><div class="form-group"><label>下拉列表框</label><div><select name="sel"><option value="afds">aaaa</option></select></div></div><div class="form-group"><label>多行文本框</label><div><textarea name="text"></textarea></div></div>',
+                    function(btn, inputs) {
+                        ciy_alert('已输入input:' + inputs.title + "<br/>select:" + inputs.sel + "<br/>textarea:" + inputs.text);
+                    });
+        }
+        if (type == 4)//最大化对话框
+        {
+            ciy_alert('最大化对话框', null,
+                    function(btn, inputs) {
+                    }, {max: true});
+        }
+        if (type == 5)//自定义标题
+        {
+            ciy_alert('看上面↑', null, {title: '自定义标题'});
+        }
+        if (type == 6)//无标题栏
+        {
+            ciy_alert('没有标题栏', null, {notitle: true});
+        }
+        if (type == 7)//无按钮
+        {
+            ciy_alert('没有按钮', null, {nobutton: true});
+        }
+        if (type == 8)//点空白不关闭
+        {
+            ciy_alert('点空白不关闭', null, {nomaskclose: true});
+        }
+    }
+    </script>
+</body></html>

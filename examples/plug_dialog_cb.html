@@ -1,0 +1,30 @@
+<!DOCTYPE html> <html>
+<head>
+<title>Items</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+<link href="/jscss/style.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+</style>
+</head>
+<body>
+  <div class="container">
+ifreame窗口回调演示<br/>
+<button class='btn' onclick="selected(5)">回调id=5</button>
+<button class='btn' onclick="selected(10)">回调id=10</button>
+
+  </div>
+<div class="ciy-mask"></div>
+<script src="/jscss/jquery-1.12.4.min.js"></script>
+<script src="/jscss/ciy.js"></script>
+<script type="text/javascript">
+'use strict';
+$(function(){
+    ciy_alertautoheight();//自适应高度
+});
+function selected(id){
+    window.alertcb(true,'选中',{id:id});
+}
+</script>
+</body></html>

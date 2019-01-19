@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <title>众产接口测试</title>
-    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js" type="text/javascript"></script>
     <style type="text/css">
     body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,input,button,textarea,p,blockquote,th,td,form,pre{margin: 0; padding: 0; -webkit-tap-highlight-color:rgba(0,0,0,0);box-sizing: border-box;}
     input,button,textarea,select,optgroup,option,a:active,a:hover{outline:0}
@@ -245,36 +245,55 @@ function callrun()
     $("#id_title").html('执行中...');
     $("#id_result").html('');
     $("#Canvas").html('');
-    $.ajax({type:'POST',url:file+'?json=true&func='+func,data:param.replace(/\n/g,'&'),complete:function(xhr,ts){
-        sptime = new Date().valueOf()-sptime;
-        runtime = 0;
-        if(xhr.status != 200)
+    
+    if(param.substr(0,1) != '{')
+    {
+        var json = {};
+        var ds = param.split('\n');
+        for(var d in ds)
         {
-            $("#id_title").html('<span style="color:red;">访问失败 【'+xhr.status+'】</span>　'+file+func);
-            document.getElementById("Canvas").innerHTML = xhr.responseText;
+            var ind = ds[d].indexOf('=');
+            if(ind > 0)
+                json[ds[d].substr(0,ind)] = ds[d].substr(ind+1);
         }
-        else
-        {
-            try{
-                var json = JSON.parse(xhr.responseText);
-                Process(xhr.responseText);
-                if(json.result)
-                    $("#id_title").html('<span style="color:green;">请求成功</span>　'+file+'?func='+func+'<code style="float:right;">'+sptime+'ms</code>');
-                else
-                    $("#id_title").html('<span style="color:red;">返回错误</span>　'+file+'?func='+func);
-            }catch(e){
-                var errtxt = xhr.responseText;
-                if(errtxt.substr(-1) == '}')
-                {
-                    var ind = errtxt.lastIndexOf('{');
-                    Process(errtxt.substr(ind));
-                    errtxt = errtxt.substr(0,ind);
+        param = JSON.stringify(json);
+    }
+    $.ajax({
+        type:'POST',
+        url:file+'?json=true&func='+func,
+        data:param,
+        contentType:'application/json;charset=utf-8',
+        complete:function(xhr,ts){
+            sptime = new Date().valueOf()-sptime;
+            runtime = 0;
+            if(xhr.status != 200)
+            {
+                $("#id_title").html('<span style="color:red;">访问失败 【'+xhr.status+'】</span>　'+file+func);
+                document.getElementById("Canvas").innerHTML = xhr.responseText;
+            }
+            else
+            {
+                try{
+                    var json = JSON.parse(xhr.responseText);
+                    Process(xhr.responseText);
+                    if(json.result)
+                        $("#id_title").html('<span style="color:green;">请求成功</span>　'+file+'?func='+func+'<code style="float:right;">'+sptime+'ms</code>');
+                    else
+                        $("#id_title").html('<span style="color:red;">返回错误</span>　'+file+'?func='+func);
+                }catch(e){
+                    var errtxt = xhr.responseText;
+                    if(errtxt.substr(-1) == '}')
+                    {
+                        var ind = errtxt.lastIndexOf('{');
+                        Process(errtxt.substr(ind));
+                        errtxt = errtxt.substr(0,ind);
+                    }
+                    $("#id_result").html(errtxt);
+                    $("#id_title").html('<span style="color:red;">调试信息</span>　'+file+'?func='+func);
                 }
-                $("#id_result").html(errtxt);
-                $("#id_title").html('<span style="color:red;">调试信息</span>　'+file+'?func='+func);
             }
         }
-    }});
+    });
 }
 window.TAB = "    ";
 function IsArray(obj) {

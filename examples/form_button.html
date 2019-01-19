@@ -4,7 +4,7 @@
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
-<link href="jscss/style.css" rel="stylesheet" type="text/css" />
+<link href="/jscss/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
   <div class="container">
@@ -31,30 +31,36 @@
 <br/><br/>
 
 <blockquote>自定样式按钮</blockquote>
-<button class='btn btn-default'>按钮</button><br/>
+<button class='btn btn-default'>按钮</button> <code>class=btn-default</code><br/>
 <button class='btn' style='background: #359802;color:#ffffff;'>按钮</button>
 <button class='btn' style='background: #980202;color:#ffffff;'>按钮</button>
 <button class='btn' style='background: #810298;color:#ffffff;'>按钮</button>
-<button class='btn' style='background: #efff00;color:#000000;'>按钮</button>
+<button class='btn' style='background: #efff00;color:#000000;'>按钮</button> <code>用style实现</code>
 <br/><br/>
 
 <blockquote>图标+文字按钮</blockquote>
-<button class='btn'><i>&#xe6b9</i>按钮</button>
+<button class='btn'><i>&#xe6b9</i>按钮</button> <code>不用class定义icon-*，直接使用unicode</code>
 <br/><br/>
 
 <blockquote>只带图标按钮</blockquote>
 <button class='btn'><i>&#xe6b9</i></button>
 <br/><br/>
 
-<blockquote>左右连体按钮</blockquote>
+<blockquote>左右连体按钮 btn-group</blockquote>
 <div class="btn-group">
   <button type="button" class="btn">Left</button>
   <button type="button" class="btn">Middle</button>
   <button type="button" class="btn">Right</button>
-</div>
+</div> 后面文字并排
+<br/><br/>
+<div class="btn-group br">
+  <button type="button" class="btn">Left</button>
+  <button type="button" class="btn">Middle</button>
+  <button type="button" class="btn">Right</button>
+</div> 带br，后面文字换行
 <br/><br/>
 
-<blockquote>上下连体按钮</blockquote>
+<blockquote>上下连体按钮 btn-group-vertical</blockquote>
 <div class="btn-group-vertical">
   <button type="button" class="btn">Left</button>
   <button type="button" class="btn">Middle</button>
@@ -73,6 +79,8 @@
         <li>aaa</li>
     </ul>
 </a>
+<br/>
+需调用ciy_menu(".btn-menu");
 <br/><br/>
 
 <blockquote>连体+上拉菜单按钮</blockquote>
@@ -103,6 +111,8 @@
     </ul>
     <span class="caret"></span>
 </label>
+<br/>
+无需任何JS调用
 <br/><br/>
 
 
@@ -123,12 +133,12 @@
 
 
   </div>
-<script src="jscss/jquery-1.12.4.js"></script>
-<script src="jscss/ciy.js"></script>
+<script src="/jscss/jquery-1.12.4.min.js"></script>
+<script src="/jscss/ciy.js"></script>
 <script type="text/javascript">
 'use strict';
 $(function(){
-    ciy_menu(".ciy-nav>li,.btn-menu");
+    ciy_menu(".btn-menu");
 });
 </script>
 </body></html>
