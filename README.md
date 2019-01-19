@@ -3,7 +3,7 @@
 ## WEB PHP框架
 这款PHP框架，经历了5年发展，开发了十几个商业项目。  
 众产风格极易理解，目录结构清晰，文件极少，支持前后端分离，DBA与后端逻辑可分离。  
-后端UI演示地址：[前往](http://ciyphp.ciy.cn/examples/index.html)
+后端UI演示地址：[前往查看](http://ciyphp.ciy.cn/examples/index.html)
 
 ## 目录结构
 >zcommon/  
@@ -13,9 +13,9 @@
 >>dbajax.php  
 >>config.php  
 
->acommon.php
->jscss/
->examples/
+>acommon.php  
+>jscss/  
+>examples/  
 >>serverdata.php  
 >>appcommon.php  
 >>demo.php  
@@ -108,7 +108,9 @@ $rows = $mydata->get($pageno,$pagecount, 'd_test', $where,'id desc');
 
 function json_setact() {//Ajax交互函数，ciy_runJSON()调用。
     global $mydata;
-    $act = post('act');
+    $post = new ciy_post();
+    $id = $post->getint('id');
+    $act = $post->get('act');
     数据处理...
     return succjson();
 }
@@ -116,13 +118,13 @@ function json_setact() {//Ajax交互函数，ciy_runJSON()调用。
 
 ## 部署方式
 web根目录下拷贝zcommon目录，更改config.php配置文件。即可完成文件部署。  
-项目目录可以在子目录，也可以在根目录。只需对init.php 中的PATH_DIR进行修改。  
+后端代码目录可以非WEB目录。只需对init.php 中的PATH_PROGRAM进行修改。  
 
 ## 框架建议
 与其他框架不同，前端无模板，而直接使用php。建议前端html化。  
 文件名命名习惯：  
 ```php
-*.php  /  *.pro.php  成对出现。*.php引用*.pro.php，前端Ajax调用。都在*.pro.php中完成。*.pro.php直接访问无效。  
+*.php  /  *.pro.php     成对出现。*.php引用*.pro.php，前端Ajax调用。都在*.pro.php中完成。*.pro.php直接访问无效。  
 *.html /  *.pro.php  　  成对出现。*.html通过Ajax初始化及数据请求。  
 ```
 
