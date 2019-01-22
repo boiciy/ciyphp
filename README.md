@@ -3,7 +3,7 @@
 ## WEB PHP框架
 这款PHP框架，经历了5年发展，开发了十几个商业项目。  
 众产风格极易理解，目录结构清晰，文件极少，支持前后端分离，DBA与后端逻辑可分离。  
-后端UI演示地址：[前往](http://ciyphp.ciy.cn/examples/layout.html)
+后端UI演示地址：[前往查看](http://ciyphp.ciy.cn/examples/index.html)
 
 ## 目录结构
 >zcommon/  
@@ -13,8 +13,9 @@
 >>dbajax.php  
 >>config.php  
 
+>acommon.php  
+>jscss/  
 >examples/  
->>/jscss/  
 >>serverdata.php  
 >>appcommon.php  
 >>demo.php  
@@ -27,7 +28,7 @@
 ### common.php 常用公共函数库。
 封装了 Ajax函数调用、Url参数拼接函数、Application对象、CSV导出、用户安全输入、文件操作等  
 
-`appcommon.php`　　项目内公共函数库。  
+`acommon.php`　　扩展的公共函数库，与项目数据库有关系。  
 封装了 报错显示、数字/字符串加解密函数、log保存、页面分页显示等
 
 ### data.php 应用数据层类库。
@@ -74,19 +75,18 @@ class ciy_config {
 特别的，目录默认使用`/`结尾
 ```php
 defined('PATH_ROOT') || define('PATH_ROOT', $_SERVER['DOCUMENT_ROOT'].'/');  //web根目录。  
-defined('PATH_DIR') || define('PATH_DIR', PATH_ROOT.'examples/');       //指定项目目录  
-defined('PATH_PROGRAM') || define('PATH_PROGRAM', PATH_DIR.'');     //指定项目后端目录，可以实现前后端不同目录管理。  
+defined('PATH_PROGRAM') || define('PATH_PROGRAM', PATH_ROOT.'examples/');    //指定项目后端目录，可以实现前后端不同目录管理。  
 defined('NAME_SELF') || define('NAME_SELF', $_SERVER['PHP_SELF']);  
 
 require PATH_ROOT . 'zcommon/config.php';
 require PATH_ROOT . 'zcommon/common.php';
 require PATH_ROOT . 'zcommon/data.php';
-require PATH_PROGRAM . 'appcommon.php';
+require PATH_ROOT . 'acommon.php';
 ```
 
 ### demo.php demo.pro.php demo_update.php demo_update.pro.php
-例子程序，演示框架基本代码编写流程。包含数据增删改查、导出等基本功能。  
-调用例子函数之前，请先用d_test.sql在mysql中建立d_test/d_test_bak表。  
+例子程序，演示框架基本代码编写流程。包含数据增删改查、上传文件、导出等基本功能。  
+调用例子函数之前，请先用database.sql在mysql中建立d_user/d_test/d_test_bak表。  
 ```php
 //demo.php
 <?php
@@ -108,7 +108,9 @@ $rows = $mydata->get($pageno,$pagecount, 'd_test', $where,'id desc');
 
 function json_setact() {//Ajax交互函数，ciy_runJSON()调用。
     global $mydata;
-    $act = post('act');
+    $post = new ciy_post();
+    $id = $post->getint('id');
+    $act = $post->get('act');
     数据处理...
     return succjson();
 }
@@ -116,13 +118,13 @@ function json_setact() {//Ajax交互函数，ciy_runJSON()调用。
 
 ## 部署方式
 web根目录下拷贝zcommon目录，更改config.php配置文件。即可完成文件部署。  
-项目目录可以在子目录，也可以在根目录。只需对init.php 中的PATH_DIR进行修改。  
+后端代码目录可以非WEB目录。只需对init.php 中的PATH_PROGRAM进行修改。  
 
 ## 框架建议
 与其他框架不同，前端无模板，而直接使用php。建议前端html化。  
 文件名命名习惯：  
 ```php
-*.php  /  *.pro.php  成对出现。*.php引用*.pro.php，前端Ajax调用。都在*.pro.php中完成。*.pro.php直接访问无效。  
+*.php  /  *.pro.php     成对出现。*.php引用*.pro.php，前端Ajax调用。都在*.pro.php中完成。*.pro.php直接访问无效。  
 *.html /  *.pro.php  　  成对出现。*.html通过Ajax初始化及数据请求。  
 ```
 
