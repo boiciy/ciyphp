@@ -7,7 +7,7 @@
 /*
  * acommon.php 扩展函数库。
  * 
- * dieshowhtmlalert     页面级报错输出
+ * diehtml/diegoto     报错输出页面/跳转
  * encrypt  字符串加解密
  * enid/deid/id_calnumber   ID数字加解密
  * verify   判断用户是否合法
@@ -15,33 +15,48 @@
  * get_millistime   获取当前微秒数
  * savelog  在数据库保存log信息。与savelogfile类似。
  */
-function create_select($rows, $default, $formname,$opt = null)
+function create_li($rows, $default,$first = array('title'=>'全部','codeid'=>''))
 {
-    if(!is_array($opt)) $opt = array();//(!is_array($opt)) && $opt = array();
-    if(!isset($opt['showcode'])) $opt['showcode'] = 'codeid';
-    if(!isset($opt['showtitle'])) $opt['showtitle'] = 'title';
-    $showcode = $opt['showcode'];
-    $showtitle = $opt['showtitle'];
-    echo '<select name="'.$formname.'" '.@$opt['ext'].'>';
-    if(isset($opt['showdef']))
-        array_unshift($rows, array($showcode=>@$opt['showdefval'],$showtitle=>$opt['showdef']));
+    if(is_array($first))
+        array_unshift($rows,$first);
+    $showcode = 'codeid';
+    $showtitle = 'title';
+    $ret = '';
     foreach ($rows as $row) {
-        echo '<option value="'.$row[$showcode].'"';
+        $ret .= '<li';
         if($default == $row[$showcode])
-            echo ' selected="true"';
-        echo '>'.$row[$showtitle].'</option>';
+            $ret .= ' class="active"';
+        $ret .= '><a href="?liid='.$row[$showcode].'">'.$row[$showtitle].'</a></li>';
     }
-    echo '</select>';
+    return $ret;
+}
+function create_select($rows, $default, $formname, $opt)
+{
+    $showcode = 'codeid';
+    $showtitle = 'title';
+    $ret = '<select name="'.$formname.'" '.@$opt['ext'].'>';
+    foreach ($rows as $row) {
+        $ret .= '<option value="'.$row[$showcode].'"';
+        if($default == $row[$showcode])
+            $ret .= ' selected="true"';
+        $ret .= '>'.$row[$showtitle].'</option>';
+    }
+    $ret .= '</select>';
+    return $ret;
 }
 function create_checkbox($rows, $default, $formname,$opt = null)
 {
-    if(!is_array($opt)) $opt = array();
-    $showtitle = isset($opt['showtitle']) ? $opt['showtitle'] : 'title';
-    $showcode = isset($opt['showcode']) ? $opt['showcode'] : 'codeid';
-    $dot = isset($opt['dot']) ? $opt['dot'] : '';
-    $ext = @$opt['ext'];
+    $dot = '';
+    $attr = '';
+    if(is_array($opt))
+    {
+        $dot = isset($opt['dot']) ? $opt['dot'] : '';
+        $attr = isset($opt['attr']) ? $opt['attr'] : '';
+    }
+    $showcode = 'codeid';
+    $showtitle = 'title';
     foreach ($rows as $row) {
-        echo '<label class="formi"><input type="checkbox" name="'.$formname.'" '.$ext.' value="'.$row[$showcode].'"';
+        echo '<label class="formi"><input type="checkbox" name="'.$formname.'" '.$attr.' value="'.$row[$showcode].'"';
         if(strpos($default,$dot.$row[$showcode].$dot) !== false)
             echo ' checked="checked"';
         echo '/><i></i>'.$row[$showtitle].'</label>';
@@ -68,7 +83,9 @@ function create_queryone($rows, $default, $formname,$opt = null)
 function getcodes($code)
 {
     global $mydata;
-    $catarows = $mydata->get(0,0,'p_cata', 'types=\''.$code.'\'','nums desc,id');
+    $csql = new ciy_sql('p_cata');
+    $csql->where('types',$code)->order('nums desc,id');
+    $catarows = $mydata->get($csql);
     return $catarows;
 }
 function ccode($rows,$code,$showcode = 'codeid',$showtitle = 'title')
@@ -109,11 +126,12 @@ function treerows_sort(&$rows,$upfield = 'upid',$upid=0,$deep=0)//树形排序
     }
     return $ret;
 }
-function dieshowhtmlalert($msg) {
+function diehtml($msg,$title='提示信息') {
     echo '<!DOCTYPE html><html><head><meta http-equiv="Content-type" content="text/html; charset=utf-8">';
-    echo '<title>提示信息</title><meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/><meta name="format-detection" content="telephone=no,email=no"/>';
-    echo '<meta name="apple-mobile-web-app-capable" content="yes" />';
-    echo '</head><body>'.$msg.'</body></html>';
+    echo '<title>'.$title.'</title><meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/><meta name="format-detection" content="telephone=no,email=no"/>';
+    echo '<meta name="apple-mobile-web-app-capable" content="yes" /></head><body>';
+    echo '<fieldset style="margin:2em;border-radius: 0.5em;border: 1px solid #eeeeee;line-height:2em;"><legend style="font-size: 1.3em;padding: 0.2em 0.5em;">'.$title.'</legend><div style="padding:0 15px 15px 15px;"><b>来源： '.NAME_SELF.'</b><br/>'.$msg.'</div></fieldset>';
+    echo '</body></html>';
     die();
 }
 
@@ -321,7 +339,6 @@ function get_millistime()
 }
 
 function savelogdb($types,$oldrow, $newrow, $msg = ''){
-    global $mydata;
     if(is_array($oldrow) && is_array($newrow))
     {
         $msg .= '更新数据';
@@ -330,6 +347,8 @@ function savelogdb($types,$oldrow, $newrow, $msg = ''){
         {
             if($oldrow[$f] != $v)
             {
+                if($f == 'activetime')
+                    continue;
                 $msg .= '，'.$f.'='.$oldrow[$f].'→'.$v;
                 $modify = true;
             }
@@ -373,22 +392,43 @@ function savelog($types,$msg,$isrequest=false){
     $updata['logs'] = $msg;
     $updata['addtimes'] = time();
     $updata['ip'] = getip();
-    $mydata->set($updata, 'p_log', '', 'insert');
+    $mydata->data($updata)->set(new ciy_sql('p_log'));
 }
 
-function verifyadmin() {
+function verifyadmin($errfunc = null) {
     global $mydata;
-    $oid = cookie('aoid');
+    $oid = (int)cookie('aoid');
     $uid = deid(cookie('auid'));
-    $onlinerow = $mydata->getone('p_adminonline', 'id=' . $oid);
-    if ($onlinerow === null || $onlinerow === false)
-        return null;
-    if (cookie('asid') != $onlinerow['sid'])
-        return null;
-    if ($uid != $onlinerow['userid'])
-        return null;
-    $userrow = $mydata->getone('p_admin', 'id=' . $uid);
-    if ($userrow === null || $userrow === false)
-        return null;
-    return $userrow;
+    $sql = new ciy_sql('p_adminonline');
+    $sql->where('id',$oid);
+    $onlinerow = $mydata->getone($sql);
+    $err = '您尚未登录或已超时';
+    if($onlinerow === false)
+        $err = $mydata->error;
+    else if (is_array($onlinerow))
+    {
+        if (cookie('asid') == $onlinerow['sid'])
+        {
+            if ($uid == $onlinerow['userid'])
+            {
+                $sql = new ciy_sql('p_admin');
+                $sql->where('id',$uid);
+                $userrow = $mydata->getone($sql);
+                if($userrow === false)
+                    $err = $mydata->error;
+                else if(is_array($userrow))
+                    return $userrow;
+            }
+        }
+    }
+    if($errfunc !== null)
+    {
+        $errfunc($err);
+        die();
+    }
+    if (isset($_GET['json']))
+        die(json_encode(errjson($err)));
+    if(NAME_SELF == 'manage')
+        diegoto('login.php');
+    diehtml($err.'<br/><a href="/admin/login.php" target="_top">重新登录</a>');
 }

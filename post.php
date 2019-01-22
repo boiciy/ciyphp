@@ -1,3 +1,7 @@
+<?php
+if(@$_GET['phpinfo'] == 'out')
+    die(phpinfo());
+?>
 <!DOCTYPE html><html>
 <head>
     <meta charset="UTF-8">
@@ -135,6 +139,7 @@
     }
     .abtn {
         cursor:pointer;
+        text-decoration:underline;
     }
     #id_result{margin:0.5em;padding:0.5em;}
     #Canvas {color: #000000;border: solid 1px #CECECE;margin:0.5em;padding:0.5em;}
@@ -170,7 +175,7 @@
             <div class="form-group">
                 <label id="id_sec"></label>
                 <button class="btn btn-llg" type="button" onclick="callrun()">接口测试</button>
-                　　　　Cookie：<a onclick="readcookie()" class="abtn">读取</a>　<a onclick="clearcookie()" class="abtn">清空</a>　　　　LocalStorage：<a onclick="readStorage()" class="abtn">读取</a>　<a onclick="clearStorage()" class="abtn">清空</a>
+                　　　<a onclick="location.href='?phpinfo=out'" class="abtn">phpInfo</a>　　Cookie：<a onclick="readcookie()" class="abtn">读取</a>　<a onclick="clearcookie()" class="abtn">清空</a>　　LocalStorage：<a onclick="readStorage()" class="abtn">读取</a>　<a onclick="clearStorage()" class="abtn">清空</a>
             </div>
             <div class="form-group">
                 <label><button class="btn" type="button" onclick="location.href=createurl()">生成地址Go</button></label>

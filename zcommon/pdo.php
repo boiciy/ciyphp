@@ -5,13 +5,11 @@
  * 版本：0.5.2
 ====================================================================================*/
 /**
- * mysql操作类库
+ * PDO操作类库
  * 支持PHP7
- * 如需pconnect长连接，请适当修改connect函数。
- * 可以使用join，但不建议使用join等关系数据库功能。单一数据库服务器下容易实现某些功能，但不利于后期分库分表迭代。
- * 可以使用union，但不建议使用，建议编程实现。
+ * 建议使用参数绑定模式
 */
-class ciy_mysql {
+class ciy_pdo {
     public $link;
     public $isconnected;
     public $error;
@@ -21,22 +19,28 @@ class ciy_mysql {
         $this->error = '';
         $this->sql = '';
     }
-    function connect($host,$user,$pass,$name,$port,$charset) {
+    function connect($db,$host,$user,$pass,$name,$port,$charset) {
         if($this->isconnected)
             return true;
-        if (!isset($this->link))
-            $this->link = new mysqli();
-        $this->link->options(MYSQLI_OPT_CONNECT_TIMEOUT,5);
-        $this->link->connect($host,$user,$pass,$name,$port);
-        if($this->link->connect_errno>0)
-            return $this->errsql(false, 'SQLi连接失败:' . $this->link->connect_error);
-        $this->link->set_charset($charset);
+        if (!isset($this->link)) {
+            try {
+                $opts = array(
+                    PDO::ATTR_TIMEOUT => 5,
+                    PDO::ATTR_PERSISTENT=>false,
+                    PDO::ATTR_ERRMODE=>PDO::ERRMODE_SILENT,
+                    PDO::MYSQL_ATTR_INIT_COMMAND=>"SET CHARACTER SET {$charset}"
+                    );
+                $this->link = new PDO("{$db}:host={$host};dbname={$name};port={$port};", $user,$pass,$opts);
+            } catch (PDOException $e) {
+                return $this->errsql(false, 'PDO连接失败:' . $e->GetMessage());
+            }
+        }
         $this->isconnected = true;
         return true;
     }
     function disconnect() {
         if($this->isconnected)
-            $this->link->close();
+            $this->link = null;
         $this->isconnected = false;
         return true;
     }
@@ -46,33 +50,29 @@ class ciy_mysql {
         $rs = $this->_prepare($query,$data);
         if($rs === false)
             return false;
-        $result = $rs->get_result();
-        if($result === false)
-            return $this->errsql(false, 'SQL获取结果集出错:'.$this->link->error);
         if($type == 1)//返回全部数据
         {
-            $retdata = array();
-            while($row = $result->fetch_assoc())
-                $retdata[] = $row;
-            $result->free();
-            $rs->free_result();
+            $retdata = $rs->fetchAll(PDO::FETCH_ASSOC);
+            $rs->closeCursor();
+            if($retdata === false)
+                return $this->errsql(array(), "表1[{$query}]数据不存在");
             return $retdata;
         }
         else if($type == 2)//返回单行数据
         {
-            $retdata = $result->fetch_assoc();
-            $result->free();
-            $rs->free_result();
+            $retdata = $rs->fetch(PDO::FETCH_ASSOC);
+            $rs->closeCursor();
+            if($retdata === false)
+                return $this->errsql(null, "表2[{$query}]数据不存在");
             return $retdata;
         }
         else if($type == 3)//返回第一行第一列数据
         {
-            $retdata = $result->fetch_row();
-            $result->free();
-            $rs->free_result();
-            if($retdata == null)
-                return null;
-            return $retdata[0];
+            $retdata = $rs->fetchColumn();
+            $rs->closeCursor();
+            if($retdata === false)
+                return $this->errsql(null, "表3[{$query}]数据不存在");
+            return $retdata;
         }
         return null;
     }
@@ -116,7 +116,7 @@ class ciy_mysql {
             $execute = $this->execute("insert into {$csql->table} ({$field}) values ({$value})",$data);
             if ($execute === false)
                 return false;
-            return $this->link->insert_id;
+            return $this->link->lastInsertId();
         }
         else {
             $set = '';
@@ -151,62 +151,54 @@ class ciy_mysql {
         $rs = $this->_prepare($query,$data);
         if($rs === false)
             return false;
-        $rs->free_result();
-        return $this->link->affected_rows;
+        $cnt = $rs->rowCount();
+        $rs->closeCursor();
+        return $cnt;
     }
     function begin() {
         if(!$this->isconnected)
             return false;
-        return $this->link->query('BEGIN');
+        $this->link->setAttribute(PDO::ATTR_AUTOCOMMIT,0);
+        $execute = $this->link->beginTransaction();
+        if ($execute === false)
+            return $this->errsql(false, 'begin失败:'.$this->pdoerr());
+        return $execute;
     }
     function commit() {
         if(!$this->isconnected)
             return false;
-        return $this->link->query('COMMIT');
+        $execute = $this->link->commit();
+        $this->link->setAttribute(PDO::ATTR_AUTOCOMMIT,1);
+        if ($execute === false)
+            return $this->errsql(false, 'commit失败:'.$this->pdoerr());
+        return $execute;
     }
     function rollback() {
         if(!$this->isconnected)
             return false;
-        return $this->link->query('ROLLBACK');
+        $execute = $this->link->rollback();
+        $this->link->setAttribute(PDO::ATTR_AUTOCOMMIT,1);
+        if ($execute === false)
+            return $this->errsql(false, 'rollback失败:'.$this->pdoerr());
+        return $execute;
+    }
+    function pdoerr()
+    {
+        $err = $this->link->errorInfo();
+        return $this->link->errorCode().':'.@$err[2];
     }
     function errsql($ret,$msg)
     {
         $this->error = $msg;
         return $ret;
     }
-    function refvalues($arr){
-        if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
-            $refs = array();
-            foreach($arr as $key => $value)
-                $refs[$key] = &$arr[$key];
-            return $refs;
-        }
-        return $arr;
-    }
-    function _prepare($query,$data)
-    {
+    function _prepare($query,$data){
         $rs = $this->link->prepare($query);
         if($rs === false)
-            return $this->errsql(false, 'SQL预处理出错:'.$this->link->error);
-        if($rs->param_count != count($data))
-            return $this->errsql(false, "参数数量不对:param_count={$rs->param_count},count(data)=".count($data));
-        if (count($data)>0) {
-            $sv = '';
-            foreach($data as $d)
-            {
-                if(is_double($d))
-                    $sv.='d';
-                else if(is_long($d))
-                    $sv.='i';
-                else
-                    $sv.='s';
-            }
-            array_unshift($data, $sv);
-            call_user_func_array(array($rs, 'bind_param'),$this->refvalues($data));
-        }
-        $execute = $rs->execute();
-        if($execute === false)
-            return $this->errsql(false, 'SQL执行出错:'.$rs->error);
+            return $this->errsql(false, "SQL预处理出错[{$query}]:".$this->pdoerr());
+        $execute = $rs->execute($data);
+        if ($execute === false)
+            return $this->errsql(false, "SQL执行出错[{$query}]:".$this->pdoerr());
         return $rs;
     }
 }

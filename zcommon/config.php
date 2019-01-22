@@ -10,9 +10,25 @@ class ciy_config {
         $ret = array();
         if($index == 1)
         {
+            $ret['type'] = 'pdo';
+            $ret['db'] = 'mysql';
+            $ret['charset'] = 'utf8';
+            $ret['level'] = 'default';//ns 一主多从模式；ms 单库多主多从模式。
+            $ret['name'] = 'ciyphp';
+            $ret['port'] = 3306;
+            $ret['host'] = '127.0.0.1';//填写web URL地址，则为json方式访问远程数据库。远程服务器增加serverdata.php即可。localhost
+            $ret['user'] = 'ciyphp';
+            $ret['pass'] = 'CiyPHP';
+            if(stripos($_SERVER['HTTP_HOST'],'.local') !== false)
+            {
+                $ret['pass'] = 'CiyPHP';
+            }
+        }
+        else if($index == 2)
+        {
             $ret['type'] = 'mysql';//mysql-tab 多主多从读写分离+分库模式；mysql-ms 单库多主多从读写分离模式。详见data.php注释
             $ret['charset'] = 'utf8';
-            $ret['name'] = 'ciyphp';
+            $ret['name'] = 'ciyphp';//需要mysqlnd
             $ret['port'] = 3306;
             $ret['host'] = '127.0.0.1';//填写web URL地址，则为json方式访问远程数据库。远程服务器增加serverdata.php即可。localhost
             $ret['user'] = 'ciyphp';
@@ -22,7 +38,7 @@ class ciy_config {
                 $ret['pass'] = 'CiyPHP';
             }
         }
-        else if($index == 2)
+        else if($index == 3)
         {
             //$ret['type']...   第二个数据库服务器集群
         }

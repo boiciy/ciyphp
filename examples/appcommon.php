@@ -197,7 +197,9 @@ function get_millistime()
 function verify() {
     global $mydata;
     $uid = deid(cookie('uid'));
-    $userrow = $mydata->getone('d_user', 'id=' . $uid);
+    $sql = new ciy_sql('d_user');
+    $sql->where('id',$uid);
+    $userrow = $mydata->getone($sql);
     if ($userrow === null || $userrow === false)
         return false;
     if (cookie('sid') != $userrow['sid'])

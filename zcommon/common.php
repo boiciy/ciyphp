@@ -273,26 +273,8 @@ function ciy_runCSV() {
     $funcname = 'csv_' . get('func');
     if (!function_exists($funcname))
     {
-        global $mydata;
-        $table = get('table');
-        $where = get('where');
-        $order = get('order');
-        $column = get('column');
-        if(empty($table))
-        {
-            pr($funcname.'调试信息：函数不存在，无table参数');
-            return;
-        }
-        $retarr = array();
-        $rows = $mydata->get(0,0, $table, $where,$order,$column);
-        if(is_array($rows) && count($rows) > 0)
-        {
-            $fs = array();
-            foreach($rows[0] as $f=>$v)
-                $fs[] = $f;
-            $retarr = array_merge($retarr,array($fs));
-        }
-        $retarr = array_merge($retarr,$rows);
+        pr('调试信息：'.$funcname.'函数未定义');
+        return;
     }
     else
         $retarr = call_user_func($funcname);
@@ -331,7 +313,16 @@ function ciy_runCSV() {
     exit;
 }
 function get($name, $defvalue = '') {
-    return isset($_GET[$name]) ? $_GET[$name] : $defvalue;
+    if(!isset($_GET[$name]))
+        return $defvalue;
+    $val = $_GET[$name];
+    //原始数据监控
+    return $val;
+}
+function getint($name, $defvalue = 0) {
+    if(!isset($_GET[$name]))
+        return $defvalue;
+    return (int)$_GET[$name];
 }
 
 function cookie($name, $defvalue = '') {
@@ -578,27 +569,36 @@ function delfile($file)
  * 调试打印函数。也可以用var_dump。
  * 对于需要立即输出的情况，用本函数更方便。
  */
-function pr($var) {
-    
+function pr() {
     echo "\n".'<pre>';
-    if (is_null($var))
-        echo 'null';
-    else if (is_long($var))
-        echo 'long:' . $var;
-    else if (is_integer($var))
-        echo 'int:' . $var;
-    else if (is_string($var))
-    {
-        if(strlen($var) == 0)
-            echo 'str:---空----';
-        else
-            echo 'str:' . $var;
-    }
-    else if (is_bool($var))
-        echo 'bool:' . ($var ? 'true' : 'false');
-    else {
-        echo 'Type:' . gettype($var) . "\n";
-        print_r($var);
+    $first = true;
+    foreach(func_get_args() as $var) {
+        if (is_null($var))
+            echo 'null';
+        else if (is_long($var))
+            echo 'long:' . $var;
+        else if (is_integer($var))
+            echo 'int:' . $var;
+        else if (is_string($var))
+        {
+            if(strlen($var) == 0)
+                echo 'str:---空----';
+            else
+            {
+                if($first&&func_num_args()>1)
+                    echo '<kbd>' . $var.'</kbd>';
+                else
+                    echo 'str:' . $var;
+            }
+        }
+        else if (is_bool($var))
+            echo 'bool:' . ($var ? 'true' : 'false');
+        else {
+            echo 'Type:' . gettype($var) . "\n";
+            print_r($var);
+        }
+        $first = false;
+        echo "\n";
     }
     echo '</pre>'."\n";
     @ob_flush();

@@ -6,15 +6,23 @@
 ====================================================================================*/
 /**
  * 应用数据层类库   分两个库文件。调用方式一致。单数据库服务器请用单服版，效率较高。多数据库服务器使用多服版。
- * 1、type: mysql       [单服版]访问单台Mysql(Mariadb)服务器
+ * 1、type: mysql     使用MySQLi引擎
+ *    type: pdo       使用PDO引擎
+ *    type: http      使用http透传（注意安全控制，只建议临时数据迁移时使用，正常业务不要使用）
+ *        ...['db'] = mysql     mysql/Mariadb数据库
+ *        ...['db'] = mssql     MSSQL数据库
+ *        ...['db'] = pgsql     PostgreSQL数据库
+ *        ...['db'] = oracle    Oracle数据库
  * 
- * 2、type: mysql-ms    [多服版]Mysql(Mariadb)支持一主多从和多主多从，不分库的读写分离模式。
+ * 2、level: default    [单服版]
+ *        ...['host'] = localhost;
+ * 
+ *    level: ns         [多服版] 一主多从模式。
  *        ...['host'] = array('m_ip','ip2','ip3');   m_*为写服务器。默认随机连接一个读服务器。
  * 
- * 3、type: mysql-tab   [多服版]Mysql(Mariadb)支持多主多从，分库的读写分离模式。
+ *    level: ms         [多服版] 单库多主多从模式。
  *        ...['host'] = array(array('m_ip','m_ip2','ip3'),array('m_ip','ip2','ip3'));m_*为写服务器。支持加权选择空闲读服务器
  * 
- * 4、type: pgsql       [单服版]访问单台PostgreSQL服务器
  * 
  * 
  * getone       table,where,order,column获取一条数据。          无数据返回null。    出错返回false   判断is_array，确认数据有效
@@ -23,13 +31,165 @@
  * set          更新或新增数据。        成功返回id。        出错返回false
  * delete       删除及备份数据。        成功返回影响行数。  出错返回false
  * execute      执行SQL语句。           成功返回影响行数。  出错返回false
+ * begin        开始事务                成功返回true        出错返回false
+ * commit       事务提交                成功返回true        出错返回false
+ * rollback     事务回滚                成功返回true        出错返回false
+ * tran         事务回调                成功返回true        出错返回false
  * 
- * 变量名取名，建议getone函数使用$xxrow，get函数使用$xxrows。
+ * 变量名取名尽量用s尾缀区分，建议getone函数使用$xxrow，get函数使用$xxrows。
 */
+class ciy_sql{
+    public $table;
+    public $where;
+    public $order;
+    public $column;
+    public $group;
+    public $tsmt;
+
+    function __construct($table = '') {
+        $this->tsmt = array();
+        $this->table = $table;
+        $this->column = '*';
+        $this->where = '';
+        $this->order = '';
+        $this->group = '';
+        $this->having = '';
+    }
+    function table($table)
+    {
+        $this->table = $table;
+        return $this;
+    }
+    function column($column)
+    {
+        $this->column = $column;
+        return $this;
+    }
+    function where($query,$data,$op = '=')//m 自定义，like 模糊，in 数组，其他 操作符
+    {
+        if(empty($query) || $data === null)
+            return $this;
+        if($data === '' && $op !== '<>')
+            return $this;
+        if($op == 'like')
+        {
+            if($data[0] != '%' && $data[strlen($data)-1] != '%')
+                $data = "%{$data}%";
+            $query = " and {$query} like ?";
+        }
+        else if($op == 'in')
+        {
+            if($query == 'id')
+            {
+                $datas = explode(',',$data);
+                $ids = array();
+                foreach($datas as $d)
+                    $ids[] = (int)$d;
+                $data = implode(',',$ids);
+            }
+            else
+            {
+                //如接受外部参数，请在这里检查
+            }
+            $query = " and {$query} in ({$data})";
+        }
+        else if($op == 'm'){}
+        else
+            $query = " and {$query}{$op}?";
+        $cnt = substr_count($query,'?');
+        if($cnt > 1)
+        {
+            if(!is_array($data))
+                return $this;
+            if(count($data) != $cnt)
+                return $this;
+            foreach($data as $d)
+                $this->tsmt[] = $d;
+        }
+        else if($cnt == 1)
+            $this->tsmt[] = $data;
+        $this->where.=$query;
+        return $this;
+    }
+    function order($order)
+    {
+        //检查order是否字母数字_-,空格后是否跟紧desc
+        $this->order = $order;
+        return $this;
+    }
+    function group($group)
+    {
+        //检查group是否字母数字_-
+        $this->group = $group;
+        return $this;
+    }
+    function having($query,$data = '',$op = '=')
+    {
+        if(empty($query))
+            return $this;
+        if(empty($data))
+            return $this;
+        if($op != 'm')
+            $query = " and {$query}{$op}?";
+        $cnt = substr_count($query,'?');
+        if($cnt > 1)
+        {
+            if(!is_array($data))
+                return $this;
+            if(count($data) != $cnt)
+                return $this;
+            foreach($data as $d)
+                $this->tsmt[] = $d;
+        }
+        else if($cnt == 1)
+            $this->tsmt[] = $data;
+        $this->having.=$query;
+        return $this;
+    }
+    function buildsql()
+    {
+        if(empty($this->table))
+            return null;
+        $sql = "select {$this->column} from {$this->table}";
+        $sql .= $this->buildwhere();
+        if(!empty($this->order))
+            $sql .=' order by '.$this->order;
+        if(!empty($this->group))
+            $sql .=' group by '.$this->group;
+        return $sql;
+    }
+    function buildwhere()
+    {
+        if(empty($this->where))
+            return '';
+        if(strpos($this->where,' and ') === 0)
+            $this->where = substr($this->where,5);
+        return ' where '.$this->where;
+    }
+}
 class ciy_data {
     public $linkmaster;//写服务器驱动层类实例。
     public $dbindex;//指定数据库集群，参数在config.php中配置，可配置多个数据库服务器集群。
     public $error;
+    public $master;
+    public $dataupdate;
+    public $datainsert;
+    
+    function data($dataupdate)
+    {
+        $this->dataupdate = $dataupdate;
+        return $this;
+    }
+    function datainsert($datainsert)
+    {
+        $this->datainsert = $datainsert;
+        return $this;
+    }
+    function master($master)
+    {
+        $this->master = $master;
+        return $this;
+    }
 
     function __construct($dbindex = 1) {
         $this->linkmaster = false;
@@ -43,18 +203,24 @@ class ciy_data {
         if($this->linkmaster === false)
         {
             $cfg = ciy_config::getdb($this->dbindex);
-            if(stripos($cfg['host'],'http') === 0)
+            if($cfg['type'] == 'http')
             {
-                
                 require_once 'dbajax.php';
                 $this->linkmaster = new ciy_dbajax();
                 $this->linkmaster->connect($cfg['host'],$cfg['user'], $cfg['pass']);
             }
-            else
+            else if($cfg['type'] == 'mysql')
             {
                 require_once 'mysql.php';
                 $this->linkmaster = new ciy_mysql();
-                $this->linkmaster->connect($cfg['type'],$cfg['host'], $cfg['user'], $cfg['pass'], $cfg['name'], $cfg['port'],$cfg['charset']);
+                $this->linkmaster->connect($cfg['host'], $cfg['user'], $cfg['pass'], $cfg['name'], $cfg['port'],$cfg['charset']);
+            }
+            else if($cfg['type'] == 'pdo')
+            {
+                //level = ns/ms集群扩展
+                require_once 'pdo.php';
+                $this->linkmaster = new ciy_pdo();
+                $this->linkmaster->connect($cfg['db'],$cfg['host'], $cfg['user'], $cfg['pass'], $cfg['name'], $cfg['port'],$cfg['charset']);
             }
         }
         return $this->linkmaster;
@@ -62,106 +228,142 @@ class ciy_data {
 /**
  * 获取一条数据。
  * 返回array()，无数据返回null，出错返回false
+ * csql         SQL拼接类
  * 例：
- * $row = $mydata->getone('user','id=1');
+ * $csql = new ciy_sql();
+ * $csql->...
+ * $row = $mydata->getone($csql);
  * if(is_array($row))
- * {
- *      $row['username']
- * }
+ *      $row['username']...
  */
-    function getone($table, $where='', $order='', $column='',$master=false) {
-        (strpos($where,' and ') === 0) && $where = substr($where,5);
-        $ret = $this->connect($master)->getone($table, $where,$order,$column);
+    function getone($csql) {
+        $ret = $this->connect($this->master)->get(2,$csql->buildsql().' limit 0,1',$csql->tsmt);
         if($ret === false || $ret === null)
-            return $this->errdata($ret,$master);
+            return $this->errdata($ret);
         return $ret;
     }
 
 /**
  * 获取一条数据的单个字段。
  * 返回变量，无数据返回null，出错返回false
- * 用(int)  或  .''  强制转换类型直接使用数据
+ * csql         SQL拼接类
  * 例：
- * $usercount = (int)$mydata->getonescalar('user','');
- * $username = ''.$mydata->getonescalar('user','id=20','username');
+ * $csql = new ciy_sql();
+ * $usercount = (int)$mydata->get1($csql);
+ * $csql->column('truename');
+ * $username = $mydata->get1($csql);
  */
-    function getonescalar($table, $where='', $column='', $order='',$master=false) {
-        (strpos($where,' and ') === 0) && $where = substr($where,5);
-        $ret = $this->connect($master)->getonescalar($table, $where, $column,$order);
+    function get1($csql) {
+        if($csql->column == '*')
+            $csql->column = 'count(*)';
+        $ret = $this->connect($this->master)->get(3,$csql->buildsql().' limit 0,1',$csql->tsmt);
         if($ret === false || $ret === null)
-            return $this->errdata($ret,$master);
+            return $this->errdata($ret);
         return $ret;
     }
 /**
  * 获取数据集合。
  * 返回array()，出错返回false
  * 判断is_array，确认数据有效
- * 特殊的，join/union/show等，可以直接使用SQL语句。
- * pageno       第pageno页
- * pagecount    每页pagecount条
- * table        表名
- * where        查询条件（不带where），请注意SQL注入的过滤。
- * order        排序条件（不带order by）
- * column       返回字段列表，默认 *
- * master       true返回写数据库数据，false返回读数据库数据
+ * csql         SQL拼接类
+ * pageno       第pageno页，不分页传null，默认null
+ * pagecount    每页pagecount条，默认20
+ * rowcount     返回总数据条数(数据量大，查询耗时较高)，不填不查询。
  * 例：
-$rows = $mydata->get(1,20,'user');
-if(is_array($rows))
-{
+ * $rows = $mydata->get($csql);//查询全部数据
+ * $rows = $mydata->get($csql,1,$pagecount,$rowcount);
+if(is_array($rows)){
      foreach($rows as $row)
-     {
-         $row['username']
-     }
+         $row['username']...
 }
-$rows = $mydata->get(1,20,'sqlshow full fields from table'); //执行 show full fields from table，获取表各个字段数据
  */
-    function get($pageno,$pagecount, $table, $where='', $order = '', $column = '',$master=false) {
-        (strpos($where,' and ') === 0) && $where = substr($where,5);
-        $ret = $this->connect($master)->get($pageno,$pagecount, $table, $where, $order, $column);
+    function get($csql,$pageno = null,&$pagecount=20,&$rowcount = false) {//$pageno=null 查询全部
+        if($pagecount === null)
+            $pagecount = 20;
+        $rowcount = 0;
+        $sql = $csql->buildsql();
+        if($pageno !== null)
+        {
+            if($pageno < 1)
+                $pageno = 1;
+            if($pagecount < 2)
+                $pagecount = 20;
+            $pageid = $pagecount * ($pageno - 1);
+            $sql .= " limit {$pageid},{$pagecount}";
+        }
+        $ret = $this->connect($this->master)->get(1,$sql,$csql->tsmt);
         if($ret === false)
-            return $this->errdata($ret,$master);
+            return $this->errdata($ret);
+        if($rowcount !== false)
+        {
+            $csql->column = 'count(*)';
+            $rowcount = (int)$this->connect($this->master)->get(3,$csql->buildsql(),$csql->tsmt);
+        }
+        return $ret;
+    }
+/**
+ * 原始参数获取数据集合。
+ * 返回array()，出错返回false
+ * sql          SQL prepare字符串
+ * tsmt         array ?对应数据集
+ * 例：
+ * $row = $mydata->getraw('select * from xxx where id=?',[3]);
+ */
+    function getraw($sql,$tsmt) {
+        $ret = $this->connect($this->master)->get(1,$sql,$tsmt);
+        if($ret === false)
+            return $this->errdata($ret);
         return $ret;
     }
 /**
  * 更新或新增数据。
  * 成功返回id(insert返回新增的id，update读取第一条数据id)，失败返回false
- * updata       待更新数据（数组）。
- * table        表名
- * where        查询条件（不带where），请注意SQL注入的过滤。
+ * csql         SQL拼接类
  * type         指定写入方式。   auto：自动识别[默认]；insert：只新增；update：只更新
- * insertdata   新增时附加的数据（数组），默认null。
  * 例：
 $updata = array();
 $updata['username'] = 'ciy.cn';
-$id = $mydata->set($updata, 'users','id=20','update');//更新
-$newid = $mydata->set($updata, 'users','id=20');//更新或新增
 $updatainsert = array();
 $updatainsert['addtimes'] = getnow();
 $updatainsert['ip'] = getip();
-$newid = $mydata->set($updata, 'users','id=20','auto',$updatainsert);//更新或新增
+$id = $mydata->data($updata)->set($csql);//更新
+$id = $mydata->data($updata)->datainsert($updatainsert)->set($csql);//可能新增
  */
-    function set($updata, $table, $where, $type = 'auto', $insertdata = null) {
-        (strpos($where,' and ') === 0) && $where = substr($where,5);
-        $ret = $this->connect(true)->set($updata, $table, $where, $type, $insertdata);
+    function set($csql, $type = 'auto') {
+        $ret = $this->connect(true)->set($csql, $type,$this->dataupdate,$this->datainsert);
+        $this->dataupdate = null;
+        $this->datainsert = null;
         if($ret === false)
-            return $this->errdata($ret,true);
+            return $this->errdata($ret);
         return $ret;
     }
 /**
- * 删除表数据，支持备份到_bak。
- * 注意_bak建表时，应去掉id的自增属性。
+ * 删除表数据，支持备份到_bak。（注意_bak建表时，应去掉id的自增属性）
  * 成功返回影响行数，失败返回false
- * table        表名
- * where        查询条件（不带where），请注意SQL注入的过滤。
- * type         指定删除方式。   空：直接删除；backup：先备份到table_bak，再删除。
+ * csql         SQL拼接类
+ * backup       false:直接删除；true：先备份到table_bak，再删除。
  * 例：
-$affected = $mydata->delete('users','id=20','backup');//备份后删除
+$affected = $mydata->delete($csql,true);//备份后删除
  */
-    function delete($table, $where, $type = '') {//backup
-        (strpos($where,' and ') === 0) && $where = substr($where,5);
-        $ret = $this->connect(true)->delete($table, $where, $type);
+    function delete($csql,$backup = false)
+    {
+        if($backup)
+        {
+            $fields = $this->connect(true)->get(1,'show full fields from '.$csql->table,array());
+            $fieldlts = array();
+            if($fields === false)
+                return $this->errdata($fields);
+            foreach ($fields as $row)
+                $fieldlts[] = $row['Field'];
+            $fieldlt = implode(',',$fieldlts);
+            $sql = "insert into {$csql->table}_bak ({$fieldlt}) select {$fieldlt} from {$csql->table}".$csql->buildwhere();
+            $ret = $this->connect(true)->execute($sql, $csql->tsmt);
+            if($ret === false)
+                return $this->errdata($ret);
+        }
+        $ret = $this->connect(true)->execute("delete from {$csql->table}".$csql->buildwhere(), $csql->tsmt);
         if($ret === false)
-            return $this->errdata($ret,true);
+            return $this->errdata($ret);
         return $ret;
     }
 /**
@@ -169,15 +371,49 @@ $affected = $mydata->delete('users','id=20','backup');//备份后删除
  * 成功返回影响行数，失败返回false
  * sql      SQL语句。
  * 例：
-$affected = $mydata->execute('update users set username=\'abc\' where id=30');
+$affected = $mydata->execute('update users set username=? where id=?',['aaa',12]);
  */
-    function execute($sql) {
-        $ret = $this->connect(true)->execute($sql);
+    function execute($sql,$tsmt=array()) {
+        $ret = $this->connect(true)->execute($sql,$tsmt);
         if($ret === false)
-            return $this->errdata($ret,true);
+            return $this->errdata($ret);
         return $ret;
     }
-    function errdata($ret,$master)
+    function begin() {
+        $ret = $this->connect(true)->begin();
+        if($ret === false)
+            return $this->errdata($ret);
+        return $ret;
+    }
+    function commit() {
+        $ret = $this->connect(true)->commit();
+        if($ret === false)
+            return $this->errdata($ret);
+        return $ret;
+    }
+    function rollback() {
+        $ret = $this->connect(true)->rollback();
+        if($ret === false)
+            return $this->errdata($ret);
+        return $ret;
+    }
+    function tran($func)
+    {
+        $this->begin();
+        $ret = false;
+        try{
+            $ret = $func();
+        }catch(Exception $ex){
+            $ret = false;
+            $this->error = $ex->getMessage();
+        }
+        if ($ret === false)
+            $this->rollback();
+        else
+            $this->commit();
+        return $ret;
+    }
+    function errdata($ret)
     {
         $this->error = $this->linkmaster->error;
         return $ret;

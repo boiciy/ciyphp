@@ -1,7 +1,7 @@
 <?php
 require 'init.php';
 require PATH_PROGRAM . '/' . NAME_SELF . '.pro.php';
-?><!DOCTYPE html> <html>
+?><!DOCTYPE html><html>
 <head>
 <title>管理中心</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">

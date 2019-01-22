@@ -3,15 +3,11 @@ $mydata = new ciy_data();
 $table = 'd_test';
 ciy_runJSON();
 ciy_runCSV();
-$pageno = (int)get('page', 1);
-$pagecount = 20;
-$where = '';//不用担心" and "前缀，组合sql时会自动过滤
-$val = get('truename');
-if(!empty($val))
-    $where .= ' and truename like \'%'.$val.'%\'';
-$order = get('order','id desc');
-$rows = $mydata->get($pageno,$pagecount, $table, $where,$order);
-$mainrowcount = (int)$mydata->getonescalar($table, $where);
+$csql = new ciy_sql($table);
+$csql->where('truename',get('truename'),'like');
+$csql->order(get('order','id desc'));
+$pageno = getint('pageno', 1);
+$rows = $mydata->get($csql,$pageno,$pagecount,$mainrowcount);
 function csv_cc()//Excel CSV数据导出函数，ciy_runCSV()调用。
 {
     global $mydata;
@@ -36,9 +32,14 @@ function json_del() {//Ajax交互函数，ciy_runJSON()调用。
     global $table;
     $post = new ciy_post();
     $id = $post->getint('id');
-    $execute = $mydata->delete($table, 'id=' . $id, 'backup');
-    if ($execute === false)
-        return errjson('操作失败:'.$mydata->error);
+    $csql = new ciy_sql($table);
+    $csql->where('id',$id);
+    $oldrow = $mydata->getone($csql);
+    $ret = $mydata->tran(function()use($mydata,$csql){
+        return $mydata->delete($csql,true);
+    });
+    if($ret === false)
+        return errjson('删除失败:'.$mydata->error);
     return succjson();
 }
 function json_setact() {
