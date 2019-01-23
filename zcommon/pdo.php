@@ -19,18 +19,27 @@ class ciy_pdo {
         $this->error = '';
         $this->sql = '';
     }
-    function connect($db,$host,$user,$pass,$name,$port,$charset) {
+    function connect($conn) {
         if($this->isconnected)
             return true;
         if (!isset($this->link)) {
             try {
+                $timeout = 5;
+                if(isset($conn['timeout']))
+                    $timeout = (int)$conn['timeout'];
+                $charset = 'utf8';
+                if(isset($conn['charset']))
+                    $charset = $conn['charset'];
+                $persistent = false;
+                if(isset($conn['persistent']))
+                    $persistent = (bool)$conn['persistent'];
                 $opts = array(
-                    PDO::ATTR_TIMEOUT => 5,
-                    PDO::ATTR_PERSISTENT=>false,
+                    PDO::ATTR_TIMEOUT => $timeout,
+                    PDO::ATTR_PERSISTENT=>$persistent,
                     PDO::ATTR_ERRMODE=>PDO::ERRMODE_SILENT,
                     PDO::MYSQL_ATTR_INIT_COMMAND=>"SET CHARACTER SET {$charset}"
                     );
-                $this->link = new PDO("{$db}:host={$host};dbname={$name};port={$port};", $user,$pass,$opts);
+                $this->link = new PDO($conn['dsn'], $conn['user'],$conn['pass'],$opts);
             } catch (PDOException $e) {
                 return $this->errsql(false, 'PDO连接失败:' . $e->GetMessage());
             }

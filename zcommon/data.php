@@ -5,32 +5,29 @@
  * 版本：0.5.2
 ====================================================================================*/
 /**
- * 应用数据层类库   分两个库文件。调用方式一致。单数据库服务器请用单服版，效率较高。多数据库服务器使用多服版。
+ * 应用数据层类库（单服版）
+ * 注：单数据库服务器请用单服版，效率较高。多数据库服务器使用多服版。
  * 1、type: mysql     使用MySQLi引擎
  *    type: pdo       使用PDO引擎
  *    type: http      使用http透传（注意安全控制，只建议临时数据迁移时使用，正常业务不要使用）
- *        ...['db'] = mysql     mysql/Mariadb数据库
- *        ...['db'] = mssql     MSSQL数据库
- *        ...['db'] = pgsql     PostgreSQL数据库
- *        ...['db'] = oracle    Oracle数据库
  * 
- * 2、level: default    [单服版]
+ * 2、mode: default    [单服版]
  *        ...['host'] = localhost;
  * 
- *    level: ns         [多服版] 一主多从模式。
- *        ...['host'] = array('m_ip','ip2','ip3');   m_*为写服务器。默认随机连接一个读服务器。
+ *    mode: ns         [多服版] 一主多从模式。
+ *        ...['conn'] = [0]主，其他从;   第一个为写服务器。支持加权选择空闲读服务器
  * 
- *    level: ms         [多服版] 单库多主多从模式。
- *        ...['host'] = array(array('m_ip','m_ip2','ip3'),array('m_ip','ip2','ip3'));m_*为写服务器。支持加权选择空闲读服务器
+ *    mode: ms         [多服版] 单库多主多从模式。
+ *        ...['conn'][n]['master'] = true;  master=true为写服务器。支持加权选择空闲读服务器
  * 
  * 
- * 
- * getone       table,where,order,column获取一条数据。          无数据返回null。    出错返回false   判断is_array，确认数据有效
- * getonescalar table,where,column,order获取一条数据的单个字段。无数据返回null。    出错返回false   用(int)  或  .''  强制转换类型直接使用数据
- * get          table,where,order,column获取数据集合。          无数据返回array()。 出错返回false   判断is_array，确认数据有效  可以用sqlshow查询
- * set          更新或新增数据。        成功返回id。        出错返回false
- * delete       删除及备份数据。        成功返回影响行数。  出错返回false
- * execute      执行SQL语句。           成功返回影响行数。  出错返回false
+ * getone       获取一条数据。          无数据返回null      出错返回false   判断is_array，确认数据有效
+ * getonescalar 获取一条第一列数据      无数据返回null      出错返回false   
+ * get          获取数据集合。          无数据返回array()   出错返回false   判断is_array，确认数据有效
+ * getraw       原始方法获取数据集合。  无数据返回array()   出错返回false   判断is_array，确认数据有效
+ * set          更新或新增数据。        成功返回id          出错返回false
+ * delete       删除及备份数据。        成功返回影响行数    出错返回false
+ * execute      执行SQL语句。           成功返回影响行数    出错返回false
  * begin        开始事务                成功返回true        出错返回false
  * commit       事务提交                成功返回true        出错返回false
  * rollback     事务回滚                成功返回true        出错返回false
@@ -207,20 +204,20 @@ class ciy_data {
             {
                 require_once 'dbajax.php';
                 $this->linkmaster = new ciy_dbajax();
-                $this->linkmaster->connect($cfg['host'],$cfg['user'], $cfg['pass']);
+                $this->linkmaster->connect($cfg['conn'][0]);
             }
             else if($cfg['type'] == 'mysql')
             {
                 require_once 'mysql.php';
                 $this->linkmaster = new ciy_mysql();
-                $this->linkmaster->connect($cfg['host'], $cfg['user'], $cfg['pass'], $cfg['name'], $cfg['port'],$cfg['charset']);
+                $this->linkmaster->connect($cfg['conn'][0]);
             }
             else if($cfg['type'] == 'pdo')
             {
-                //level = ns/ms集群扩展
+                //mode = ns/ms集群扩展，请引用集群data文件
                 require_once 'pdo.php';
                 $this->linkmaster = new ciy_pdo();
-                $this->linkmaster->connect($cfg['db'],$cfg['host'], $cfg['user'], $cfg['pass'], $cfg['name'], $cfg['port'],$cfg['charset']);
+                $this->linkmaster->connect($cfg['conn'][0]);
             }
         }
         return $this->linkmaster;

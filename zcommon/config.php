@@ -11,38 +11,53 @@ class ciy_config {
         if($index == 1)
         {
             $ret['type'] = 'pdo';
-            $ret['db'] = 'mysql';
-            $ret['charset'] = 'utf8';
-            $ret['level'] = 'default';//ns 一主多从模式；ms 单库多主多从模式。
-            $ret['name'] = 'ciyphp';
-            $ret['port'] = 3306;
-            $ret['host'] = '127.0.0.1';//填写web URL地址，则为json方式访问远程数据库。远程服务器增加serverdata.php即可。localhost
-            $ret['user'] = 'ciyphp';
-            $ret['pass'] = 'CiyPHP';
+            $ret['mode'] = '';//空 单服务器模式；ns 一主多从模式；ms 单库多主多从模式。请替换专用data.php文件
+            $ret['conn'] = array();
+            $ret['conn'][] = array(
+                'dsn'=>'mysql:host=127.0.0.1;dbname=ciyphp;port=3306;',
+                //mysql:host=127.0.0.1;dbname=ciyphp;port=3306;                     MySQL/MariaDB
+                //pgsql:host=localhost;port=5432;dbname=ciyphp;                     PostgreSQL
+                //odbc:Driver={SQL Server};Server=127.0.0.1;Database=ciyphp         ODBC MSSQL
+                //oci:dbname=127.0.0.1:1521/ciyphp         ODBC MSSQL
+                'user'=>'ciyphp',
+                'pass'=>'CiyPHP',
+                'timeout'=>5,//数据库连接超时时间，默认5秒
+                'persistent'=>false,//持久连接，默认false
+                'charset'=>'utf8'//编码方式，默认utf8
+                );
             if(stripos($_SERVER['HTTP_HOST'],'.local') !== false)
             {
-                $ret['pass'] = 'CiyPHP';
+                $ret['conn'][0]['pass'] = 'CiyPHP';
             }
         }
-        else if($index == 2)
+        else if($index == 2)//第二个数据源，此处仅为多种驱动配置例程
         {
-            $ret['type'] = 'mysql';//mysql-tab 多主多从读写分离+分库模式；mysql-ms 单库多主多从读写分离模式。详见data.php注释
-            $ret['charset'] = 'utf8';
-            $ret['name'] = 'ciyphp';//需要mysqlnd
-            $ret['port'] = 3306;
-            $ret['host'] = '127.0.0.1';//填写web URL地址，则为json方式访问远程数据库。远程服务器增加serverdata.php即可。localhost
-            $ret['user'] = 'ciyphp';
-            $ret['pass'] = 'CiyPHP';
-            if(stripos($_SERVER['HTTP_HOST'],'local') !== false)
+            $ret['type'] = 'mysql';//需要mysqlnd支持
+            $ret['conn'] = array();
+            $ret['conn'][] = array(
+                'host'=>'127.0.0.1',
+                'name'=>'ciyphp',
+                'user'=>'ciyphp',
+                'pass'=>'CiyPHP',
+                'port'=>3306,//端口号，默认3306
+                'timeout'=>5,//数据库连接超时时间，默认5秒
+                'charset'=>'utf8'//编码方式，默认utf8
+                );
+            if(stripos($_SERVER['HTTP_HOST'],'.local') !== false)
             {
-                $ret['pass'] = 'CiyPHP';
+                $ret['conn'][0]['pass'] = 'CiyPHP';
             }
         }
         else if($index == 3)
         {
-            //$ret['type']...   第二个数据库服务器集群
+            $ret['type'] = 'http';
+            $ret['conn'] = array();
+            $ret['conn'][] = array(
+                'host'=>'http://ciyphp.ciy.cn/serverdata.php',//填写web URL地址，访问远程数据库（仅限于临时内部数据分析使用）
+                'user'=>'ciyphp',
+                'pass'=>'ciy'
+                );
         }
         return $ret;
     }
 }
-//echo ciy_config::$conmmonkey;

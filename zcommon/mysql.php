@@ -16,20 +16,30 @@ class ciy_mysql {
     public $isconnected;
     public $error;
     public $sql;
+    private $checkrs = true;
     function __construct() {
         $this->isconnected = false;
         $this->error = '';
         $this->sql = '';
     }
-    function connect($host,$user,$pass,$name,$port,$charset) {
+    function connect($conn) {
         if($this->isconnected)
             return true;
         if (!isset($this->link))
             $this->link = new mysqli();
-        $this->link->options(MYSQLI_OPT_CONNECT_TIMEOUT,5);
-        $this->link->connect($host,$user,$pass,$name,$port);
+        $timeout = 5;
+        if(isset($conn['timeout']))
+            $timeout = (int)$conn['timeout'];
+        $charset = 'utf8';
+        if(isset($conn['charset']))
+            $charset = $conn['charset'];
+        $port = 3306;
+        if(isset($conn['port']))
+            $port = (int)$conn['port'];
+        $this->link->options(MYSQLI_OPT_CONNECT_TIMEOUT,$timeout);
+        $this->link->connect($conn['host'],$conn['user'],$conn['pass'],$conn['name'],$port);
         if($this->link->connect_errno>0)
-            return $this->errsql(false, 'SQLi连接失败:' . $this->link->connect_error);
+            return $this->errsql(false, 'mysqli连接失败:' . $this->link->connect_error);
         $this->link->set_charset($charset);
         $this->isconnected = true;
         return true;
@@ -46,6 +56,12 @@ class ciy_mysql {
         $rs = $this->_prepare($query,$data);
         if($rs === false)
             return false;
+        if($this->checkrs)
+        {
+            if(!method_exists($rs,'get_result'))
+                return $this->errsql(false, '服务器不支持mysqlnd模块，请编译安装该模块');
+            $this->checkrs = false;
+        }
         $result = $rs->get_result();
         if($result === false)
             return $this->errsql(false, 'SQL获取结果集出错:'.$this->link->error);
