@@ -124,7 +124,7 @@ class ciy_sql{
     {
         if(empty($query))
             return $this;
-        if(empty($data))
+        if($data==='')
             return $this;
         if($op != 'm')
             $query = " and {$query}{$op}?";
@@ -396,6 +396,11 @@ $affected = $mydata->execute('update users set username=? where id=?',['aaa',12]
     }
     function tran($func)
     {
+        if (!($func instanceof Closure))
+        {
+            $this->error = '没有传递正确的闭包函数';
+            return false;
+        }
         $this->begin();
         $ret = false;
         try{

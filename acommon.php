@@ -421,10 +421,11 @@ function verifyadmin($errfunc = null) {
             }
         }
     }
-    if($errfunc !== null)
+    if ($errfunc instanceof Closure)
     {
         $errfunc($err);
         die();
+        return;
     }
     if (isset($_GET['json']))
         die(json_encode(errjson($err)));
