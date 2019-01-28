@@ -27,7 +27,7 @@ require PATH_PROGRAM . NAME_SELF . '.pro.php';
     
 <?php
 if($rows === false)
-    echo '<div class="table-nodata">数据出错：'.$mydata->error.'</div>';
+    echo '<div class="table-nodata">查询失败:'.$mydata->error.'</div>';
 else if(count($rows) == 0)
     echo '<div class="table-nodata">无数据</div>';
 else{

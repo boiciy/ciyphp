@@ -5,7 +5,7 @@
             styleElement = document.createElement('style');
             styleElement.type = 'text/css';
             styleElement.id = 'style_upload';
-            styleElement.innerText = '.upload,.upload li{margin:0;padding:0;list-style-type: none}.upload{border:1px solid #d7d7d7;padding:15px 5px 5px 15px;zoom:1;position:relative;width:100%;box-sizing: border-box;}.upload:after{display:block;clear:both;content:"";visibility:hidden;height:0}.upload .item{width:150px;height:120px;float:left;margin:0 10px 10px 0;background:#f8f8f8;position:relative;border-radius:4px;background-size:contain;background-position:center center;background-repeat:no-repeat;border:1px solid #d7d7d7;overflow:hidden}.upload .item .filename{font-size:12px;width:90%;left:5%;position:absolute;top:70%;line-height:1.3em;height:2.6em;overflow:hidden;text-align:center}.upload .item.error{border-color:#f20}.upload .item.error::after{content:"";background:rgba(255,255,255,.8);position:absolute;width:100%;height:100%;z-index:9;display:block;line-height:100%;text-align:center}.upload .item.error::before{content:attr(data-error);position:absolute;padding:10px;z-index:10;display:block;font-size:12px;color:#f20;top:0}.upload .item svg.icon{position:absolute;height:40%;top:20%;left:0;width:100%;opacity:0.6;}.upload .item svg.progress{position:absolute;bottom:0;width:100%;height:50%}.upload .item .progressnum{width:40px;height:40px;border-radius:40px;text-align:center;line-height:40px;font-size:12px;color:#fff;position:absolute;left:50%;margin-left:-20px;top:50%;margin-top:-20px;background:rgba(17,89,164,0.5)}.upload .item.add svg{top:30%}.upload .item.success::after{position:absolute;background:rgba(0,0,0,.6);content:"";left:0;right:0;top:0;bottom:0;opacity:0;transition:all .3s}.upload .item.success:hover::after{opacity:1}.upload .item.success svg.delete,.upload .item.success svg.look{position:absolute;height:30px;top:50%;margin-top:-15px;left:50%;color:#fff;z-index:10;transition:all .3s;cursor:pointer}.upload .item.success svg.delete{margin-left:-35px;height:26px;margin-top:-14px;left:-30px}.upload .item.success svg.look{margin-left:10px;left:105%}.upload .item.success:hover svg.delete{margin-left:-35px;left:50%;height:26px;margin-top:-14px;transition:all .3s}.upload .item.success:hover svg.look{margin-left:10px;left:50%;transition:all .3s}.upload .item.delete{opacity:.2;transition:all .3s}.upload input[type=\'file\']{display:none}.upload.one{width:150px;height:150px;padding:0}.upload.one li{height:100%;width:100%;margin:0;padding:0}.upload.one li.add svg{opacity:0;transition:all .3s;}.upload.one li.add:hover svg{opacity:1;transition:all .3s}.upload.one li.add svg{opacity:0.6;transition:all .3s}.upload.one .item{border:0 none;border-radius:0}.upload.one .add{position:absolute;top:0;right:0;left:0;background:0;box-sizing: border-box;}.upload.one .item.success svg.delete,.upload.one .item.success svg.look{top:0;margin-top:5px}.upload.one .item.success svg.look{margin-top:3px}.upload.multiple .add::before{content:"最多上传 "attr(data-num) " 个文件";width:100%;text-align:center;position:absolute;bottom:5px;font-size:12px;margin-top:14px;left:0;color:#999;white-space:nowrap}';
+            styleElement.innerText = '.upload,.upload li{margin:0;padding:0;list-style-type: none}.upload{border:1px solid #d7d7d7;padding:15px 5px 5px 15px;zoom:1;position:relative;width:100%;box-sizing: border-box;}.upload:after{display:block;clear:both;content:"";visibility:hidden;height:0}.upload .item{width:150px;height:120px;float:left;margin:0 10px 10px 0;background:#f8f8f8;position:relative;border-radius:4px;background-size:contain;background-position:center center;background-repeat:no-repeat;border:1px solid #d7d7d7;overflow:hidden}.upload .item .filename{font-size:12px;width:90%;left:5%;position:absolute;top:70%;line-height:1.3em;height:2.6em;overflow:hidden;text-align:center}.upload .item.error{border-color:#f20}.upload .item.error::after{content:"";background:rgba(255,255,255,.8);position:absolute;width:100%;height:100%;z-index:9;display:block;line-height:100%;text-align:center}.upload .item.error::before{content:attr(data-error);position:absolute;padding:10px;z-index:10;display:block;font-size:12px;color:#f20;top:0}.upload .item svg.icon{position:absolute;height:40%;top:20%;left:0;width:100%;opacity:0.6;}.upload .item svg.progress{position:absolute;bottom:0;width:100%;height:50%}.upload .item .progressnum{width:40px;height:40px;border-radius:40px;text-align:center;line-height:40px;font-size:12px;color:#fff;position:absolute;left:50%;margin-left:-20px;top:50%;margin-top:-20px;background:rgba(17,89,164,0.5)}.upload .item.add svg{top:30%}.upload .item.success::after{position:absolute;background:rgba(0,0,0,.6);content:"";left:0;right:0;top:0;bottom:0;opacity:0;transition:all .3s}.upload .item.success:hover::after{opacity:1}.upload .item.success svg.delete{position:absolute;height:30px;top:50%;margin-top:-15px;left:50%;color:#fff;z-index:10;transition:all .3s;cursor:pointer}.upload .item.success svg.delete{margin-left:-35px;height:26px;margin-top:-14px;left:-30px}.upload .item.success:hover svg.delete{margin-left:-15px;left:50%;height:26px;margin-top:-14px;transition:all .3s}.upload .item.delete{opacity:.2;transition:all .3s}.upload input[type=\'file\']{display:none}.upload.one{width:150px;height:150px;padding:0}.upload.one li{height:100%;width:100%;margin:0;padding:0}.upload.one li.add svg{opacity:0;transition:all .3s;}.upload.one li.add:hover svg{opacity:1;transition:all .3s}.upload.one li.add svg{opacity:0.6;transition:all .3s}.upload.one .item{border:0 none;border-radius:0}.upload.one .add{position:absolute;top:0;right:0;left:0;background:0;box-sizing: border-box;}.upload.one .item.success svg.delete{top:0;margin-top:5px}.upload.multiple .add::before{content:"最多上传 "attr(data-num) " 个文件";width:100%;text-align:center;position:absolute;bottom:5px;font-size:12px;margin-top:14px;left:0;color:#999;white-space:nowrap}';
             document.getElementsByTagName('head')[0].appendChild(styleElement);
         }
         var r = a(this),
@@ -13,7 +13,6 @@
                 A = a('<li class="item add"><svg class="icon" viewBox="0 0 1024 1024" version="1" xmlns="http://www.w3.org/2000/svg" width="200" height="200"><defs><style/></defs><path d="M768 810.7c-23.6 0-42.7-19.1-42.7-42.7s19.1-42.7 42.7-42.7c94.1 0 170.7-76.6 170.7-170.7 0-89.6-70.1-164.3-159.5-170.1L754 383l-10.7-22.7c-42.2-89.3-133-147-231.3-147s-189.1 57.7-231.3 147L270 383l-25.1 1.6c-89.5 5.8-159.5 80.5-159.5 170.1 0 94.1 76.6 170.7 170.7 170.7 23.6 0 42.7 19.1 42.7 42.7s-19.1 42.7-42.7 42.7c-141.2 0-256-114.8-256-256 0-126.1 92.5-232.5 214.7-252.4C274.8 195.7 388.9 128 512 128s237.2 67.7 297.3 174.2C931.5 322.1 1024 428.6 1024 554.7c0 141.1-114.8 256-256 256z" fill="#3688FF" p-id="4221"></path><path d="M640 789.3c-10.9 0-21.8-4.2-30.2-12.5L512 679l-97.8 97.8c-16.6 16.7-43.7 16.7-60.3 0-16.7-16.7-16.7-43.7 0-60.3l128-128c16.6-16.7 43.7-16.7 60.3 0l128 128c16.7 16.7 16.7 43.7 0 60.3-8.4 8.4-19.3 12.5-30.2 12.5z" fill="#5F6379" p-id="4222"></path><path d="M512 960c-23.6 0-42.7-19.1-42.7-42.7V618.7c0-23.6 19.1-42.7 42.7-42.7s42.7 19.1 42.7 42.7v298.7c0 23.5-19.1 42.6-42.7 42.6z" fill="#5F6379" p-id="4223"></path></svg></li>'),
                 e = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300" class="progress"><g fill="rgba(17,89,164,0.1)"><path d="M 0 70 Q 75 39, 150 70 T 300 70 T 450 70 T 600 70 T 750 70 V 320 H 0 V 0"></path><animateTransform attributeName="transform" attributeType="XML" type="translate" from="0" to="-300" dur="1.5s" repeatCount="indefinite"></animateTransform></g><g fill="rgba(17,89,164,0.15)"><path d="M 0 70 Q 87.5 47, 175 70 T 350 70 T 525 70 T 700 70 T 875 70 T 1050 70 V 320 H 0 V 0"></path><animateTransform attributeName="transform" attributeType="XML" type="translate" from="0" to="-350" dur="3s" repeatCount="indefinite"></animateTransform></g></svg><div class="progressnum"></div>',
                 g = '<svg xmlns="http://www.w3.org/2000/svg" class="delete" version="1" viewBox="0 0 1024 1024"><path fill="#fff" d="M512 70a439 439 0 0 1 442 442 439 439 0 0 1-442 442A439 439 0 0 1 70 512 439 439 0 0 1 512 70m0-40a482 482 0 1 0 0 964 482 482 0 0 0 0-964zm114 253v-1c0-21-17-38-38-38H436c-21 0-38 17-38 38v1H282v74h460v-74H626zM321 396v346c0 21 17 38 38 38h306c21 0 38-17 38-38V396H321zm114 306h-76V474h76v228zm115 0h-76V474h76v228zm115 0h-76V474h76v228z"/></svg>',
-                E = '<svg xmlns="http://www.w3.org/2000/svg" class="look" version="1" viewBox="0 0 1024 1024"><path fill="#fff" d="M451 835a386 386 0 1 1 0-771 386 386 0 0 1 0 771zm0-675a291 291 0 1 0 0 581 291 291 0 0 0 0-581zm450 798c-15 0-30-5-42-17L658 740a58 58 0 0 1 83-82l201 201a58 58 0 0 1-41 99"/></svg>',
                 d = a('<input type="file" name="file" />'),
                 b = a('<input type="hidden" />'),
                 j, u, t, o, n, m, y, B = {
@@ -25,6 +24,7 @@
                     save: r.attr("data-save") ? r.attr("data-save") : "upload/tmp/{Rnd}.{Ext}", //保存路径文件名
                     inputname: r.attr("data-name") ? r.attr("data-name") : "upload", //input name
                     num: r.attr("data-num") ? r.attr("data-num") : 1, //最多上传文件数量
+                    nodel: r.attr("data-nodel")=='true' ? true : false, //是否自动删除已上传的文件
                     action: r.attr("action") ? r.attr("action") : "upload.php", //后端处理文件名
                     size: r.attr("data-size") ? r.attr("data-size") : 1024*1024*1024, //非图片文件尺寸限制
                     value: r.attr("data-value") ? r.attr("data-value") : ""
@@ -33,6 +33,10 @@
         r.append(d.attr("multiple", B.num > 1 ? "multiple" : false));
         r.append(b.attr("name", B.inputname));
         r.addClass(B.num > 1 ? "multiple" : "one");
+        if(B.num < 1){
+            B.num = 1;
+            r.hide();
+        }
         r.on("click", "li.add", function() {
             d.click();
         }).on("change", "input[type='file']", function(H) {
@@ -52,10 +56,6 @@
             z(a(i.currentTarget))
         }).on("click", ".delete", function(i) {
             z(a(i.currentTarget).parent("li.success"))
-        }).on("click", "svg.look", function(i) {
-            if (D && typeof D == "function") {
-                D(r, a(i.currentTarget).parent("li.success").data("url"))
-            }
         }).on("mousedown", "li.success", function(I) {
             var i = a(I.target);
             j = a(this);
@@ -157,7 +157,7 @@
             var f = 0;
             for (var x in p) {
                 if (s < B.num && p[s]) {
-                    h = a("<li class='item success'></li>").append(g).append(typeof D == "function" ? E : "").data("url", p[s]).attr("data-filename", c(p[s])).css("background-image", "url('" + p[s] + "')").insertBefore(A);
+                    h = a("<li class='item success'></li>").append(g).data("url", p[s]).attr("data-filename", c(p[s])).css("background-image", "url('" + p[s] + "')").insertBefore(A);
                     r.data("num", ++f);//.removeClass("empty");
                     q()
                 }
@@ -216,11 +216,13 @@
                             J.children("svg.progress").remove();
                             J.children(".progressnum").remove();
                             if (M.result) {
-                                J.addClass("success").append(g).append(typeof D == "function" ? E : "").data("url", M.msg)
+                                J.addClass("success").append(g).data("url", M.msg)
                             } else {
                                 J.addClass("error").attr("data-error", M.msg ? M.msg : "服务端返回数据异常")
                             }
-                            q()
+                            q();
+                            if (D && typeof D == "function")
+                                D(M.msg);
                         },
                         xhr: function() {
                             var M = new XMLHttpRequest();
@@ -407,18 +409,21 @@
             var ii = [];
             if (b.val() != "")
                 ii = b.val().split(",");
-            for (var xx in ii)
+            if(!B.nodel)
             {
-                var bdel = true;
-                for (var x in i)
+                for (var xx in ii)
                 {
-                    if (i[x] == ii[xx])
-                        bdel = false;
+                    var bdel = true;
+                    for (var x in i)
+                    {
+                        if (i[x] == ii[xx])
+                            bdel = false;
+                    }
+                    if (bdel)
+                        a.ajax({url: B.action + "?delfile=" + ii[xx]});
                 }
-                if (bdel)
-                    a.ajax({url: B.action + "?delfile=" + ii[xx]});
             }
-            b.val(i.join(","))
+            b.val(i.join(","));
         }
         function z(i) {
             i.fadeOut(333, function() {

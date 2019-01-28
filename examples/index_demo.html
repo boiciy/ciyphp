@@ -151,6 +151,8 @@
         <button class='btn' onclick="alerttest(6)">无标题栏对话框</button>
         <button class='btn' onclick="alerttest(7)">无按钮对话框</button>
         <button class='btn' onclick="alerttest(8)">点空白不关闭</button>
+        <button class='btn' onclick="alerttest(9)">左对齐</button>
+        <button class='btn' onclick="alerttest(10)">右对齐</button>
 
         <hr/>
 
@@ -443,6 +445,14 @@ res === false && result === null && (result = false);
         if (type == 8)//点空白不关闭
         {
             ciy_alert('点空白不关闭', null, {nomaskclose: true});
+        }
+        if (type == 9)//左对齐
+        {
+            ciy_alert('左对齐', null, {align: 'left'});
+        }
+        if (type == 10)//右对齐
+        {
+            ciy_alert('右对齐', null, {align: 'right'});
         }
     }
     </script>

@@ -601,6 +601,8 @@ function ciy_table_adjust(domname,pathname){
         document.addEventListener("mousedown",function(ev){
             if(dodrag == null)
                 return;
+            if(ev.target.tagName != 'TH')
+                return;
             var index = 0;
             for (var i = 0; i < trs.length; i++)
             {
@@ -633,27 +635,28 @@ function ciy_table_adjust(domname,pathname){
             dodrag.mouseDown = true;
         });
         document.addEventListener("mouseup",function(ev){
-            if(dodrag != null)
+            if(dodrag == null)
+                return;
+            if(ev.target.tagName != 'TH')
+                return;
+            dodrag.mouseDown = false;
+            dodrag = null;
+            var sheet = style.sheet || style.styleSheet || {};
+            var rules = sheet.cssRules || sheet.rules;
+            var wids = [];
+            for (var i = 0; i < rules.length; i++)
             {
-                dodrag.mouseDown = false;
-                dodrag = null;
-                var sheet = style.sheet || style.styleSheet || {};
-                var rules = sheet.cssRules || sheet.rules;
-                var wids = [];
-                for (var i = 0; i < rules.length; i++)
-                {
-                    var tmpstr = rules[i].selectorText.substr(rules[i].selectorText.indexOf('nth-child(')+10);
-                    wids[parseInt(tmpstr.substr(0,tmpstr.indexOf(')')))-1] = rules[i].style.width;
-                }
-                var csstxt = '';
-                for (var i = 0; i < trs.length; i++)
-                {
-                    csstxt += ',';
-                    if(wids[i])
-                        csstxt += wids[i];
-                }
-                localStorage.setItem(pathname, csstxt.substr(1));
+                var tmpstr = rules[i].selectorText.substr(rules[i].selectorText.indexOf('nth-child(')+10);
+                wids[parseInt(tmpstr.substr(0,tmpstr.indexOf(')')))-1] = rules[i].style.width;
             }
+            var csstxt = '';
+            for (var i = 0; i < trs.length; i++)
+            {
+                csstxt += ',';
+                if(wids[i])
+                    csstxt += wids[i];
+            }
+            localStorage.setItem(pathname, csstxt.substr(1));
         });
         document.addEventListener("mousemove",function(ev){
             if(dodrag != null && dodrag.mouseDown)
@@ -833,15 +836,20 @@ function ciy_alert(content, cb, option){
     {
         $(domifm).load(function(e){
             e.target.contentWindow.alertautoheight = function(height){
-                if(height>document.body.scrollHeight - e.target.offsetTop - 60)
-                    height = document.body.scrollHeight - e.target.offsetTop - 60;
+                var bodyheight = document.body.scrollHeight;
+                if(bodyheight == 0)
+                    bodyheight = document.documentElement.scrollHeight;
+                if(bodyheight == 0)
+                    return;
+                if(height>bodyheight - e.target.offsetTop - 60)
+                    height = bodyheight - e.target.offsetTop - 60;
                 domifm.css("height",height+"px");
             };
             e.target.contentWindow.alertcb = function(isclose,btn,data){
                 if(isclose)
                     alertclose();
                 if(typeof(cb) == 'function')
-                    cb(btn,data);
+                    return cb(btn,data);
             };
         });
         
@@ -882,6 +890,11 @@ function ciy_alert(content, cb, option){
     }
     else
     {
+        if(option.align === 'right')
+            htmldom.css('left',window.innerWidth-htmldom.outerWidth()-15);
+        else if(option.align === 'left')
+            htmldom.css('left',15);
+        else
         htmldom.css('left',(window.innerWidth-htmldom.outerWidth())/2);
         if(window.innerHeight>htmldom.height())
             htmldom.css('top',(window.innerHeight-htmldom.outerHeight())/3);
@@ -1075,7 +1088,7 @@ function ciy_tab(afterfunc){
         uldom.children('li').each(function(){
             if($(this).hasClass("active"))
                 $(this).trigger('click');
-            if(this.offsetTop>1)
+            if(this.offsetTop>2)
                 uldom.css('height','6.1em');
             if(this.offsetTop>45)
                 uldom.css('height','9.1em');

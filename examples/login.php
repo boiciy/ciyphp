@@ -35,7 +35,7 @@ require PATH_PROGRAM . '/' . NAME_SELF . '.pro.php';
       </form>
       </div>
     </fieldset>
-      <code>推荐整体部署http2，ssl加密，密码部分无需JS加密。</code>
+      <code>推荐整体部署http2，ssl加密，密码部分无需JS加密。</code><br/>
       <code>如果仍使用http部署，建议使用md5/sha等做密文处理。</code>
   </div>
     <hr/>

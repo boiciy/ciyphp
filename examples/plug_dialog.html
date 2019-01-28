@@ -157,17 +157,33 @@ function alert12()
 }
 </script>
 
-<blockquote>其他对话框</blockquote>
-<button class='btn' onclick="alert20()">最大化对话框</button>
-<button class='btn' onclick="alert21()">点空白不关闭</button>
+<blockquote>左右对齐对话框</blockquote>
+<button class='btn' onclick="alert20()">左对齐弹出</button>
+<button class='btn' onclick="alert21()">右对齐弹出</button>
 <br/><br/>
 <script type="text/javascript">
 'use strict';
 function alert20()
 {
-    ciy_alert('最大化对话框',null,{max:true});
+    ciy_alert('左对齐',null,{align:'left'});
 }
 function alert21()
+{
+    ciy_alert('右对齐',null,{align:'right'});
+}
+</script>
+
+<blockquote>其他对话框</blockquote>
+<button class='btn' onclick="alert50()">最大化对话框</button>
+<button class='btn' onclick="alert51()">点空白不关闭</button>
+<br/><br/>
+<script type="text/javascript">
+'use strict';
+function alert50()
+{
+    ciy_alert('最大化对话框',null,{max:true});
+}
+function alert51()
 {
     ciy_alert('点空白不关闭',null,{nomaskclose:true});
 }
