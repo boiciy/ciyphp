@@ -841,6 +841,7 @@ function ciy_alert(content, cb, option){
                     bodyheight = document.documentElement.scrollHeight;
                 if(bodyheight == 0)
                     return;
+                height += 18;
                 if(height>bodyheight - e.target.offsetTop - 60)
                     height = bodyheight - e.target.offsetTop - 60;
                 domifm.css("height",height+"px");

@@ -25,7 +25,7 @@ class ciy_config {
                 'persistent'=>false,//持久连接，默认false
                 'charset'=>'utf8'//编码方式，默认utf8
                 );
-            if(stripos($_SERVER['HTTP_HOST'],'.local') !== false)
+            if(isset($_SERVER['HTTP_HOST']) && stripos($_SERVER['HTTP_HOST'],'.local') !== false)
             {
                 $ret['conn'][0]['pass'] = 'CiyPHP';
             }
@@ -43,7 +43,7 @@ class ciy_config {
                 'timeout'=>5,//数据库连接超时时间，默认5秒
                 'charset'=>'utf8'//编码方式，默认utf8
                 );
-            if(stripos($_SERVER['HTTP_HOST'],'.local') !== false)
+            if(isset($_SERVER['HTTP_HOST']) && stripos($_SERVER['HTTP_HOST'],'.local') !== false)
             {
                 $ret['conn'][0]['pass'] = 'CiyPHP';
             }

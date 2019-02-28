@@ -20,7 +20,9 @@ require PATH_PROGRAM . NAME_SELF . '.pro.php';
             <div>
             <button class="btn" type="submit">查询</button>
             <a class="btn" onclick="ciy_ifropen('demo_update.php','新增数据',false,function(){location.reload();})">新增</a>
-            <a href="<?php echo urlparam('', array('csv' => 'true','func' => 'cc','prefix' => '导出'));?>" class="btn" target="_blank">导出到Excel</a>
+            <a href="<?php echo urlparam('', array('excel' => 'csv','func' => 'cc','prefix' => '导出'));?>" class="btn" target="_blank">导出到CSV</a>
+            <a href="<?php echo urlparam('', array('excel' => 'xml','func' => 'cc','prefix' => '导出'));?>" class="btn" target="_blank">导出到Excel</a>
+            <a href="<?php echo urlparam('', array('excel' => 'xml','func' => 'ccsimple','prefix' => '简化'));?>" class="btn" target="_blank">导出到Excel(简化)</a>
             </div>
         </div>
     </form>

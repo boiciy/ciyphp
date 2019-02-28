@@ -15,12 +15,11 @@ class ciy_mysql {
     public $link;
     public $isconnected;
     public $error;
-    public $sql;
+    public $setaction;
     private $checkrs = true;
     function __construct() {
         $this->isconnected = false;
         $this->error = '';
-        $this->sql = '';
     }
     function connect($conn) {
         if($this->isconnected)
@@ -113,6 +112,8 @@ class ciy_mysql {
         if ($type === 'insert') {
             $field = '';
             $value = '';
+            if (!is_array($updata))
+                return false;
             if(is_array($insertdata))
                 $updata = $insertdata + $updata;
             foreach ($updata as $key => $val) {
@@ -132,10 +133,13 @@ class ciy_mysql {
             $execute = $this->execute("insert into {$csql->table} ({$field}) values ({$value})",$data);
             if ($execute === false)
                 return false;
+            $this->setaction = 'insert';
             return $this->link->insert_id;
         }
         else {
             $set = '';
+            if (!is_array($updata))
+                return false;
             foreach ($updata as $key => $val) {
                 if ($key == 'id')
                 {
@@ -158,6 +162,7 @@ class ciy_mysql {
                 return false;
             if($id == 0)
                 $id = $execute;
+            $this->setaction = 'update';
             return $id;
         }
     }

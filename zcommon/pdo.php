@@ -13,11 +13,10 @@ class ciy_pdo {
     public $link;
     public $isconnected;
     public $error;
-    public $sql;
+    public $setaction;
     function __construct() {
         $this->isconnected = false;
         $this->error = '';
-        $this->sql = '';
     }
     function connect($conn) {
         if($this->isconnected)
@@ -106,6 +105,8 @@ class ciy_pdo {
         if ($type === 'insert') {
             $field = '';
             $value = '';
+            if (!is_array($updata))
+                return false;
             if(is_array($insertdata))
                 $updata = $insertdata + $updata;
             foreach ($updata as $key => $val) {
@@ -125,10 +126,13 @@ class ciy_pdo {
             $execute = $this->execute("insert into {$csql->table} ({$field}) values ({$value})",$data);
             if ($execute === false)
                 return false;
+            $this->setaction = 'insert';
             return $this->link->lastInsertId();
         }
         else {
             $set = '';
+            if (!is_array($updata))
+                return false;
             foreach ($updata as $key => $val) {
                 if ($key == 'id')
                 {
@@ -151,6 +155,7 @@ class ciy_pdo {
                 return false;
             if($id == 0)
                 $id = $execute;
+            $this->setaction = 'update';
             return $id;
         }
     }
@@ -194,7 +199,7 @@ class ciy_pdo {
     function pdoerr()
     {
         $err = $this->link->errorInfo();
-        return $this->link->errorCode().':'.@$err[2];
+        return $this->link->errorCode().':'.@$err[1].':'.@$err[2];
     }
     function errsql($ret,$msg)
     {

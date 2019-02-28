@@ -15,10 +15,9 @@
  * getnow/getip/todate                  数据库转换时间和IP的快捷函数，建议用bigint替代datetime存储
  * getstrparam/setstrparam              比json还简化的多数据保存方式，一般用于单列多项设置的数据库保存。
  * file_down/img2thumb                  文件下载到本地和生成图片缩略图
- * makedir/savefile/savelogfile/delfile 创建多层新文件夹/保存文本文件/本地保存LOG/文件静默删除（影响程序稳定较多的地方，做了一个单独封装）
- * getapplication/setapplication        全局永久保存数据函数。类似ASP的Application对象。
- * pr/var_dump                          PHP调试变量界面打印。
- * ciy_runCSV                           导出到Excel，CSV格式。
+ * makedir/delfile                      创建多层新文件夹/文件静默删除
+ * pr/var_dump                          PHP调试变量界面打印
+ * ciy_runExcelCSV/ciy_runExcelxml      导出到Excel，CSV格式
  * ciy_post                             payload json参数处理类
  * 
  * 版本更新：
@@ -147,12 +146,16 @@ function urlparam($baseurl, $keyarray) {
 
 function todate($time,$format = 'i')
 {
+    if($time == 0)
+        return '--';
     if($format == 'H')
         return date('Y-m-d H',$time);
     if($format == 'd')
         return date('Y-m-d',$time);
     if($format == 'm')
         return date('Y-m',$time);
+    if($format == 's')
+        return date('Y-m-d H:i:s',$time);
     return date('Y-m-d H:i',$time);
 }
 /**
@@ -266,51 +269,180 @@ function ciy_runJSON($isform = false) {
  * 将调用csv_函数名(){}
  * 函数返回array数组。第一行包含.csv，则为CSV文件名。
  */
-function ciy_runCSV() {
-    if (!isset($_GET['csv']))
+function ciy_runExcelCSV($msql) {
+    if (!isset($_GET['excel']) || $_GET['excel'] != 'csv')
         return;
-    $filename = date('Y-m-d_H-i-s', time()) . '.csv';
-    $funcname = 'csv_' . get('func');
+    $funcname = 'excel_' . get('func');
     if (!function_exists($funcname))
     {
-        pr('调试信息：'.$funcname.'函数未定义');
-        return;
+        pr('Excel CSV导出失败：'.$funcname.'函数未定义');
+        exit;
     }
-    else
-        $retarr = call_user_func($funcname);
+    $retarr = call_user_func($funcname,$msql);
     if(!is_array($retarr))
     {
-        pr('调试信息：'.$funcname.'函数返回值不是数组');
-        return;
+        pr('Excel CSV导出失败：'.$retarr);
+        exit;
     }
-    if(count($retarr) > 0 && !is_array($retarr[0]) && substr($retarr[0],-4) == '.csv')
-    {
-        $filename = $retarr[0];
-        unset($retarr[0]);
-    }
+    $filename = $retarr[0];
+    if(empty($filename))
+        $filename = date('Y-m-d_H-i-s').rand(1000,9999);
+    $filename.='.csv';
+    $fields = $retarr[1];
+    $datas = $retarr[2];
     header("Cache-Control: public");
     header("Pragma: public");
     header("Content-type: text/csv");
     header("Content-Disposition: attachment; filename=" . $filename);
     echo(chr(255) . chr(254));
-    foreach ($retarr as $line)
+    $bline = false;
+    foreach ($fields as $field)
     {
-        if (is_array($line))
-        {
-            $bline = false;
-            foreach ($line as $l)
-            {
-                if($bline)
-                    echo mb_convert_encoding("\t", "UTF-16LE", "UTF-8");
-                echo mb_convert_encoding('"'.$l.'"', "UTF-16LE", "UTF-8");
-                $bline = true;
-            }
-        }
+        if(is_array($field))
+            $d = $field['name'];
         else
-            echo mb_convert_encoding($line, "UTF-16LE", "UTF-8");
+            $d = $field;
+        if($bline)
+            echo mb_convert_encoding("\t", "UTF-16LE", "UTF-8");
+        echo mb_convert_encoding('"'.$d.'"', "UTF-16LE", "UTF-8");
+        $bline = true;
+    }
+    echo mb_convert_encoding("\r\n", "UTF-16LE", "UTF-8");
+    foreach ($datas as $data)
+    {
+        $bline = false;
+        foreach($data as $d)
+        {
+            if($bline)
+                echo mb_convert_encoding("\t", "UTF-16LE", "UTF-8");
+            echo mb_convert_encoding('"'.$d.'"', "UTF-16LE", "UTF-8");
+            $bline = true;
+        }
         echo mb_convert_encoding("\r\n", "UTF-16LE", "UTF-8");
     }
     exit;
+}
+function ciy_runExcelxml($msql) {
+    if (!isset($_GET['excel']) || $_GET['excel'] != 'xml')
+        return;
+    $funcname = 'excel_' . get('func');
+    if (!function_exists($funcname))
+    {
+        pr('Excel xml导出失败：'.$funcname.'函数未定义');
+        exit;
+    }
+    $retarr = call_user_func($funcname,$msql);
+    if(!is_array($retarr))
+    {
+        pr('Excel xml导出失败:'.$retarr);
+        exit;
+    }
+    $filename = $retarr[0];
+    if(empty($filename))
+        $filename = date('Y-m-d_H-i-s').rand(1000,9999);
+    $filename.='.xml';
+    $fields = $retarr[1];
+    $datas = $retarr[2];
+    $styles = @$retarr[3];
+    if(!is_array($styles))
+        $styles = array();
+    $exts = @$retarr[4];
+    if(!is_array($exts))
+        $exts = array();
+    $sheetname = 'sheetCIY';
+    if(isset($exts['sheetname']))
+        $sheetname = $exts['sheetname'];
+    $DefaultColumnWidth = 60;//默认宽度
+    $DefaultRowHeight = 16;//默认高度
+    $dat = '<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="http://www.w3.org/TR/REC-html40">
+<DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+<Author>CIYPHP</Author>
+<Version>15.00</Version>
+</DocumentProperties>
+<OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office"><AllowPNG/></OfficeDocumentSettings>
+<ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel"><WindowTopX>0</WindowTopX><WindowTopY>0</WindowTopY>  <ProtectStructure>False</ProtectStructure><ProtectWindows>False</ProtectWindows></ExcelWorkbook>
+<Styles>';
+    foreach($styles as $id=>$style)
+        $dat.='<Style ss:ID="'.$id.'">'.$style.'</Style>';
+    $dat .= '</Styles><Worksheet ss:Name="'.$sheetname.'"><Table ss:ExpandedColumnCount="'.(count($fields)+10).'" ss:ExpandedRowCount="'.(count($datas)+20).'" x:FullColumns="1" x:FullRows="1" ss:DefaultColumnWidth="'.$DefaultColumnWidth.'" ss:DefaultRowHeight="'.$DefaultRowHeight.'">';
+    foreach($fields as $field)
+    {
+        if(!is_array($field) || !isset($field['width']))
+            $dat.='<Column ss:Width="'.$DefaultColumnWidth.'"/>';
+        else
+            $dat.='<Column ss:Width="'.$field['width'].'"/>';
+    }
+    $dat.=@$exts['rowstop'];//自定义表格头
+    if(isset($exts['titleheight']))
+        $dat.='<Row ss:Height="'.$exts['titleheight'].'">';
+    else
+        $dat.='<Row>';
+    $cellpre = '<Cell';
+    if(isset($styles['ts']))
+        $cellpre .= '<Cell ss:StyleID="ts"';
+    foreach($fields as $field)
+    {
+        if(is_array($field))
+        {
+            $dat.=$cellpre.'><Data ss:Type="String">'.@$field['name'].'</Data></Cell>';
+        }
+        else
+            $dat.=$cellpre.'><Data ss:Type="String">'.$field.'</Data></Cell>';
+    }
+    $dat.='</Row>';
+    foreach($datas as $data)
+    {
+        $dat.='<Row>';
+        foreach($data as $ind=>$d)
+        {
+            $dat.='<Cell';
+            $type = 'String';
+            if(is_array($fields[$ind]))
+            {
+                if(isset($fields[$ind]['style']))
+                    $dat.=' ss:StyleID="'.$fields[$ind]['style'].'"';
+                if(isset($fields[$ind]['type']))
+                    $type = $fields[$ind]['type'];
+            }
+            $dat.='><Data ss:Type="'.$type.'">'.$d.'</Data></Cell>';
+        }
+        $dat.='</Row>';
+    }
+    $dat.=@$exts['rowsfooter'];//自定义表格尾
+   $dat.='</Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
+   <Print>
+    <ValidPrinterInfo/>
+    <PaperSizeIndex>1</PaperSizeIndex>
+    <HorizontalResolution>600</HorizontalResolution>
+    <VerticalResolution>0</VerticalResolution>
+   </Print>
+   <Selected/>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>';
+
+    header("Cache-Control: public");
+    header("Pragma: public");
+    header("Content-type: text/xml");
+    header("Content-Disposition: attachment; filename=" . $filename);
+    echo $dat;
+    exit;
+}
+//直接导出xls/xlsx格式。
+//分析具体格式，将xlsx修改为zip解压后，研究sheet1.xml/styles.xml。
+//使用PHPExcel后端导出（服务器压力较大，可以自定义样式或导入样式）
+//使用js-xlsx前端导出（服务器压力小，前端JS控制数据样式）
+function ciy_runExcelxlsx($msql) {
+    if (!isset($_GET['excel']) || $_GET['excel'] != 'xlsx')
+        return;
 }
 function get($name, $defvalue = '') {
     if(!isset($_GET[$name]))
@@ -403,7 +535,7 @@ function file_down($url,$savepath,$filename = '', $thumb = null,$timeout = 60)
  * cut          是否裁切图片
  * jpgquality   保存jpg的清晰度。
  */
-function img2thumb($src_img, $dst_img, $width = 75, $height = 75, $cut = false,$jpgquality=50)
+function img2thumb($src_img, $dst_img, $width = 75, $height = 75, $cut = false,$jpgquality=60)
 {
     if(!is_file($src_img))
         return false;
@@ -483,52 +615,6 @@ function img2thumb($src_img, $dst_img, $width = 75, $height = 75, $cut = false,$
     return true;
 }
 /**
- * 实现类似ASP中的Application对象。采用文件存储方式。默认保存到cache文件夹。
- * 与Application不同，保存数据永久有效。
- */
-function getapplication($name, $defvalue='') {
-    if (!is_file(PATH_ROOT.'cache/' . $name . '.alt'))
-        return $defvalue;
-    return file_get_contents(PATH_ROOT.'cache/' . $name . '.alt');
-}
-function setapplication($name, $value) {
-    if (!is_dir(PATH_ROOT.'cache/'))
-        mkdir(PATH_ROOT.'cache/', 0777);
-    $fp = fopen(PATH_ROOT.'cache/' . $name . '.alt', 'w');
-    fwrite($fp, $value);
-    fclose($fp);
-}
-
-/**
- * 保存log到本地。
- */
-function savelogfile($types,$msg,$isrequest=false,$path='log/')
-{
-    $filename = PATH_ROOT.$path.$types.'.log';
-    if (makedir(dirname($filename))) {
-        if ($fp = fopen($filename, 'a')) {
-            if($isrequest)
-            {
-                $msg.=' GET:';
-                foreach ($_GET as $key => $value)
-                    $msg.=$key.'='.$value.'&';
-                $msg.=' POST:';
-                foreach ($_POST as $key => $value)
-                    $msg.=$key.'='.$value.'&';
-            }
-            $msg .= "\r\n";
-            if (@fwrite($fp, date('Y-m-d H:i:s')."\t".$msg)) {
-                fclose($fp);
-                return true;
-            } else {
-                fclose($fp);
-                return false;
-            } 
-        } 
-    }
-}
-
-/**
  * 循环建立新文件夹。
  */
 function makedir($dir) {
@@ -537,26 +623,6 @@ function makedir($dir) {
     if(!is_dir($dir))
         return mkdir($dir,0777,true);
     return true;
-}
-/**
- * 保存文本数据到本地文件。
- */
-function savefile($filename, $text) {
-    if (!$filename || !$text)
-        return false;
-    if (makedir(dirname($filename))) {
-        $filename = iconv("UTF-8", "GBK", $filename);
-        if ($fp = fopen($filename, "w")) {
-            if (@fwrite($fp, $text)) {
-                fclose($fp);
-                return true;
-            } else {
-                fclose($fp);
-                return false;
-            } 
-        } 
-    } 
-    return false;
 }
 /**
  * 静默删除文件。

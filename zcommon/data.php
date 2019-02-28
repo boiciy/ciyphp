@@ -22,7 +22,7 @@
  * 
  * 
  * getone       获取一条数据。          无数据返回null      出错返回false   判断is_array，确认数据有效
- * getonescalar 获取一条第一列数据      无数据返回null      出错返回false   
+ * get1         获取一条第一列数据      无数据返回null      出错返回false   
  * get          获取数据集合。          无数据返回array()   出错返回false   判断is_array，确认数据有效
  * getraw       原始方法获取数据集合。  无数据返回array()   出错返回false   判断is_array，确认数据有效
  * set          更新或新增数据。        成功返回id          出错返回false
@@ -332,6 +332,7 @@ $id = $mydata->data($updata)->datainsert($updatainsert)->set($csql);//可能新�
         $this->datainsert = null;
         if($ret === false)
             return $this->errdata($ret);
+        $this->setaction = $this->connect(true)->setaction;
         return $ret;
     }
 /**
