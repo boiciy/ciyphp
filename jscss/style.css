@@ -1,4 +1,7 @@
-/*http://www.iconfont.cn/ 生成，实际为空，本框架没有依赖ciyfont*/
+/*
+Version: 0.5.3
+http://www.iconfont.cn/ 生成，实际为空，本框架没有依赖ciyfont
+*/
 @font-face {
   font-family: 'ciyfont';
   src: url('font/iconfont.eot');
@@ -1314,6 +1317,7 @@ float: left;
     line-height: 3em;
     padding: 0 0.5em 0 1em;
     border-bottom: 1px solid #f6f6f6;
+    border-top: 1px solid #f6f6f6;
     color: #333333;
     border-radius: 2px 2px 0 0;
 }

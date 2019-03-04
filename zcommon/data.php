@@ -2,7 +2,7 @@
 /* =================================================================================
  * 版权声明：保留开源作者及版权声明前提下，开源代码可进行修改及用于任何商业用途。
  * 开源作者：众产国际产业公会  http://ciy.cn/code
- * 版本：0.5.2
+ * 版本：0.5.5
 ====================================================================================*/
 /**
  * 应用数据层类库（单服版）
@@ -36,12 +36,15 @@
  * 变量名取名尽量用s尾缀区分，建议getone函数使用$xxrow，get函数使用$xxrows。
 */
 class ciy_sql{
+    public $tsmt;
     public $table;
+    public $column;
     public $where;
     public $order;
-    public $column;
     public $group;
-    public $tsmt;
+    public $having;
+    public $join;
+    public $on;
 
     function __construct($table = '') {
         $this->tsmt = array();
@@ -51,6 +54,8 @@ class ciy_sql{
         $this->order = '';
         $this->group = '';
         $this->having = '';
+        $this->join = '';
+        $this->on = '';
     }
     function table($table)
     {
@@ -62,12 +67,29 @@ class ciy_sql{
         $this->column = $column;
         return $this;
     }
-    function where($query,$data,$op = '=')//m 自定义，like 模糊，in 数组，其他 操作符
+    function join($table,$join = 'inner')
     {
-        if(empty($query) || $data === null)
+        $this->join = " {$join} join {$table}";
             return $this;
+    }
+    function on($query,$data = null,$op = '=')
+    {
+        $this->on.=$this->_query($query,$data,$op);
+        return $this;
+    }
+    function where($query,$data = null,$op = '=')
+    {
+        $this->where.=$this->_query($query,$data,$op);
+        return $this;
+    }
+    function _query($query,$data = null,$op = '=')//like 模糊，in 数组，其他 操作符
+    {
+        if(empty($query))
+            return '';
+        if($data === null)
+            return ' and '.$query;
         if($data === '' && $op !== '<>')
-            return $this;
+            return '';
         if($op == 'like')
         {
             if($data[0] != '%' && $data[strlen($data)-1] != '%')
@@ -105,12 +127,18 @@ class ciy_sql{
         }
         else if($cnt == 1)
             $this->tsmt[] = $data;
-        $this->where.=$query;
-        return $this;
+        return $query;
     }
     function order($order)
     {
-        //检查order是否字母数字_-,空格后是否跟紧desc
+        $chks = explode(',',$order);
+        foreach($chks as $chk)
+        {
+            if(substr($chk,-5) == ' desc')
+                $chk = trim(substr($chk,0,-5));
+            if(!preg_match('/^[0-9a-zA-Z_-]+$/',$chk))
+                return $this;
+        }
         $this->order = $order;
         return $this;
     }
@@ -120,39 +148,35 @@ class ciy_sql{
         $this->group = $group;
         return $this;
     }
-    function having($query,$data = '',$op = '=')
+    function having($query,$data = null,$op = '=')
     {
-        if(empty($query))
+        $this->having.=$this->_query($query,$data,$op);
             return $this;
-        if($data==='')
-            return $this;
-        if($op != 'm')
-            $query = " and {$query}{$op}?";
-        $cnt = substr_count($query,'?');
-        if($cnt > 1)
-        {
-            if(!is_array($data))
-                return $this;
-            if(count($data) != $cnt)
-                return $this;
-            foreach($data as $d)
-                $this->tsmt[] = $d;
         }
-        else if($cnt == 1)
-            $this->tsmt[] = $data;
-        $this->having.=$query;
-        return $this;
-    }
     function buildsql()
     {
+        //where group having order
         if(empty($this->table))
             return null;
         $sql = "select {$this->column} from {$this->table}";
+        if(!empty($this->join) && !empty($this->on))
+        {
+            $sql .= $this->join;
+            if(strpos($this->on,' and ') === 0)
+                $this->on = substr($this->on,5);
+            $sql .=' on '.$this->on;
+        }
         $sql .= $this->buildwhere();
-        if(!empty($this->order))
-            $sql .=' order by '.$this->order;
         if(!empty($this->group))
             $sql .=' group by '.$this->group;
+        if(!empty($this->having))
+        {
+            if(strpos($this->having,' and ') === 0)
+                $this->having = substr($this->having,5);
+            $sql .=' having '.$this->having;
+        }
+        if(!empty($this->order))
+            $sql .=' order by '.$this->order;
         return $sql;
     }
     function buildwhere()

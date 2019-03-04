@@ -1,3 +1,6 @@
+/*
+ * 版本：0.5.3
+ */
 'use strict';
 function uperr(err,msg){
     console.error(err);
