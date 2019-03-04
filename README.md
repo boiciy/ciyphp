@@ -1,15 +1,15 @@
 # 众产未来 - IT工程 - 全栈工程师
 
 ## WEB PHP框架
-编写轻封装的软件架构，让普通人都能看懂程序代码块。
-众产风格，能简化的，绝不繁杂，去概念化，回归本质。
-1个目录，最少4个文件组成框架结构，函数式代码风格。
+编写轻封装的软件架构，让普通人都能看懂程序代码块。  
+众产风格，能简化的，绝不繁杂，去概念化，回归本质。  
+1个目录，最少4个文件组成框架结构，函数式代码风格。  
 支持前端、后端、DBA协同开发，类似但有别于MVC架构。  
 
-提供了一套演示代码
+提供了一套演示代码  
 后台UI演示地址：[前往查看](http://ciyphp.ciy.cn/examples/index.html)
 
-一套管理后台脚手架
+一套管理后台脚手架  
 带管理的后台演示地址：[前往查看](http://ciyphp.ciy.cn/admin/login.php)
 
 
@@ -24,14 +24,13 @@
 >acommon.php  
 >jscss/  
 >examples/  
->>serverdata.php  
->>appcommon.php  
+>>init.php  
 >>demo.php  
 >>demo.pro.php  
 >>demo_update.php  
 >>demo_update.pro.php  
+>>serverdata.php  
 >>upload.php  
->>init.php  
 
 ### common.php 常用公共函数库。
 封装了 Ajax函数调用、Url参数拼接函数、CSV导出、用户安全输入、文件操作等  
@@ -54,12 +53,10 @@ class ciy_config {
     public static function getdb($index = 1)
     {
         //一般的，本地调试连接本地数据库，数据库密码一般会不同，您可以单独配置，便于本地调试。
-        //如果您只有一个Web项目，可以访问localhost，多个web项目，建议使用 xx.local的本地域名，统一使用80端口调试。(配置C:\Windows\System32\drivers\etc\hosts)
-        //如果您发现xx.local本地域名访问时很慢(延迟3-4秒)，请使用xx.local.ciy.cn作为本地域名，*.local.ciy.cn已经永久的指向到了127.0.0.1
         $ret = array();
         if($index == 1)
         {
-            $ret['type'] = 'pdo';//mysql-tab 多主多从读写分离+分库模式；mysql-ms 单库多主多从读写分离模式。详见data.php注释
+            $ret['type'] = 'pdo';
             $ret['mode'] = '';//空 单服务器模式；ns 一主多从模式；ms 单库多主多从模式。请替换专用data.php文件
             $ret['conn'] = array();
             $ret['conn'][] = array(
@@ -143,7 +140,7 @@ web根目录下拷贝zcommon目录，更改config.php配置文件。即可完成
 *.html /  *.pro.php  　  成对出现。*.html通过Ajax初始化及数据请求。  
 ```
 
-后端变量取名，建议getone函数使用$xx`row`表示一条数据，get函数使用$xx`rows`表示多条数据。  
+后端变量取名，建议getone函数使用`$xxrow`表示一条数据，get函数使用`$xxrows`表示多条数据。  
 ```php
 $count = get1();//返回第一行第一列数据
 $xxrow = getone();//返回单条数据
