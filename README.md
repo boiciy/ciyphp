@@ -1,15 +1,23 @@
 # 众产未来 - IT工程 - 全栈工程师
 
 ## WEB PHP框架
-这款PHP框架，经历了5年发展，开发了十几个商业项目。  
-众产风格极易理解，目录结构清晰，文件极少，支持前后端分离，DBA与后端逻辑可分离。  
-后端UI演示地址：[前往查看](http://ciyphp.ciy.cn/examples/index.html)
+编写轻封装的软件架构，让普通人都能看懂程序代码块。
+众产风格，能简化的，绝不繁杂，去概念化，回归本质。
+1个目录，最少4个文件组成框架结构，函数式代码风格。
+支持前端、后端、DBA协同开发，类似但有别于MVC架构。  
+
+提供了一套演示代码
+后台UI演示地址：[前往查看](http://ciyphp.ciy.cn/examples/index.html)
+
+一套管理后台脚手架
+带管理的后台演示地址：[前往查看](http://ciyphp.ciy.cn/admin/login.php)
+
 
 ## 目录结构
 >zcommon/  
 >>common.php  
 >>data.php  
->>mysql.php  
+>>pdo.php  
 >>dbajax.php  
 >>config.php  
 
@@ -26,14 +34,15 @@
 >>init.php  
 
 ### common.php 常用公共函数库。
-封装了 Ajax函数调用、Url参数拼接函数、Application对象、CSV导出、用户安全输入、文件操作等  
+封装了 Ajax函数调用、Url参数拼接函数、CSV导出、用户安全输入、文件操作等  
 
-`acommon.php`　　扩展的公共函数库，与项目数据库有关系。  
+`acommon.php`　　扩展的公共函数库，与耦合了部分数据库。  
 封装了 报错显示、数字/字符串加解密函数、log保存、页面分页显示等
 
 ### data.php 应用数据层类库。
 封装了数据层，get/getone/set/execute/delete数据库接口。  
-`mysql.php`　　MYSQL驱动层。由数据层data.php引用，set接口实现了insert和update SQL命令整合。  
+`pdo.php`　　PDO驱动层。由数据层data.php引用，set接口实现了insert和update SQL命令整合。  
+`mysql.php`　　MYSQL驱动层。由数据层data.php引用，功能同pdo，建议使用pdo。  
 `dbajax.php`　　跨服访问层。由数据层data.php引用，实现了可控的远程数据库接口，自定义授权函数。  
 `serverdata.php`　　数据中间件。一般在项目目录内，用来被dbajax.php远程调用。  
 
@@ -50,16 +59,20 @@ class ciy_config {
         $ret = array();
         if($index == 1)
         {
-            $ret['type'] = 'mysql';//mysql-tab 多主多从读写分离+分库模式；mysql-ms 单库多主多从读写分离模式。详见data.php注释
-            $ret['charset'] = 'utf8';
-            $ret['name'] = 'ciyphp';
-            $ret['port'] = 3306;
-            $ret['host'] = '127.0.0.1';//填写web URL地址，则为json方式访问远程数据库。远程服务器增加dbjson.php即可。localhost
-            $ret['user'] = 'ciyphp';
-            $ret['pass'] = 'CiyPHP';
-            if(stripos($_SERVER['HTTP_HOST'],'local') !== false)
+            $ret['type'] = 'pdo';//mysql-tab 多主多从读写分离+分库模式；mysql-ms 单库多主多从读写分离模式。详见data.php注释
+            $ret['mode'] = '';//空 单服务器模式；ns 一主多从模式；ms 单库多主多从模式。请替换专用data.php文件
+            $ret['conn'] = array();
+            $ret['conn'][] = array(
+                'dsn'=>'mysql:host=127.0.0.1;dbname=ciyphp;port=3306;',
+                'user'=>'ciyphp',
+                'pass'=>'CiyPHP',
+                'timeout'=>5,//数据库连接超时时间，默认5秒
+                'persistent'=>false,//持久连接，默认false
+                'charset'=>'utf8'//编码方式，默认utf8
+            );
+            if(isset($_SERVER['HTTP_HOST']) && stripos($_SERVER['HTTP_HOST'],'local') !== false)
             {
-                $ret['pass'] = 'CiyPHP';
+                $ret['conn'][0]['pass'] = 'CiyPHP';
             }
         }
         else if($index == 2)
@@ -75,7 +88,7 @@ class ciy_config {
 特别的，目录默认使用`/`结尾
 ```php
 defined('PATH_ROOT') || define('PATH_ROOT', $_SERVER['DOCUMENT_ROOT'].'/');  //web根目录。  
-defined('PATH_PROGRAM') || define('PATH_PROGRAM', PATH_ROOT.'examples/');    //指定项目后端目录，可以实现前后端不同目录管理。  
+defined('PATH_PROGRAM') || define('PATH_PROGRAM', __DIR__.'/');    //指定项目后端目录，可以实现前后端不同目录管理。  
 defined('NAME_SELF') || define('NAME_SELF', $_SERVER['PHP_SELF']);  
 
 require PATH_ROOT . 'zcommon/config.php';
@@ -101,10 +114,12 @@ require PATH_PROGRAM . NAME_SELF . '.pro.php';
 <?php
 $mydata = new ciy_data();
 ciy_runJSON();
-$pageno = (int)get('page', 1);
-$pagecount = 20;
-$where = '';
-$rows = $mydata->get($pageno,$pagecount, 'd_test', $where,'id desc');
+$table = 'd_test';
+$msql = new ciy_sql($table);
+$msql->where('truename',get('truename'),'like');
+$msql->order(get('order','id desc'));
+$pageno = getint('pageno', 1);
+$rows = $mydata->get($msql,$pageno,$pagecount,$mainrowcount);
 
 function json_setact() {//Ajax交互函数，ciy_runJSON()调用。
     global $mydata;
@@ -130,27 +145,13 @@ web根目录下拷贝zcommon目录，更改config.php配置文件。即可完成
 
 后端变量取名，建议getone函数使用$xx`row`表示一条数据，get函数使用$xx`rows`表示多条数据。  
 ```php
+$count = get1();//返回第一行第一列数据
 $xxrow = getone();//返回单条数据
 $xxrows = get();//返回多条数据
 foreach($xxrows as $row)
 {
 }
 ```
-
-## 框架演进计划
-#### 逐步支持各类库函数及SDK
-如二维码生成、excel导入导出、html爬虫、短信邮件等等。  
-数据库结构体文档生成工具、自动化代码生成工具、简易后端界面框架、定时执行任务。  
-以上函数库都已完成（但未经大规模商用验证），如有需要可以直接留言，作者将源码发送至信箱。  
-
-#### Socket后端框架及前端CiySocket.js库
-基于Workerman的PHP Socket框架，采用端口并发机制，基本实现了无需变量锁的编程方法。降低开发难度，提升开发效率。  
-无需变量锁编程，和没有锁意识的编程是两回事，很多程序员无奈的发现，用户量上来了，程序变的不稳定，原因在这里  
-
-#### 后台管理练习框架及common.js库
-提供一个后台管理UI框架。  
-帮助程序员逐渐放弃使用大型复杂的前端框架，进而一步一步练习搭建UI框架，全面掌控。  
-越大型复杂的框架集成度越高，基础开发成本极低，但个性化开发成本较高，精通难度大。  
 
 ## 适应众产监督的IT架构
 为能够让无编程经验的普通人都能理解并监督程序代码块。  
@@ -159,6 +160,5 @@ foreach($xxrows as $row)
 
 ## 版权声明
 遵循MIT协议。  
-在源代码上，保留开源作者及版权声明注释前提下，开源代码可进行修改及用于任何商业用途。  
 
 [众产](http://ciy.cn) [众产IT工程](http://ciy.cn/code)
