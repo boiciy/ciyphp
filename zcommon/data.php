@@ -2,7 +2,7 @@
 /* =================================================================================
  * 版权声明：保留开源作者及版权声明前提下，开源代码可进行修改及用于任何商业用途。
  * 开源作者：众产国际产业公会  http://ciy.cn/code
- * 版本：0.5.5
+ * 版本：0.5.6
 ====================================================================================*/
 /**
  * 应用数据层类库（单服版）
@@ -80,6 +80,48 @@ class ciy_sql{
     function where($query,$data = null,$op = '=')
     {
         $this->where.=$this->_query($query,$data,$op);
+        return $this;
+    }
+    function wherenumber($query,$data)
+    {
+        if(empty($data))
+            return $this;
+        if($data[0] == '[' && $data[strlen($data)-1] == ']')
+        {
+            $data = substr($data,1,-1);
+            if(strpos($data,'-') !== false)
+            {
+                $ds = explode('-', $data);
+                $this->where.=$this->_query($query,$ds[0],'>=');
+                $this->where.=$this->_query($query,$ds[1],'<=');
+            }
+            else
+            {
+                $this->where.=$this->_query($query,$data,'in');
+            }
+        }
+        else if($data[0] == '>' || $data[0] == '<')
+        {
+            $op = '';
+            if(is_numeric(@$data[1]))
+            {
+                $op = substr($data,0,1);
+                $data = (int)substr($data,1);
+            }
+            else if(is_numeric(@$data[2]))
+            {
+                $op = substr($data,0,2);
+                $data = (int)substr($data,2);
+            }
+            else
+                return $this;
+            $this->where.=$this->_query($query,$data,$op);
+        }
+        else
+        {
+            $data = (int)trim(trim($data),'=');
+            $this->where.=$this->_query($query,$data);
+        }
         return $this;
     }
     function _query($query,$data = null,$op = '=')//like 模糊，in 数组，其他 操作符

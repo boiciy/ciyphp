@@ -1,5 +1,5 @@
 /*
-Version: 0.5.3
+Version: 0.5.4
 http://www.iconfont.cn/ 生成，实际为空，本框架没有依赖ciyfont
 */
 @font-face {
@@ -1153,6 +1153,9 @@ input.imp{
 .ciy-tab{
     margin-bottom:10px;
 }
+.ciy-tab-right{
+    float:right;line-height:3em;margin-top:-3em;display:block;
+}
 .ciy-tab>ul.none{
     height: 0;
     border-bottom: none!important;
@@ -1253,7 +1256,7 @@ fieldset.tips{
     border: 1px solid #cccccc;
     border-radius: 8px;
     display:inline-block;
-    margin:0 auto;
+    margin:0.5em auto;
 }
 fieldset.tips>legend{
     padding: 0.1em 1em;

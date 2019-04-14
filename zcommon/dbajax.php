@@ -2,7 +2,7 @@
 /* =================================================================================
  * 版权声明：保留开源作者及版权声明前提下，开源代码可进行修改及用于任何商业用途。
  * 开源作者：众产国际产业公会  http://ciy.cn/code
- * 版本：0.5.2
+ * 版本：0.5.3
 ====================================================================================*/
 /**
  * 远程数据操作类库
@@ -71,6 +71,7 @@ class ciy_dbajax {
         $json = json_decode($json,true);
         if(@$json['result'] != 'true')
             return $this->errmsg(null, @$json['msg']);
+        $this->setaction = @$json['setaction'];
         return $json['data'];
     }
     function execute($query,$data) {

@@ -63,7 +63,7 @@ function json_set() {
     $data = $mydata->set($csql,$type);
     if($data === false)
         return errjson($mydata->error);
-    return succjson(array('data'=>$data));
+    return succjson(array('data'=>$data,'setaction'=>$mydata->setaction));
 }
 function json_execute() {
     global $mydata;

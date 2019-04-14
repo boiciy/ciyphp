@@ -2,7 +2,7 @@
 /* =================================================================================
  * 版权声明：保留开源作者及版权声明前提下，开源代码可进行修改及用于任何商业用途。
  * 开源作者：众产国际产业公会  http://ciy.cn/code
- * 版本：0.6.1
+ * 版本：0.6.2
 ====================================================================================*/
 /*
  * common.php 常用公共函数库
@@ -411,8 +411,9 @@ function ciy_runExcelxml($msql) {
     $dat.=@$exts['rowsfooter'];//自定义表格尾
    $dat.='</Table>
   <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
-   <PageSetup>
-    <Header x:Margin="0.3"/>
+   <PageSetup>';
+    $dat.=@$exts['pagesetup'];
+   $dat.='<Header x:Margin="0.3"/>
     <Footer x:Margin="0.3"/>
     <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
    </PageSetup>

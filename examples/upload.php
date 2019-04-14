@@ -29,8 +29,8 @@ else {
     else
     {
         makedir(dirname(PATH_ROOT.$path)); 
-        move_uploaded_file($_FILES["file"]["tmp_name"], PATH_ROOT.$path);
-        $ret = succjson(array('msg'=>$path));
+        move_uploaded_file($_FILES['file']['tmp_name'], PATH_ROOT.$path);
+        $ret = succjson(array('msg'=>$path,'name'=>$_FILES['file']['name']));
     }
 }
 echo json_encode($ret);

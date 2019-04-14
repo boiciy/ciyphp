@@ -48,6 +48,7 @@ function excel_cc($msql)//Excel CSV数据导出函数，ciy_runCSV()调用。
     $exts = array();
     $exts['sheetname'] = '导出数据';//Sheet名称
     $exts['titleheight'] = '20';//列头高度
+    //$exts['pagesetup'] = '<Layout x:Orientation="Landscape"/>';//横向打印
     $exts['rowstop'] = '<Row ss:Height="45"><Cell ss:MergeAcross="4" ss:StyleID="cap"><Data ss:Type="String">众产CIYPHP</Data></Cell></Row>';//顶部行
     $exts['rowsfooter'] = '<Row><Cell ss:MergeAcross="1"><Data ss:Type="String">合计</Data></Cell><Cell ss:Formula="=SUM(R[-'.$count.']C:R[-1]C)"><Data ss:Type="Number"></Data></Cell></Row>';//底部行
     

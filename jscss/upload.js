@@ -15,6 +15,7 @@
                 g = '<svg xmlns="http://www.w3.org/2000/svg" class="delete" version="1" viewBox="0 0 1024 1024"><path fill="#fff" d="M512 70a439 439 0 0 1 442 442 439 439 0 0 1-442 442A439 439 0 0 1 70 512 439 439 0 0 1 512 70m0-40a482 482 0 1 0 0 964 482 482 0 0 0 0-964zm114 253v-1c0-21-17-38-38-38H436c-21 0-38 17-38 38v1H282v74h460v-74H626zM321 396v346c0 21 17 38 38 38h306c21 0 38-17 38-38V396H321zm114 306h-76V474h76v228zm115 0h-76V474h76v228zm115 0h-76V474h76v228z"/></svg>',
                 d = a('<input type="file" name="file" />'),
                 b = a('<input type="hidden" />'),
+                bname = a('<input type="hidden" />'),
                 j, u, t, o, n, m, y, B = {
                     height: r.attr("data-height") ? r.attr("data-height") : 0, //压缩后最大高度，0自适应
                     width: r.attr("data-width") ? r.attr("data-width") : 800, //压缩后最大宽度，显示宽度
@@ -27,11 +28,13 @@
                     nodel: r.attr("data-nodel")=='true' ? true : false, //是否自动删除已上传的文件
                     action: r.attr("action") ? r.attr("action") : "upload.php", //后端处理文件名
                     size: r.attr("data-size") ? r.attr("data-size") : 1024*1024*1024, //非图片文件尺寸限制
-                    value: r.attr("data-value") ? r.attr("data-value") : ""
+                    value: r.attr("data-value") ? r.attr("data-value") : "",
+                    valuename: r.attr("data-valuename") ? r.attr("data-valuename") : ""
                 };
         r.append(A.attr("data-num", B.num).attr("data-type", B.type));
         r.append(d.attr("multiple", B.num > 1 ? "multiple" : false));
         r.append(b.attr("name", B.inputname));
+        r.append(bname.attr("name", B.inputname+"_name"));
         r.addClass(B.num > 1 ? "multiple" : "one");
         if(B.num < 1){
             B.num = 1;
@@ -56,108 +59,15 @@
             z(a(i.currentTarget))
         }).on("click", ".delete", function(i) {
             z(a(i.currentTarget).parent("li.success"))
-        }).on("mousedown", "li.success", function(I) {
-            var i = a(I.target);
-            j = a(this);
-            var J = j.offset();
-            var H = r.offset();
-            var G = J.left;
-            var F = J.top;
-            u = parseInt(G) + (I.pageX - parseInt(G)) + (H.left - J.left);
-            t = parseInt(F) + (I.pageY - parseInt(F)) + (H.top - J.top);
-            m = j.width() + 2 + j.css("margin-right").replace("px", "") * 1;
-            y = j.height() + 2 + j.css("margin-bottom").replace("px", "") * 1;
-            o = false;
-            n = false
-        }).on("mousemove", function(G) {
-            if (j) {
-                var F = G.pageX - u;
-                var J = G.pageY - t;
-                var I = j.index();
-                var H = r.offset();
-                var i = r.height() ? r.height() : 134;
-                j.css({
-                    top: J,
-                    left: F,
-                    zIndex: 999,
-                    position: "absolute"
-                });
-                o = G.pageX - H.left;
-                n = G.pageY - H.top;
-                if (n > (i + 20) || n < 0) {
-                    j.addClass("delete")
-                } else {
-                    j.removeClass("delete")
-                }
-                o = parseInt(o / m);
-                n = parseInt(n / y);
-                o = parseInt(o + (r.width() / m) * n);
-                if (o >= I) {
-                    o++
-                }
-                r.children("li").not(j).css("margin-left", 0);
-                r.children("li").eq(o).not(j).css("margin-left", m)
-            }
-        }).on("mouseup", function() {
-            if (j) {
-                if (j.hasClass("delete") && j.data("filename")) {
-                    z(j);
-                    j = false;
-                    r.children("li").not(".add").css({
-                        "position": "relative",
-                        "top": 0,
-                        "left": 0,
-                        "margin-left": 0,
-                        "zIndex": 0
-                    });
-                    r.children("li.add").css("margin-left", 0);
-                    return false
-                }
-                var i = j.clone();
-                i.data("url", j.data("url"));
-                if (o !== false) {
-                    if (o >= r.children("li").size()) {
-                        i.insertBefore(A)
-                    } else {
-                        i.insertBefore(r.children("li").eq(o))
-                    }
-                    j.remove();
-                    q();
-                    r.children("li").not(".add").css({
-                        "position": "relative",
-                        "top": 0,
-                        "left": 0,
-                        "margin-left": 0,
-                        "zIndex": 0
-                    });
-                    r.children("li.add").css("margin-left", 0)
-                }
-            }
-            j = false
-        }).on("dragenter", function(i) {
-            i.preventDefault();
-        }).on("dragover", function(i) {
-            i.preventDefault();
-        }).on("drop", function(H) {
-            H.preventDefault();
-            var G = H.originalEvent.dataTransfer.files;
-            var i = [];
-            for (var F in G) {
-                if (typeof G[F] == "object") {
-                    i.push(G[F])
-                }
-            }
-            C(i);
-            return false
         });
         if (B.value) {
-            var p = B.value.split(","),
+            var p = B.value.split(","),pname = B.valuename.split(","),
                     s = 0,
                     h = "";
             var f = 0;
             for (var x in p) {
                 if (s < B.num && p[s]) {
-                    h = a("<li class='item success'></li>").append(g).data("url", p[s]).attr("data-filename", c(p[s])).css("background-image", "url('" + p[s] + "')").insertBefore(A);
+                    h = a("<li class='item success'></li>").append(k(p[s].toLowerCase().split(".").splice(-1).join())).append(g).append("<div class='filename'>"+pname[s]+"</div>").attr("data-url", p[s]).attr("data-uname", pname[s]).attr("data-filename", c(p[s])).css("background-image", "url('" + p[s] + "')").insertBefore(A);
                     r.data("num", ++f);//.removeClass("empty");
                     q()
                 }
@@ -216,7 +126,7 @@
                             J.children("svg.progress").remove();
                             J.children(".progressnum").remove();
                             if (M.result) {
-                                J.addClass("success").append(g).data("url", M.msg)
+                                J.addClass("success").append(g).data("url", M.msg).data("uname", M.name)
                             } else {
                                 J.addClass("error").attr("data-error", M.msg ? M.msg : "服务端返回数据异常")
                             }
@@ -395,8 +305,10 @@
         }
         function q() {
             var i = [];
+            var iname = [];
             r.children("li.success").each(function() {
-                i.push(a(this).data("url"))
+                i.push(a(this).data("url"));
+                iname.push(a(this).data("uname"));
             });
             if (r.children("li").not(".add").size() >= B.num && B.num > 1) {
                 A.hide()
@@ -424,6 +336,7 @@
                 }
             }
             b.val(i.join(","));
+            bname.val(iname.join(","));
         }
         function z(i) {
             i.fadeOut(333, function() {

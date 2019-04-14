@@ -1,5 +1,5 @@
 /*
- * 版本：0.5.3
+ * 版本：0.5.5
  */
 'use strict';
 function uperr(err,msg){
@@ -234,6 +234,47 @@ function ciy_getform(dom,parentTag)
             retdata[els[i].name] = els[i].value;
         }
     }
+    els = dom.getElementsByClassName("form-group");
+    for (var i = 0; i < els.length; i++)
+    {
+        var check = els[i].getAttribute('data-check');
+        if(check == null)
+            continue;
+        var el = els[i].getElementsByTagName("input");
+        if(el.length == 0)
+            el = els[i].getElementsByTagName("select");
+        if(el.length == 0)
+            el = els[i].getElementsByTagName("textarea");
+        if(el.length == 0)
+        {
+            console.log('no Find FormData',els[i]);
+            continue;
+        }
+        var val = retdata[el[0].name]||'';
+        var chd = true;
+        if(check == 'mobile')
+            chd = /^1\d{10}$/.test(val);
+        else if(check == 'url')
+            chd = /^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/)(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~\/])+$/.test(val);
+        else if(check == 'mail')
+            chd = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(val);
+        else if(check == 'ip')
+            chd = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/.test(val);
+        else if(check == 'cardid')
+            chd = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(val);
+        else if(check == 'num')
+            chd = /(-?\d*)(\.\d+)?/.test(val);
+        else if(check == 'int')
+            chd = (val > 0);
+        else
+            chd = (val != '');
+        if(!chd)
+        {
+            var title = els[i].querySelector('label').textContent;
+            retdata['_check'] = els[i].getAttribute('data-checkmsg')||'请正确填写'+title;
+        console.log(title,els[i]);
+    }
+    }
     return retdata;
 }
 function ciy_urlparam(url){
@@ -288,7 +329,7 @@ function ciy_layout(act){
         else
         {
             //关闭上次打开菜单
-            if(lmenuact != 'close')
+            if(lmenuact == 'autoclose')
             {
                 if($(this).parents('ul').length == 1)
                 {
@@ -301,6 +342,26 @@ function ciy_layout(act){
             $(this).children('ul').slideDown(400);
             $(this).addClass("show");
         }
+        var navshows = new Array();
+        $('.ciy-menu-nav li').each(function(){
+            if(this.querySelector(".ciy-menu-more") === null)
+                return;
+            if(this.className != 'show')
+                return;
+            var atxt = this.querySelector("a");
+            if(atxt === null)
+                return;
+            var navshow;
+            if(atxt.querySelector("cite") !== null)
+            {
+                atxt = atxt.querySelector("cite");
+                navshow = '_CITE'+atxt.textContent;
+            }
+            else
+                navshow = atxt.textContent;
+            navshows.push(navshow);
+        });
+        localStorage.setItem('menushow', navshows.join('||'));
         var href = $(this).children('a').attr('data-href');
         if(href !== undefined)
         {
@@ -340,6 +401,31 @@ function ciy_layout(act){
             $(".ciy-nav-bar").css('top',top);
         }
     });
+    var menushow = localStorage.getItem('menushow');
+    if(menushow !== null)
+    {
+        var navs = {};
+        $('.ciy-menu-nav li').each(function(){
+            if(this.querySelector(".ciy-menu-more") === null)
+                return;
+            var atxt = this.querySelector("a");
+            if(atxt === null)
+                return;
+            if(atxt.querySelector("cite") !== null)
+            {
+                atxt = atxt.querySelector("cite");
+                navs['_CITE'+atxt.textContent] = this;
+            }
+            else
+                navs[atxt.textContent] = this;
+        });
+        var menushows = menushow.split('||');
+        for(var i in menushows)
+        {
+            if(navs[menushows[i]])
+                navs[menushows[i]].className = 'show';
+        }
+    }
 }
 function ciy_layoutclose(act){
     if(act == 'me')
@@ -1173,4 +1259,83 @@ function formattime(dt,bestr){
     if(diff < 31536000)//12月以内
         return parseInt(diff/2592000) +"月" + bestr;
     return parseInt(diff/31536000) +"年" + bestr;
+}
+function ciy_getstrparam(str,split){
+    var strs = str.split(split);
+    var ret = new Array();
+    for(var i in strs)
+    {
+        var ind = strs[i].indexOf('=');
+        if(ind == -1)
+            continue;
+        ret[strs[i].substr(0,ind)] = strs[i].substr(ind+1);
+    }
+    return ret;
+}
+function ciy_formhtml(sp,dbdatas){
+    var ret = '';
+    ret += '<div class="form-group"';
+    if(sp.check)
+        ret += ' data-check="'+sp.check+'"';
+    ret += '>';
+    ret += '<label>'+sp.title+'</label><div>';
+    var val = dbdatas[sp.name]||sp.value||'';
+    if(sp.type == 'input')
+        ret += '<input type="text" name="'+sp.name+'" value="'+val+'"/>';
+    else if(sp.type == 'textarea')
+    {
+        ret += '<textarea name="'+sp.name+'" style="width:100%;">'+val+'</textarea>';
+    }
+    else if(sp.type == 'select')
+    {
+        ret += '<select name="'+sp.name+'">';
+        var vals = sp.value.split(',');
+        var valcodes = (sp.code||'').split(',');
+        if(vals.length != valcodes.length)
+            valcodes = vals;
+        for(var i in vals)
+        {
+            ret += '<option value="'+valcodes[i]+'"';
+            if(val == valcodes[i])
+                ret += ' selected="true"';
+            ret += '>'+vals[i]+'</option>';
+        }
+        ret += '</select>';
+    }
+    else if(sp.type == 'radio')
+    {
+        var vals = sp.value.split(',');
+        var valcodes = (sp.code||'').split(',');
+        if(vals.length != valcodes.length)
+            valcodes = vals;
+        for(var i in vals)
+        {
+            ret += '<label class="formi"><input type="radio" name="'+sp.name+'" value="'+valcodes[i]+'"';
+            if(val == valcodes[i])
+                ret += ' checked="checked"';
+            ret += '/><i></i>'+vals[i]+'</label>';
+        }
+    }
+    else if(sp.type == 'checkbox')
+    {
+        var vals = sp.value.split(',');
+        var valcodes = (sp.code||'').split(',');
+        if(vals.length != valcodes.length)
+            valcodes = vals;
+        for(var i in vals)
+        {
+            ret += '<label class="formi"><input type="checkbox" name="'+sp.name+'" value="'+valcodes[i]+'"';
+            if(val == valcodes[i])
+                ret += ' checked="checked"';
+            ret += '/><i></i>'+vals[i]+'</label>';
+        }
+    }
+    else
+    {
+        ret += 'No FormData,'+sp.type;
+    }
+    if(sp.tip)
+        ret += '<code>'+sp.tip+'</code>';
+    ret += '</div></div>';
+    return ret;
 }
