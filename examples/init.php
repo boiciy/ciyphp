@@ -9,4 +9,4 @@ defined('NAME_SELF') || define('NAME_SELF', substr($_SERVER['PHP_SELF'],strrpos(
 require PATH_ROOT . 'zcommon/config.php';
 require PATH_ROOT . 'zcommon/common.php';
 require PATH_ROOT . 'zcommon/data.php';
-require PATH_PROGRAM . 'appcommon.php';
+require PATH_ROOT . 'acommon.php';

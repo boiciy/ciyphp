@@ -17,12 +17,28 @@ require PATH_PROGRAM . NAME_SELF . '.pro.php';
             <div><input type="text" name="truename" value="<?php echo get('truename');?>"/></div>
         </div>
         <div class="form-group inline">
+            <label>分数</label>
+            <div><input type="text" name="scores" value="<?php echo get('scores');?>" style="width:5em;"/><code>支持>、<、n,n、n-n</code></div>
+        </div>
+        <div class="form-group inline">
+            <label>日期</label>
+            <div><input type="text" name="activetime" value="<?php echo get('activetime');?>" style="width:13em;"/></div>
+        </div>
+        <div class="form-group inline">
             <div>
             <button class="btn" type="submit">查询</button>
-            <a class="btn" onclick="ciy_ifropen('demo_update.php','新增数据',false,function(){location.reload();})">新增</a>
-            <a href="<?php echo urlparam('', array('excel' => 'csv','func' => 'cc','prefix' => '导出'));?>" class="btn" target="_blank">导出到CSV</a>
-            <a href="<?php echo urlparam('', array('excel' => 'xml','func' => 'cc','prefix' => '导出'));?>" class="btn" target="_blank">导出到Excel</a>
-            <a href="<?php echo urlparam('', array('excel' => 'xml','func' => 'ccsimple','prefix' => '简化'));?>" class="btn" target="_blank">导出到Excel(简化)</a>
+            <a class="btn" onclick="edit(0)">新增(弹窗)</a>
+            <a class="btn" onclick="ciy_ifropen('demo_update.php','新增数据',false,function(){location.reload();})">新增(新标签)</a>
+            <label class="btn">
+                导出
+                <input type="checkbox">
+                <ul class="ciy-popmenu" style="top:2em;">
+                    <li><a href="<?php echo urlparam('', array('excel' => 'csv','func' => 'cc','prefix' => '导出'));?>" target="_blank">导出到CSV</a></li>
+                    <li><a href="<?php echo urlparam('', array('excel' => 'xml','func' => 'cc','prefix' => '导出'));?>" target="_blank">导出到Excel</a></li>
+                    <li><a href="<?php echo urlparam('', array('excel' => 'xml','func' => 'ccsimple','prefix' => '简化'));?>" target="_blank">导出到Excel(简化)</a></li>
+                </ul>
+                <span class="caret"></span>
+            </label>
             </div>
         </div>
     </form>
@@ -41,7 +57,12 @@ else{
                 <th>头像</th>
                 <th>姓名<?php echo showorder('truename');?></th>
                 <th>分数<?php echo showorder('scores');?></th>
-                <th>日期<?php echo showorder('addtimes');?></th>
+                <th>日期<?php echo showorder('activetime');?></th>
+                <th>单选框</th>
+                <th>复选框</th>
+                <th>下拉列表</th>
+                <th>开关</th>
+                <th>多行</th>
                 <th>IP</th>
                 <th>操作</th>
             </tr>
@@ -52,14 +73,21 @@ foreach($rows as $row)
 ?>
     <tr data-id="<?php echo $id;?>">
         <td><div><?php echo enid($id);?></div></td>
-        <td><div><img src="<?php echo $row['icon'];?>" style="max-height:3em;"/></div></td>
+        <td><div><img src="<?php echo $row['icon'];?>" style="width:100%;"/></div></td>
         <td><div><?php echo $row['truename'];?></div></td>
         <td><div style="text-align:center;"><?php echo $row['scores'];?></div></td>
-        <td><div><?php echo todate($row['addtimes']);?></div></td>
+        <td><div><?php echo todate($row['activetime']);?></div></td>
+        <td><div><?php echo $row['dxk'];?></div></td>
+        <td><div><?php echo $row['fxk'];?></div></td>
+        <td><div><?php echo $row['lbk'];?></div></td>
+        <td><div><?php echo ($row['kg'] == 1)?'ON':'OFF';?></div></td>
+        <td><div><?php echo $row['dh'];?></div></td>
         <td><div><?php echo long2ip($row['ip']);?></div></td>
         <td><div>
                 <a class="btn" onclick="edit(<?php echo $id;?>)">编辑</a>
-                <a class="btn" onclick="del(<?php echo $id;?>)">删除</a>
+                <a class="btn" onclick="del(<?php echo $id;?>)">删除1</a>
+                <a class="btn" onclick="ciy_fastfunc('确认是否删除？','del','id=<?php echo $id;?>','reload');">删除2</a>
+                
         </div></td>
         </tr>
 <?php } ?>
@@ -77,11 +105,17 @@ foreach($rows as $row)
 </div>
 <script src="/jscss/jquery-1.12.4.min.js" type="text/javascript"></script>
 <script src="/jscss/ciy.js" type="text/javascript"></script>
+<script src="/jscss/laydate.js" type="text/javascript"></script>
 <script type="text/javascript">
 'use strict';
 $(function(){
     ciy_table_adjust('.table');
     ciy_select_init('.table');
+    laydate.render({
+      elem: document.getElementsByName('activetime')[0]
+      ,type: 'date'
+      ,range: '~'
+    });
 });
 function edit(id)
 {
@@ -98,10 +132,6 @@ function del(id)
                 }});
             });
         },{btns:['删除','<a class="btn btn-default">取消</a>']});
-}
-function del2(id)//第二种实现，封装后
-{
-    ciy_fastfunc('确认是否删除？','del','id='+id,'reload');
 }
 </script>
 </body>

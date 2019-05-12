@@ -60,4 +60,26 @@ class ciy_config {
         }
         return $ret;
     }
+    public static function getupload()
+    {
+        $ret['drive'] = 'local';
+        $ret['dirs'] = array('upload');//这些目录应禁止可执行文件权限
+        $ret['exts'] = array('jpe','jpg','jpeg','gif','png','ai','bmp','psb','psd','tif','webp',
+            'zip','7z','rar','tar','arj','iso','cab','gz',
+            'txt','csv','doc','docx','pps','ppt','pptx','pdf','wps','wpt','xls','xlsx','et','ett',
+            'avi','mp4','mp3','swf','flv','f4v','m4v','wma','rm','rmvb','3gp','ts','mts','vob','mpg','mpeg','mov','wmv','wav',
+            'bak','cad','chm','log','ai');
+        $ret['noexts'] = array('php','php3','php4','phtm','phtml','php5','js','html','htm','sh','so');//建议nginx部署使用。
+        $ret['checkext'] = 'exts';//使用扩展名白名单或黑名单
+        return $ret;
+    }
+    public static function gettc()
+    {
+        $ret = array();
+        $ret['url'] = 'http://ciy.cn/block.php';//事业链M
+        $ret['career'] = 'HNB';//事业缩写，唯一，上市用，建议4位以内
+        $ret['roothash'] = hash('sha256', 'prevxxx');
+        $ret['tables'] = array('p_blocktest');
+        return $ret;
+    }
 }

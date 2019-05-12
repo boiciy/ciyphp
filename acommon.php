@@ -7,15 +7,15 @@
 /*
  * acommon.php 扩展函数库。
  * 
- * diehtml/diegoto     报错输出页面/跳转
- * encrypt  字符串加解密
- * enid/deid/id_calnumber   ID数字加解密
- * verify   判断用户是否合法
+ * diehtml      报错输出页面/跳转
+ * encrypt      字符串加解密
+ * enid/deid    ID数字加解密
+ * verify       判断用户是否合法
  * isweixin     判断客户端是否在微信中
- * get_millistime   获取当前微秒数
- * savelog  在数据库保存log信息。与savelogfile类似。
+ * get_mstime   获取当前微秒数
+ * savelog      在数据库保存log信息。
  */
-function create_li($rows, $default,$first = array('title'=>'全部','codeid'=>''))
+function create_li($rows, $default,$exturl = '',$first = array('title'=>'全部','codeid'=>''))
 {
     if(is_array($first))
         array_unshift($rows,$first);
@@ -26,20 +26,25 @@ function create_li($rows, $default,$first = array('title'=>'全部','codeid'=>''
         $ret .= '<li';
         if($default == $row[$showcode])
             $ret .= ' class="active"';
-        $ret .= '><a href="?liid='.$row[$showcode].'">'.$row[$showtitle].'</a></li>';
+        $ret .= '><a href="?liid='.$row[$showcode].$exturl.'">'.$row[$showtitle].'</a></li>';
     }
     return $ret;
 }
-function create_select($rows, $default, $formname, $opt)
+function create_select($rows, $default, $formname, $itemfunc = null)
 {
-    $showcode = 'codeid';
-    $showtitle = 'title';
-    $ret = '<select name="'.$formname.'" '.@$opt['ext'].'>';
+    $ret = '<select name="'.$formname.'">';
     foreach ($rows as $row) {
-        $ret .= '<option value="'.$row[$showcode].'"';
-        if($default == $row[$showcode])
+        if ($itemfunc instanceof Closure)
+            $kw = $itemfunc($row);
+        else
+        {
+            $kw['title'] = $row['title'];
+            $kw['value'] = $row['codeid'];
+        }
+        $ret .= '<option value="'.$kw['value'].'"';
+        if($default == $kw['value'])
             $ret .= ' selected="true"';
-        $ret .= '>'.$row[$showtitle].'</option>';
+        $ret .= '>'.$kw['title'].'</option>';
     }
     $ret .= '</select>';
     return $ret;
@@ -55,30 +60,39 @@ function create_checkbox($rows, $default, $formname,$opt = null)
     }
     $showcode = 'codeid';
     $showtitle = 'title';
+    $ret = '';
     foreach ($rows as $row) {
-        echo '<label class="formi"><input type="checkbox" name="'.$formname.'" '.$attr.' value="'.$row[$showcode].'"';
+        $ret.='<label class="formi"><input type="checkbox" name="'.$formname.'" '.$attr.' value="'.$row[$showcode].'"';
         if(strpos($default,$dot.$row[$showcode].$dot) !== false)
-            echo ' checked="checked"';
-        echo '/><i></i>'.$row[$showtitle].'</label>';
+            $ret.=' checked="checked"';
+        $ret.='/><i></i>'.$row[$showtitle].'</label>';
     }
+    return $ret;
 }
-function create_queryone($rows, $default, $formname,$opt = null)
+function create_radio($rows, $default, $formname, $itemfunc = null)
 {
-    if(!is_array($opt)) $opt = array();//(!is_array($opt)) && $opt = array();
-    if(!isset($opt['showtitle'])) $opt['showtitle'] = 'title';
-    if(!isset($opt['showcode'])) $opt['showcode'] = 'title';
-    $showtitle = $opt['showtitle'];
-    $showcode = $opt['showcode'];
-    echo '<a href="'.urlparam('', array($formname=>'','pageno'=>1)).'" class="nm-query';
-        if(get($formname) == '')
-            echo ' active';
-    echo '">不限</a>';
+    $ret = '';
     foreach ($rows as $row) {
-        echo '<a href="'.urlparam('', array($formname=>$row[$showcode],'pageno'=>1)).'" class="nm-query';
-        if($row[$showcode] == get($formname))
-            echo ' active';
-        echo '">'.$row[$showtitle].'</a>';
+        if ($itemfunc instanceof Closure)
+            $kw = $itemfunc($row);
+        else
+        {
+            $kw['title'] = $row['title'];
+            $kw['value'] = $row['codeid'];
+        }
+        $ret.='<label class="formi"><input type="radio" name="'.$formname.'" value="'.$kw['value'].'"';
+        if($default == $kw['value'])
+            $ret.=' checked="checked"';
+        $ret.='/><i></i>'.$kw['title'].'</label>';
     }
+    return $ret;
+}
+function getconfig($code)
+{
+    global $mydata;
+    $csql = new ciy_sql('p_config');
+    $csql->where('types',$code)->column('params');
+    return $mydata->get1($csql);
 }
 function getcodes($code)
 {
@@ -90,8 +104,7 @@ function getcodes($code)
 }
 function ccode($rows,$code,$showcode = 'codeid',$showtitle = 'title')
 {
-    foreach($rows as $row)
-    {
+    foreach($rows as $row){
         if($code == $row[$showcode])
             return $row[$showtitle];
     }
@@ -319,10 +332,6 @@ function id_calnumber($num, $key = 224,$len = 2) {
     return sprintf('%0'.$len.'d',$ret);
 }
 
-function ismobile($mob)
-{
-    return preg_match( '/^1\d{10}$/',$mob);
-}
 function isweixin()
 {
     $useragent = strtolower($_SERVER["HTTP_USER_AGENT"]);
@@ -331,11 +340,40 @@ function isweixin()
         return true;
     return false;
 }
-function get_millistime()
+function get_mstime()
 {
     $microtime = microtime();
     $comps = explode(' ', $microtime);
     return sprintf('%d%03d', $comps[1], $comps[0] * 1000);
+}
+
+/**
+ * 保存log到本地。
+ */
+function savelogfile($types,$msg,$isrequest=false,$path='log/')
+{
+    $filename = PATH_ROOT.$path.$types.'.log';
+    if (makedir(dirname($filename))) {
+        if ($fp = fopen($filename, 'a')) {
+            if($isrequest)
+            {
+                $msg.=' GET:';
+                foreach ($_GET as $key => $value)
+                    $msg.=$key.'='.$value.'&';
+                $msg.=' POST:';
+                foreach ($_POST as $key => $value)
+                    $msg.=$key.'='.$value.'&';
+            }
+            $msg .= "\r\n";
+            if (@fwrite($fp, date('Y-m-d H:i:s')."\t".$msg)) {
+                fclose($fp);
+                return true;
+            } else {
+                fclose($fp);
+                return false;
+            } 
+        } 
+    }
 }
 
 function savelogdb($types,$oldrow, $newrow, $msg = ''){
@@ -390,37 +428,67 @@ function savelog($types,$msg,$isrequest=false){
     $updata['types'] = $types;
     $updata['userid'] = (int)@$rsuser['id'];
     $updata['logs'] = $msg;
+    $updata['status'] = 0;
+    $updata['readid'] = 0;
     $updata['addtimes'] = time();
     $updata['ip'] = getip();
     $mydata->data($updata)->set(new ciy_sql('p_log'));
 }
 
+function cookieadmin($oid,$uid,$sid,$exp,$logout = false) {
+    if($logout)
+        $cookieexp = time()-1;
+    else
+        $cookieexp = time() + 360000000;
+    setcookie('aoid', $oid, $cookieexp,'/');
+    setcookie('auid', enid($uid), $cookieexp,'/');
+    setcookie('asid', $sid, $cookieexp,'/');
+    setcookie('aexp', $exp, $cookieexp,'/');
+}
 function verifyadmin($errfunc = null) {
     global $mydata;
     $oid = (int)cookie('aoid');
+    $exp = (int)cookie('aexp');
+    $sid = cookie('asid');
     $uid = deid(cookie('auid'));
-    $sql = new ciy_sql('p_adminonline');
-    $sql->where('id',$oid);
-    $onlinerow = $mydata->getone($sql);
+    $csql = new ciy_sql('p_adminonline');
+    $csql->where('id',$oid);
+    $onlinerow = $mydata->getone($csql);
     $err = '您尚未登录或已超时';
     if($onlinerow === false)
         $err = $mydata->error;
     else if (is_array($onlinerow))
     {
-        if (cookie('asid') == $onlinerow['sid'])
+        if ($sid == $onlinerow['sid'])
         {
             if ($uid == $onlinerow['userid'])
             {
-                $sql = new ciy_sql('p_admin');
-                $sql->where('id',$uid);
-                $userrow = $mydata->getone($sql);
-                if($userrow === false)
-                    $err = $mydata->error;
-                else if(is_array($userrow))
-                    return $userrow;
+                if($onlinerow['exptime']>time())
+                {
+                    if($onlinerow['exptime']<time()+259200-86400)
+                    {
+                        $sid = uniqid();
+                        $exp = time()+259200;
+                        $execute = $mydata->execute('update p_adminonline set sid=?,exptime=? where id='.$oid,array($sid,$exp));
+                        if($execute !== false)
+                            cookieadmin($oid,$uid,$sid,$exp);
+                    }
+                    $csql = new ciy_sql('p_admin');
+                    $csql->where('id',$uid);
+                    $userrow = $mydata->getone($csql);
+                    if($userrow === false)
+                        $err = $mydata->error;
+                    else if(is_array($userrow))
+                        return $userrow;
+                }
             }
+            else
+                savelog('LOGIN', "UID不一致！在尝试登录[OID={$oid}][UID={$uid}][SID={$sid}] DBUID=".$onlinerow['userid']);
         }
+        else
+            savelog('LOGIN', "SID不一致，在尝试登录[OID={$oid}][UID={$uid}][SID={$sid}] DBSID=".$onlinerow['sid']);
     }
+    else
     if ($errfunc instanceof Closure)
     {
         $errfunc($err);
@@ -429,7 +497,7 @@ function verifyadmin($errfunc = null) {
     }
     if (isset($_GET['json']))
         die(json_encode(errjson($err)));
-    if(NAME_SELF == 'manage')
+    if(NAME_SELF == 'index')
         diegoto('login.php');
     diehtml($err.'<br/><a href="/admin/login.php" target="_top">重新登录</a>');
 }

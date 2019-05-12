@@ -2,7 +2,7 @@
 /* =================================================================================
  * 版权声明：保留开源作者及版权声明前提下，开源代码可进行修改及用于任何商业用途。
  * 开源作者：众产国际产业公会  http://ciy.cn/code
- * 版本：0.5.6
+ * 版本：0.6.0
 ====================================================================================*/
 /**
  * 应用数据层类库（单服版）
@@ -39,6 +39,7 @@ class ciy_sql{
     public $tsmt;
     public $table;
     public $column;
+    public $limit;
     public $where;
     public $order;
     public $group;
@@ -50,6 +51,7 @@ class ciy_sql{
         $this->tsmt = array();
         $this->table = $table;
         $this->column = '*';
+        $this->limit = '';
         $this->where = '';
         $this->order = '';
         $this->group = '';
@@ -67,109 +69,26 @@ class ciy_sql{
         $this->column = $column;
         return $this;
     }
-    function join($table,$join = 'inner')
+    function limit($pageno,$pagecount=20)
+    {
+        if($pageno < 1)
+            $pageno = 1;
+        if($pagecount < 1)
+            $pagecount = 20;
+        $pageid = $pagecount * ($pageno - 1);
+        $this->limit = " limit {$pageid},{$pagecount}";
+        return $this;
+    }
+    //eg. $csql->join('tab2','left')->on('tab1.id=tab2.id');
+    function join($table,$join = 'left')//left right inner outer
     {
         $this->join = " {$join} join {$table}";
             return $this;
     }
-    function on($query,$data = null,$op = '=')
+    function on($query,$data = null)
     {
-        $this->on.=$this->_query($query,$data,$op);
+        $this->on.=$this->_query($query,$data);
         return $this;
-    }
-    function where($query,$data = null,$op = '=')
-    {
-        $this->where.=$this->_query($query,$data,$op);
-        return $this;
-    }
-    function wherenumber($query,$data)
-    {
-        if(empty($data))
-            return $this;
-        if($data[0] == '[' && $data[strlen($data)-1] == ']')
-        {
-            $data = substr($data,1,-1);
-            if(strpos($data,'-') !== false)
-            {
-                $ds = explode('-', $data);
-                $this->where.=$this->_query($query,$ds[0],'>=');
-                $this->where.=$this->_query($query,$ds[1],'<=');
-            }
-            else
-            {
-                $this->where.=$this->_query($query,$data,'in');
-            }
-        }
-        else if($data[0] == '>' || $data[0] == '<')
-        {
-            $op = '';
-            if(is_numeric(@$data[1]))
-            {
-                $op = substr($data,0,1);
-                $data = (int)substr($data,1);
-            }
-            else if(is_numeric(@$data[2]))
-            {
-                $op = substr($data,0,2);
-                $data = (int)substr($data,2);
-            }
-            else
-                return $this;
-            $this->where.=$this->_query($query,$data,$op);
-        }
-        else
-        {
-            $data = (int)trim(trim($data),'=');
-            $this->where.=$this->_query($query,$data);
-        }
-        return $this;
-    }
-    function _query($query,$data = null,$op = '=')//like 模糊，in 数组，其他 操作符
-    {
-        if(empty($query))
-            return '';
-        if($data === null)
-            return ' and '.$query;
-        if($data === '' && $op !== '<>')
-            return '';
-        if($op == 'like')
-        {
-            if($data[0] != '%' && $data[strlen($data)-1] != '%')
-                $data = "%{$data}%";
-            $query = " and {$query} like ?";
-        }
-        else if($op == 'in')
-        {
-            if($query == 'id')
-            {
-                $datas = explode(',',$data);
-                $ids = array();
-                foreach($datas as $d)
-                    $ids[] = (int)$d;
-                $data = implode(',',$ids);
-            }
-            else
-            {
-                //如接受外部参数，请在这里检查
-            }
-            $query = " and {$query} in ({$data})";
-        }
-        else if($op == 'm'){}
-        else
-            $query = " and {$query}{$op}?";
-        $cnt = substr_count($query,'?');
-        if($cnt > 1)
-        {
-            if(!is_array($data))
-                return $this;
-            if(count($data) != $cnt)
-                return $this;
-            foreach($data as $d)
-                $this->tsmt[] = $d;
-        }
-        else if($cnt == 1)
-            $this->tsmt[] = $data;
-        return $query;
     }
     function order($order)
     {
@@ -190,11 +109,102 @@ class ciy_sql{
         $this->group = $group;
         return $this;
     }
-    function having($query,$data = null,$op = '=')
+    function having($query,$data = null)
     {
-        $this->having.=$this->_query($query,$data,$op);
+        $this->having.=$this->_query($query,$data);
             return $this;
+    }
+    function where($query,$data = null)
+    {
+        $this->where.=$this->_query($query,$data);
+        return $this;
+    }
+    function wherenumber($query,$data,$bet = 1)
+    {
+        $data = trim($data);
+        if(empty($data))
+            return $this;
+        if(strpos($data,'-') !== false)
+        {
+            $ds = explode('-', $data);
+            $this->where.=$this->_query($query.'>=',(float)$ds[0]*$bet);
+            $this->where.=$this->_query($query.'<=',(float)$ds[1]*$bet);
         }
+        else if(strpos($data,',') !== false)
+        {
+            $datas = explode(',',$data);
+            $ids = array();
+            foreach($datas as $d)
+                $ids[] = (int)$d;
+            $data = implode(',',$ids);
+            $this->where.=$this->_query($query.' in',$data);
+        }
+        else if($data[0] == '>' || $data[0] == '<' || $data[0] == '=')
+        {
+            if(($data[0] == '<' && @$data[1] == '>') || @$data[1] == '=')
+            {
+                $query.=substr($data,0,2);
+                $data = (float)substr($data,2);
+            }
+            else
+            {
+                $query.=substr($data,0,1);
+                $data = (float)substr($data,1);
+            }
+            $this->where.=$this->_query($query,$data*$bet);
+        }
+        else
+        {
+            $this->where.=$this->_query($query,$data*$bet);
+        }
+        return $this;
+    }
+    function _query($query,$data = null)
+    {
+        if(empty($query))
+            return '';
+        if($data === null)
+            return ' and '.$query;
+        $cnt = substr_count($query,'?');
+        if($cnt>0)
+        {
+            if(!is_array($data))
+                return '';
+            if(count($data) != $cnt)
+                return '';
+            foreach($data as $d)
+                $this->tsmt[] = $d;
+            return $query;
+        }
+        $query = trim($query);
+        if(substr($query,-4) == 'like')
+        {
+            if($data === '')
+                return '';
+            if($data[0] != '%' && $data[strlen($data)-1] != '%')
+                $data = "%{$data}%";
+            $query = " and {$query} ?";
+        }
+        else if(substr($query,-2) == 'in')
+        {
+            if($data === '')
+                return '';
+            return " and {$query} ({$data})";
+        }
+        else
+        {
+            $t = substr($query,-1);
+            if($t != '=' && $t != '>' && $t != '<')
+            {
+                if($data === '')
+                    return '';
+                $query .= '=';
+            }
+            $query = " and {$query}?";
+        }
+        $this->tsmt[] = $data;
+        return $query;
+    }
     function buildsql()
     {
         //where group having order
@@ -300,7 +310,7 @@ class ciy_data {
  *      $row['username']...
  */
     function getone($csql) {
-        $ret = $this->connect($this->master)->get(2,$csql->buildsql().' limit 0,1',$csql->tsmt);
+        $ret = $this->connect($this->master)->get(2,$csql->buildsql().$csql->limit,$csql->tsmt);
         if($ret === false || $ret === null)
             return $this->errdata($ret);
         return $ret;
@@ -319,7 +329,7 @@ class ciy_data {
     function get1($csql) {
         if($csql->column == '*')
             $csql->column = 'count(*)';
-        $ret = $this->connect($this->master)->get(3,$csql->buildsql().' limit 0,1',$csql->tsmt);
+        $ret = $this->connect($this->master)->get(3,$csql->buildsql().$csql->limit,$csql->tsmt);
         if($ret === false || $ret === null)
             return $this->errdata($ret);
         return $ret;
@@ -340,21 +350,9 @@ if(is_array($rows)){
          $row['username']...
 }
  */
-    function get($csql,$pageno = null,&$pagecount=20,&$rowcount = false) {//$pageno=null 查询全部
-        if($pagecount === null)
-            $pagecount = 20;
-        $rowcount = 0;
+    function get($csql,&$rowcount = false) {//$pageno=null 查询全部
         $sql = $csql->buildsql();
-        if($pageno !== null)
-        {
-            if($pageno < 1)
-                $pageno = 1;
-            if($pagecount < 2)
-                $pagecount = 20;
-            $pageid = $pagecount * ($pageno - 1);
-            $sql .= " limit {$pageid},{$pagecount}";
-        }
-        $ret = $this->connect($this->master)->get(1,$sql,$csql->tsmt);
+        $ret = $this->connect($this->master)->get(1,$sql.$csql->limit,$csql->tsmt);
         if($ret === false)
             return $this->errdata($ret);
         if($rowcount !== false)
@@ -394,11 +392,11 @@ $id = $mydata->data($updata)->datainsert($updatainsert)->set($csql);//可能新�
  */
     function set($csql, $type = 'auto') {
         $ret = $this->connect(true)->set($csql, $type,$this->dataupdate,$this->datainsert);
-        $this->dataupdate = null;
-        $this->datainsert = null;
         if($ret === false)
             return $this->errdata($ret);
         $this->setaction = $this->connect(true)->setaction;
+        $this->dataupdate = null;
+        $this->datainsert = null;
         return $ret;
     }
 /**

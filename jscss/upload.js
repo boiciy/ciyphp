@@ -22,7 +22,7 @@
                     type: r.attr("data-type") ? r.attr("data-type") : "png,jpg,jpeg,gif", //上传文件后缀
                     jpg: r.attr("data-jpg") ? parseFloat(r.attr("data-jpg")) : 0.6, //jpg压缩比例，0不压缩
                     upname: r.attr("data-file") ? r.attr("data-file") : "file", //formdata name
-                    save: r.attr("data-save") ? r.attr("data-save") : "upload/tmp/{Rnd}.{Ext}", //保存路径文件名
+                    save: r.attr("data-save") ? r.attr("data-save") : "upload/tmp/{Rnd}", //保存路径文件名
                     inputname: r.attr("data-name") ? r.attr("data-name") : "upload", //input name
                     num: r.attr("data-num") ? r.attr("data-num") : 1, //最多上传文件数量
                     nodel: r.attr("data-nodel")=='true' ? true : false, //是否自动删除已上传的文件
@@ -126,7 +126,7 @@
                             J.children("svg.progress").remove();
                             J.children(".progressnum").remove();
                             if (M.result) {
-                                J.addClass("success").append(g).data("url", M.msg).data("uname", M.name)
+                                J.addClass("success").append(g).data("url", M.url).data("uname", M.name)
                             } else {
                                 J.addClass("error").attr("data-error", M.msg ? M.msg : "服务端返回数据异常")
                             }

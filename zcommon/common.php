@@ -2,7 +2,7 @@
 /* =================================================================================
  * 版权声明：保留开源作者及版权声明前提下，开源代码可进行修改及用于任何商业用途。
  * 开源作者：众产国际产业公会  http://ciy.cn/code
- * 版本：0.6.2
+ * 版本：0.6.4
 ====================================================================================*/
 /*
  * common.php 常用公共函数库
@@ -256,10 +256,21 @@ function ciy_runJSON($isform = false) {
     if($isform)
         return $retarr;
     $cb = get('callback');
+    $jsonstr = json_encode($retarr);
+    if($jsonstr === false)
+    {
+        $retarr['msg'] = utf8_encode($retarr['msg']);
+        $jsonstr = json_encode($retarr);
+        if($jsonstr === false)
+        {
+            $retarr['msg'] = json_last_error_msg();
+            $jsonstr = json_encode($retarr);
+        }
+    }
     if (empty($cb))
-        echo json_encode($retarr);
+        echo $jsonstr;
     else
-        echo $cb . '(' . json_encode($retarr) . ')';
+        echo $cb . '(' . $jsonstr . ')';
     exit;
 }
 
@@ -449,8 +460,7 @@ function get($name, $defvalue = '') {
     if(!isset($_GET[$name]))
         return $defvalue;
     $val = $_GET[$name];
-    //原始数据监控
-    return $val;
+    return _checkstr($val,$defvalue);
 }
 function getint($name, $defvalue = 0) {
     if(!isset($_GET[$name]))
@@ -459,14 +469,29 @@ function getint($name, $defvalue = 0) {
 }
 
 function cookie($name, $defvalue = '') {
-    return isset($_COOKIE[$name]) ? $_COOKIE[$name] : $defvalue;
+    return isset($_COOKIE[$name]) ? _checkstr($_COOKIE[$name],$defvalue) : $defvalue;
 }
 
 function post($name, $defvalue = '') {
-    return isset($_POST[$name]) ? $_POST[$name] : $defvalue;
+    return isset($_POST[$name]) ? _checkstr($_POST[$name],$defvalue) : $defvalue;
 }
 function request($name, $defvalue = '') {
-    return isset($_REQUEST[$name]) ? $_REQUEST[$name] : $defvalue;
+    return isset($_REQUEST[$name]) ? _checkstr($_REQUEST[$name],$defvalue) : $defvalue;
+}
+function _checkstr($val,$defvalue)
+{
+    if(is_bool($val))
+        return $val;
+    $cnt = strlen($val);
+    for($i=0;$i<$cnt;$i++)
+    {
+        if(ord($val[$i]) == 0)
+        {
+            //非法记录
+            return $defvalue;
+        }
+    }
+    return $val;
 }
 
 /**
@@ -690,7 +715,7 @@ class ciy_post {
         {
             if(!isset($this->post[$key]))
                 return $defvalue;
-            return $this->post[$key];
+            return _checkstr($this->post[$key],$defvalue);
         }
         $ks = explode('>', $key);
         if(!isset($this->post[$ks[0]]))
@@ -702,7 +727,7 @@ class ciy_post {
         {
             $i++;
             if($i >= $cnt)
-                return $data;
+                return _checkstr($data,$defvalue);
             if(!isset($data[$ks[$i]]))
                 return $defvalue;
             $data = $data[$ks[$i]];
@@ -715,9 +740,7 @@ class ciy_post {
         return $data;
     }
     function get($key,$defvalue = '') {
-        $data = $this->getraw($key,$defvalue);
-        //过滤XSS、注入等漏洞字符串
-        return $data;
+        return $this->getraw($key,$defvalue);
     }
     function getint($key,$defvalue = 0) {
         return (int)$this->getraw($key,$defvalue);

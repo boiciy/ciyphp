@@ -3,12 +3,20 @@ $mydata = new ciy_data();
 $table = 'd_test';
 ciy_runJSON();
 $msql = new ciy_sql($table);
-$msql->where('truename',get('truename'),'like');
+$msql->where('truename like',get('truename'));
+$msql->wherenumber('scores',get('scores'));
+$val = explode('~',get('activetime'));
+if(count($val) == 2)
+{
+    $msql->where('activetime>=',strtotime(trim($val[0].' 00:00:00')));
+    $msql->where('activetime<=',strtotime(trim($val[1].' 23:59:59')));
+}
 $msql->order(get('order','id desc'));
-$pageno = getint('pageno', 1);
 ciy_runExcelxml($msql);
 ciy_runExcelcsv($msql);
-$rows = $mydata->get($msql,$pageno,$pagecount,$mainrowcount);
+$pageno = getint('pageno', 1);$pagecount = 20;
+$msql->limit($pageno,$pagecount);
+$rows = $mydata->get($msql,$mainrowcount);
 function excel_cc($msql)//Excel CSV数据导出函数，ciy_runCSV()调用。
 {
     global $mydata;

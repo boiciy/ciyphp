@@ -1,5 +1,5 @@
 /*
- * 版本：0.5.5
+ * 版本：0.5.6
  */
 'use strict';
 function uperr(err,msg){
@@ -14,8 +14,7 @@ function uperr(err,msg){
         data:postparam
     });
 }
-function ciy_fastfunc(confirmmsg,func,postparam,succfunc)
-{
+function ciy_fastfunc(confirmmsg,func,postparam,succfunc){
     if(!confirmmsg)
         return cfunc();
     ciy_alert(confirmmsg,function(btn){
@@ -38,8 +37,7 @@ function ciy_fastfunc(confirmmsg,func,postparam,succfunc)
         });
     }
 }
-function callfunc(funcname, post, successfunc, opt)//opt  fail,complete,headers,timeout
-{
+function callfunc(funcname, post, successfunc, opt){//opt  fail,complete,headers,timeout
     opt = opt || {};
     opt.murl = opt.murl || "";
     opt.url = opt.murl + "?json=true&func="+funcname;
@@ -75,8 +73,7 @@ function callfunc(funcname, post, successfunc, opt)//opt  fail,complete,headers,
     ciy_loading();
     ciy_ajax(opt);
 }
-function ciy_ajax(opt)//IE8 OK
-{
+function ciy_ajax(opt){//IE8 OK
     opt = opt || {};
     var header = opt.header || {};
     if(!header['Content-Type'])//header:{'Content-Type':'application/x-www-form-urlencoded'},
@@ -167,8 +164,7 @@ function ciy_ajax(opt)//IE8 OK
     }
     var aborttime = window.setTimeout( function() {request.abort("timeout");}, timeout);
 }
-function ciy_getform(dom,parentTag)
-{
+function ciy_getform(dom,parentTag){
     while(true)
     {
         if(parentTag && dom.tagName == parentTag)
@@ -251,31 +247,31 @@ function ciy_getform(dom,parentTag)
             continue;
         }
         var val = retdata[el[0].name]||'';
-        var chd = true;
-        if(check == 'mobile')
-            chd = /^1\d{10}$/.test(val);
-        else if(check == 'url')
-            chd = /^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/)(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~\/])+$/.test(val);
-        else if(check == 'mail')
-            chd = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(val);
-        else if(check == 'ip')
-            chd = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/.test(val);
-        else if(check == 'cardid')
-            chd = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(val);
-        else if(check == 'num')
-            chd = /(-?\d*)(\.\d+)?/.test(val);
-        else if(check == 'int')
-            chd = (val > 0);
-        else
-            chd = (val != '');
-        if(!chd)
+        if(!ciy_check(check,val))
         {
             var title = els[i].querySelector('label').textContent;
             retdata['_check'] = els[i].getAttribute('data-checkmsg')||'请正确填写'+title;
-        console.log(title,els[i]);
-    }
+        }
     }
     return retdata;
+}
+function ciy_check(check,val)
+{
+    if(check == 'mobile')
+        return /^1\d{10}$/.test(val);
+    if(check == 'url')
+        return /^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/)(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~\/])+$/.test(val);
+    if(check == 'mail')
+        return /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(val);
+    if(check == 'ipv4')
+        return /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/.test(val);
+    if(check == 'cardid')
+        return /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(val);
+    if(check == 'num')
+        return /(-?\d*)(\.\d+)?/.test(val);
+    if(check == 'int')
+        return (val > 0);
+    return (val != '');
 }
 function ciy_urlparam(url){
     var obj = {};
@@ -467,8 +463,7 @@ function ciy_layoutclose(act){
         ciy_ifropen('',domltab.attr('data-tit'));
     }
 }
-function ciy_ifrclose(domtab)
-{
+function ciy_ifrclose(domtab){
     if(window.parent != window)
     {
         //关闭自己
@@ -581,7 +576,6 @@ function ciy_repre(){
     for (var i = 0; i < els.length; i++)
         els[i].innerHTML = els[i].innerHTML.replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
 }
-
 function ciy_table_adjust(domname,pathname){
     var dom = document.querySelector(domname);
     if(dom == null)
@@ -785,8 +779,7 @@ function ciy_table_adjust(domname,pathname){
         });
     }
 }
-function ciy_table_tree(domname)
-{
+function ciy_table_tree(domname){
     $(domname).on("click",'div[data-treeid]',function(ev){
         $(ev.currentTarget).toggleClass('ciy-tree-spread');
         var id = $(ev.currentTarget).attr('data-treeid');
@@ -816,26 +809,22 @@ function ciy_table_tree(domname)
         }
     });
 }
-function ciy_select_init(dom)
-{
+function ciy_select_init(dom){
     $(dom).on("click",'tr[data-id]',function(ev){
         $(ev.currentTarget).toggleClass('selected');
     });
 }
-function ciy_select_all(dom)
-{
+function ciy_select_all(dom){
     $('tr[data-id]',dom).each(function () {
         $(this).addClass("selected");
     });
 }
-function ciy_select_diff(dom)
-{
+function ciy_select_diff(dom){
     $('tr[data-id]',dom).each(function () {
         $(this).toggleClass("selected");
     });
 }
-function ciy_select_act(dom,act,confirmmsg,postparam,successfunc)
-{
+function ciy_select_act(dom,act,confirmmsg,postparam,successfunc){
     if(typeof(postparam) != 'object')
         postparam = {};
     postparam.act = act;
@@ -946,7 +935,7 @@ function ciy_alert(content, cb, option){
     }
     htmldom.on('click','.btn',function(){
         var btntit = this.textContent;
-        var inputs = [];
+        var inputs = {};
         var xx = htmldom.find('input,select,textarea');
         xx.each(function(){
             inputs[this.name] = this.value;
@@ -1032,14 +1021,12 @@ function ciy_alert(content, cb, option){
     }
     return false;
 }
-function ciy_alertclose()
-{
+function ciy_alertclose(){
     if(window.parent != window)
         return window.parent.ciy_alertclose();
     $('.ciy-dialog>.close').trigger('click');
 }
-function ciy_alertautoheight()
-{
+function ciy_alertautoheight(){
     var sitime = setInterval(function(){
        if(!window.alertautoheight)
            return;
@@ -1272,14 +1259,20 @@ function ciy_getstrparam(str,split){
     }
     return ret;
 }
-function ciy_formhtml(sp,dbdatas){
+function ciy_formhtml(sp,datas){
     var ret = '';
     ret += '<div class="form-group"';
     if(sp.check)
         ret += ' data-check="'+sp.check+'"';
+    if(sp.checkmsg)
+        ret += ' data-checkmsg="'+sp.checkmsg+'"';
     ret += '>';
     ret += '<label>'+sp.title+'</label><div>';
-    var val = dbdatas[sp.name]||sp.value||'';
+    var val;
+    if(datas)
+        val = datas[sp.name];
+    if(val === undefined)
+        val = sp.defvalue||'';
     if(sp.type == 'input')
         ret += '<input type="text" name="'+sp.name+'" value="'+val+'"/>';
     else if(sp.type == 'textarea')
@@ -1322,10 +1315,11 @@ function ciy_formhtml(sp,dbdatas){
         var valcodes = (sp.code||'').split(',');
         if(vals.length != valcodes.length)
             valcodes = vals;
+        var valns = val.split(',');
         for(var i in vals)
         {
             ret += '<label class="formi"><input type="checkbox" name="'+sp.name+'" value="'+valcodes[i]+'"';
-            if(val == valcodes[i])
+            if($.inArray(valcodes[i], valns) > -1)
                 ret += ' checked="checked"';
             ret += '/><i></i>'+vals[i]+'</label>';
         }

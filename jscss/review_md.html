@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+<style type="text/css">
+body{margin:0;padding:0;}
+.rich-h1{font-size:1em;margin:0.7em 0.5em 0 0.5em;padding:0.3em 0;border-bottom:1px solid #1d9af7;}
+.rich-h2{font-size:0.9em;margin:0.7em 0.7em 0 0.7em;}
+.rich-h3{font-size:0.8em;margin:0.7em 1em 0 1em;}
+.rich-content{font-size:0.8em;padding:1em;}
+.rich-code{padding: 2px 4px;margin:0 4px;color: #c7254e;background-color: #f9f2f4;border-radius: 4px;}
+</style>
+<body>
+<div id="id_md">
+</div>
+<script src="/jscss/jquery-1.12.4.min.js" type="text/javascript"></script>
+<script src="/jscss/ciy.js" type="text/javascript"></script>
+<script type="text/javascript">
+'use strict';
+var markdown = '';
+$(function(){
+    ciy_table_tree('.table');
+    setInterval(function(){
+       if(!window.alertcb)
+           return;
+       var ret = window.alertcb();
+       if(markdown == ret)
+           return;
+       markdown = ret;
+       document.getElementById("id_md").innerHTML = convertmd(markdown);
+   },800);
+});
+function convertmd(markdown)
+{
+    // ###,##,#,@
+    var mds = markdown.split('\n');
+    var html = '';
+    var bdiv = false;
+    for(var m in mds)
+    {
+        if(mds[m].length == 0)
+        {
+            html += '<br/>';
+            continue;
+        }
+        if(mds[m][0] == '#'){
+            if(bdiv){
+                bdiv = false;
+                html += '</div>';
+            }
+            if(mds[m].substr(0,3) == '###')
+                html += '<h1 class="rich-h1">'+mds[m].substr(3)+'</h1>';
+            else if(mds[m].substr(0,2) == '##')
+                html += '<h2 class="rich-h2">'+mds[m].substr(2)+'</h2>';
+            else
+                html += '<h3 class="rich-h3">'+mds[m].substr(1)+'</h3>';
+            
+        }
+        else if(mds[m][0] == '@')
+        {
+            if(bdiv){
+                bdiv = false;
+                html += '</div>';
+            }
+            html += '<div style="font-size:0"><img src="'+mds[m].substr(1)+'" style="max-width:100%;"/></div>';
+        }
+        else
+        {
+            if(!bdiv){
+                bdiv = true;
+                html += '<div class="rich-content">';
+            }
+            html += convertcode(mds[m]);
+            if(mds[m].substr(-1) != '>')
+                html += '<br/>';
+        }
+    }
+    if(bdiv)
+        html += '</div>';
+    return html;
+    function convertcode(md)
+    {
+        var bcode = false;
+        while(true)
+        {
+            var ind = md.indexOf('`');
+            if(ind == -1)
+                break;
+            var el = '<code class="rich-code">';
+            if(bcode)
+            {
+                bcode = false;
+                el = '</code>';
+            }
+            else
+                bcode = true;
+            md = md.substr(0,ind)+el+md.substr(ind+1);
+        }
+        if(bcode)
+            md += '</code>';
+        return md;
+    }
+}
+</script>
+</body>
+</html>

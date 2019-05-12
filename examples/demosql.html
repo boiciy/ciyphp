@@ -1,0 +1,1046 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>数据库结构体</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+<link href="/jscss/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <h2>SQL文件在 /ciyphp.sql</h2>
+    <blockquote onclick="$(this).next().slideToggle();" style="cursor:pointer;">增删改查Demo表<code>d_test</code></blockquote>
+      <div class='table' style="display:none;margin-left:1em;">
+          <table>
+              <tr>
+                  <th style="width:80px;">序号</th>
+                  <th style="width:150px;">字 段 名</th>
+                  <th style="width:100px;">字段类型</th>
+                  <th style="width:80px;">长度</th>
+                  <th style="min-width:300px;">备　　　注</th>
+              </tr>
+<tr>      
+<td><div>1</div></td>
+<td><div>id</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div></div></td> 
+</tr>
+<tr>      
+<td><div>2</div></td>
+<td><div>icon</div></td>    
+<td><div>varchar</div></td>       
+<td><div>50</div></td>
+<td><div>上传图片</div></td> 
+</tr>
+<tr>      
+<td><div>3</div></td>
+<td><div>truename</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>姓名</div></td> 
+</tr>
+<tr>      
+<td><div>4</div></td>
+<td><div>scores</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>分数</div></td> 
+</tr>
+<tr>      
+<td><div>5</div></td>
+<td><div>fxk</div></td>    
+<td><div>varchar</div></td>       
+<td><div>100</div></td>
+<td><div>复选框</div></td> 
+</tr>
+<tr>      
+<td><div>6</div></td>
+<td><div>dxk</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>单选框</div></td> 
+</tr>
+<tr>      
+<td><div>7</div></td>
+<td><div>lbk</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>下拉列表框</div></td> 
+</tr>
+<tr>      
+<td><div>8</div></td>
+<td><div>kg</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>开关</div></td> 
+</tr>
+<tr>      
+<td><div>9</div></td>
+<td><div>dh</div></td>    
+<td><div>varchar</div></td>       
+<td><div>255</div></td>
+<td><div>多行文本框</div></td> 
+</tr>
+<tr>      
+<td><div>10</div></td>
+<td><div>activetime</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div>日期时间</div></td> 
+</tr>
+<tr>      
+<td><div>11</div></td>
+<td><div>addtimes</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div>新建时间</div></td> 
+</tr>
+<tr>      
+<td><div>12</div></td>
+<td><div>ip</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>IP</div></td> 
+</tr>
+          </table>
+      </div>
+    <blockquote onclick="$(this).next().slideToggle();" style="cursor:pointer;">增删改查Demo备份表<code>d_test_bak</code></blockquote>
+      <div class='table' style="display:none;margin-left:1em;">
+          <table>
+              <tr>
+                  <th style="width:80px;">序号</th>
+                  <th style="width:150px;">字 段 名</th>
+                  <th style="width:100px;">字段类型</th>
+                  <th style="width:80px;">长度</th>
+                  <th style="min-width:300px;">备　　　注</th>
+              </tr>
+<tr>      
+<td><div>1</div></td>
+<td><div>id</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div></div></td> 
+</tr>
+<tr>      
+<td><div>2</div></td>
+<td><div>icon</div></td>    
+<td><div>varchar</div></td>       
+<td><div>50</div></td>
+<td><div>上传图片</div></td> 
+</tr>
+<tr>      
+<td><div>3</div></td>
+<td><div>truename</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>姓名</div></td> 
+</tr>
+<tr>      
+<td><div>4</div></td>
+<td><div>scores</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>分数</div></td> 
+</tr>
+<tr>      
+<td><div>5</div></td>
+<td><div>fxk</div></td>    
+<td><div>varchar</div></td>       
+<td><div>100</div></td>
+<td><div>复选框</div></td> 
+</tr>
+<tr>      
+<td><div>6</div></td>
+<td><div>dxk</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>单选框</div></td> 
+</tr>
+<tr>      
+<td><div>7</div></td>
+<td><div>lbk</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>下拉列表框</div></td> 
+</tr>
+<tr>      
+<td><div>8</div></td>
+<td><div>kg</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>开关</div></td> 
+</tr>
+<tr>      
+<td><div>9</div></td>
+<td><div>dh</div></td>    
+<td><div>varchar</div></td>       
+<td><div>255</div></td>
+<td><div>多行文本框</div></td> 
+</tr>
+<tr>      
+<td><div>10</div></td>
+<td><div>activetime</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div>日期时间</div></td> 
+</tr>
+<tr>      
+<td><div>11</div></td>
+<td><div>addtimes</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div>新建时间</div></td> 
+</tr>
+<tr>      
+<td><div>12</div></td>
+<td><div>ip</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>IP</div></td> 
+</tr>
+          </table>
+      </div>
+    <blockquote onclick="$(this).next().slideToggle();" style="cursor:pointer;">管理员用户表<code>p_admin</code></blockquote>
+      <div class='table' style="display:none;margin-left:1em;">
+          <table>
+              <tr>
+                  <th style="width:80px;">序号</th>
+                  <th style="width:150px;">字 段 名</th>
+                  <th style="width:100px;">字段类型</th>
+                  <th style="width:80px;">长度</th>
+                  <th style="min-width:300px;">备　　　注</th>
+              </tr>
+<tr>      
+<td><div>1</div></td>
+<td><div>id</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div></div></td> 
+</tr>
+<tr>      
+<td><div>2</div></td>
+<td><div>upid</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div>领导用户ID</div></td> 
+</tr>
+<tr>      
+<td><div>3</div></td>
+<td><div>status</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>状态,1.禁用,10.正常</div></td> 
+</tr>
+<tr>      
+<td><div>4</div></td>
+<td><div>trytime</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>连续错误次数</div></td> 
+</tr>
+<tr>      
+<td><div>5</div></td>
+<td><div>mobile</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>登录手机号</div></td> 
+</tr>
+<tr>      
+<td><div>6</div></td>
+<td><div>password</div></td>    
+<td><div>varchar</div></td>       
+<td><div>40</div></td>
+<td><div>密码</div></td> 
+</tr>
+<tr>      
+<td><div>7</div></td>
+<td><div>truename</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>真实姓名</div></td> 
+</tr>
+<tr>      
+<td><div>8</div></td>
+<td><div>power</div></td>    
+<td><div>varchar</div></td>       
+<td><div>255</div></td>
+<td><div>扩展权限</div></td> 
+</tr>
+<tr>      
+<td><div>9</div></td>
+<td><div>sex</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>性别,1.男,2.女</div></td> 
+</tr>
+<tr>      
+<td><div>10</div></td>
+<td><div>leader</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>负责人,1.是,2.否</div></td> 
+</tr>
+<tr>      
+<td><div>11</div></td>
+<td><div>departid</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>部门ID</div></td> 
+</tr>
+<tr>      
+<td><div>12</div></td>
+<td><div>depart</div></td>    
+<td><div>varchar</div></td>       
+<td><div>100</div></td>
+<td><div>所在部门</div></td> 
+</tr>
+<tr>      
+<td><div>13</div></td>
+<td><div>icon</div></td>    
+<td><div>varchar</div></td>       
+<td><div>50</div></td>
+<td><div>用户照片</div></td> 
+</tr>
+<tr>      
+<td><div>14</div></td>
+<td><div>activetime</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div>活跃时间</div></td> 
+</tr>
+<tr>      
+<td><div>15</div></td>
+<td><div>addtimes</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div>注册日期</div></td> 
+</tr>
+<tr>      
+<td><div>16</div></td>
+<td><div>ip</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>登录IP</div></td> 
+</tr>
+          </table>
+      </div>
+    <blockquote onclick="$(this).next().slideToggle();" style="cursor:pointer;">管理部门表<code>p_admindepart</code></blockquote>
+      <div class='table' style="display:none;margin-left:1em;">
+          <table>
+              <tr>
+                  <th style="width:80px;">序号</th>
+                  <th style="width:150px;">字 段 名</th>
+                  <th style="width:100px;">字段类型</th>
+                  <th style="width:80px;">长度</th>
+                  <th style="min-width:300px;">备　　　注</th>
+              </tr>
+<tr>      
+<td><div>1</div></td>
+<td><div>id</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div></div></td> 
+</tr>
+<tr>      
+<td><div>2</div></td>
+<td><div>upid</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>上级部门</div></td> 
+</tr>
+<tr>      
+<td><div>3</div></td>
+<td><div>title</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>部门名称</div></td> 
+</tr>
+<tr>      
+<td><div>4</div></td>
+<td><div>power</div></td>    
+<td><div>varchar</div></td>       
+<td><div>200</div></td>
+<td><div>默认权限</div></td> 
+</tr>
+<tr>      
+<td><div>5</div></td>
+<td><div>powerleader</div></td>    
+<td><div>varchar</div></td>       
+<td><div>200</div></td>
+<td><div>领导权限</div></td> 
+</tr>
+          </table>
+      </div>
+    <blockquote onclick="$(this).next().slideToggle();" style="cursor:pointer;">管理员登录状态表<code>p_adminonline</code></blockquote>
+      <div class='table' style="display:none;margin-left:1em;">
+          <table>
+              <tr>
+                  <th style="width:80px;">序号</th>
+                  <th style="width:150px;">字 段 名</th>
+                  <th style="width:100px;">字段类型</th>
+                  <th style="width:80px;">长度</th>
+                  <th style="min-width:300px;">备　　　注</th>
+              </tr>
+<tr>      
+<td><div>1</div></td>
+<td><div>id</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div></div></td> 
+</tr>
+<tr>      
+<td><div>2</div></td>
+<td><div>userid</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>登录用户ID</div></td> 
+</tr>
+<tr>      
+<td><div>3</div></td>
+<td><div>target</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>登录平台,10.中台登录,11.代登录</div></td> 
+</tr>
+<tr>      
+<td><div>4</div></td>
+<td><div>sid</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>授权码</div></td> 
+</tr>
+<tr>      
+<td><div>5</div></td>
+<td><div>exptime</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div>授权到期日</div></td> 
+</tr>
+<tr>      
+<td><div>6</div></td>
+<td><div>ip</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>IP</div></td> 
+</tr>
+          </table>
+      </div>
+    <blockquote onclick="$(this).next().slideToggle();" style="cursor:pointer;">代码表<code>p_cata</code></blockquote>
+      <div class='table' style="display:none;margin-left:1em;">
+          <table>
+              <tr>
+                  <th style="width:80px;">序号</th>
+                  <th style="width:150px;">字 段 名</th>
+                  <th style="width:100px;">字段类型</th>
+                  <th style="width:80px;">长度</th>
+                  <th style="min-width:300px;">备　　　注</th>
+              </tr>
+<tr>      
+<td><div>1</div></td>
+<td><div>id</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div></div></td> 
+</tr>
+<tr>      
+<td><div>2</div></td>
+<td><div>upid</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>上级代码</div></td> 
+</tr>
+<tr>      
+<td><div>3</div></td>
+<td><div>nums</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>排序</div></td> 
+</tr>
+<tr>      
+<td><div>4</div></td>
+<td><div>types</div></td>    
+<td><div>varchar</div></td>       
+<td><div>30</div></td>
+<td><div>分类</div></td> 
+</tr>
+<tr>      
+<td><div>5</div></td>
+<td><div>codeid</div></td>    
+<td><div>varchar</div></td>       
+<td><div>10</div></td>
+<td><div>值</div></td> 
+</tr>
+<tr>      
+<td><div>6</div></td>
+<td><div>title</div></td>    
+<td><div>varchar</div></td>       
+<td><div>30</div></td>
+<td><div>名称</div></td> 
+</tr>
+          </table>
+      </div>
+    <blockquote onclick="$(this).next().slideToggle();" style="cursor:pointer;">快捷配置表<code>p_config</code></blockquote>
+      <div class='table' style="display:none;margin-left:1em;">
+          <table>
+              <tr>
+                  <th style="width:80px;">序号</th>
+                  <th style="width:150px;">字 段 名</th>
+                  <th style="width:100px;">字段类型</th>
+                  <th style="width:80px;">长度</th>
+                  <th style="min-width:300px;">备　　　注</th>
+              </tr>
+<tr>      
+<td><div>1</div></td>
+<td><div>id</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div></div></td> 
+</tr>
+<tr>      
+<td><div>2</div></td>
+<td><div>title</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>参数标题</div></td> 
+</tr>
+<tr>      
+<td><div>3</div></td>
+<td><div>types</div></td>    
+<td><div>varchar</div></td>       
+<td><div>10</div></td>
+<td><div>参数代码</div></td> 
+</tr>
+<tr>      
+<td><div>4</div></td>
+<td><div>params</div></td>    
+<td><div>varchar</div></td>       
+<td><div>200</div></td>
+<td><div>参数含义</div></td> 
+</tr>
+          </table>
+      </div>
+    <blockquote onclick="$(this).next().slideToggle();" style="cursor:pointer;">日志表<code>p_log</code></blockquote>
+      <div class='table' style="display:none;margin-left:1em;">
+          <table>
+              <tr>
+                  <th style="width:80px;">序号</th>
+                  <th style="width:150px;">字 段 名</th>
+                  <th style="width:100px;">字段类型</th>
+                  <th style="width:80px;">长度</th>
+                  <th style="min-width:300px;">备　　　注</th>
+              </tr>
+<tr>      
+<td><div>1</div></td>
+<td><div>id</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div></div></td> 
+</tr>
+<tr>      
+<td><div>2</div></td>
+<td><div>userid</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>操作人ID</div></td> 
+</tr>
+<tr>      
+<td><div>3</div></td>
+<td><div>readid</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>处理人ID</div></td> 
+</tr>
+<tr>      
+<td><div>4</div></td>
+<td><div>types</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>LOG分类</div></td> 
+</tr>
+<tr>      
+<td><div>5</div></td>
+<td><div>status</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>状态,0.未处理,1.已处理,2.锁定</div></td> 
+</tr>
+<tr>      
+<td><div>6</div></td>
+<td><div>logs</div></td>    
+<td><div>text</div></td>       
+<td><div>65535</div></td>
+<td><div>详情</div></td> 
+</tr>
+<tr>      
+<td><div>7</div></td>
+<td><div>addtimes</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div>时间</div></td> 
+</tr>
+<tr>      
+<td><div>8</div></td>
+<td><div>ip</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>IP</div></td> 
+</tr>
+          </table>
+      </div>
+    <blockquote onclick="$(this).next().slideToggle();" style="cursor:pointer;">自动化任务表<code>p_system</code></blockquote>
+      <div class='table' style="display:none;margin-left:1em;">
+          <table>
+              <tr>
+                  <th style="width:80px;">序号</th>
+                  <th style="width:150px;">字 段 名</th>
+                  <th style="width:100px;">字段类型</th>
+                  <th style="width:80px;">长度</th>
+                  <th style="min-width:300px;">备　　　注</th>
+              </tr>
+<tr>      
+<td><div>1</div></td>
+<td><div>id</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div></div></td> 
+</tr>
+<tr>      
+<td><div>2</div></td>
+<td><div>name</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>任务名称</div></td> 
+</tr>
+<tr>      
+<td><div>3</div></td>
+<td><div>runfunc</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>入口函数</div></td> 
+</tr>
+<tr>      
+<td><div>4</div></td>
+<td><div>runrequire</div></td>    
+<td><div>varchar</div></td>       
+<td><div>50</div></td>
+<td><div>引用文件</div></td> 
+</tr>
+<tr>      
+<td><div>5</div></td>
+<td><div>runparam</div></td>    
+<td><div>varchar</div></td>       
+<td><div>100</div></td>
+<td><div>执行参数</div></td> 
+</tr>
+<tr>      
+<td><div>6</div></td>
+<td><div>runcnt</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>执行次数</div></td> 
+</tr>
+<tr>      
+<td><div>7</div></td>
+<td><div>nexttime</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div>下一次执行时间</div></td> 
+</tr>
+<tr>      
+<td><div>8</div></td>
+<td><div>nextsec</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>时间间隔</div></td> 
+</tr>
+<tr>      
+<td><div>9</div></td>
+<td><div>exptime</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div>超时时间</div></td> 
+</tr>
+<tr>      
+<td><div>10</div></td>
+<td><div>status</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>状态,0.待执行,1.正在执行,10.禁用</div></td> 
+</tr>
+<tr>      
+<td><div>11</div></td>
+<td><div>errmsg</div></td>    
+<td><div>varchar</div></td>       
+<td><div>200</div></td>
+<td><div>执行信息</div></td> 
+</tr>
+          </table>
+      </div>
+    <blockquote onclick="$(this).next().slideToggle();" style="cursor:pointer;">用户表<code>p_user</code></blockquote>
+      <div class='table' style="display:none;margin-left:1em;">
+          <table>
+              <tr>
+                  <th style="width:80px;">序号</th>
+                  <th style="width:150px;">字 段 名</th>
+                  <th style="width:100px;">字段类型</th>
+                  <th style="width:80px;">长度</th>
+                  <th style="min-width:300px;">备　　　注</th>
+              </tr>
+<tr>      
+<td><div>1</div></td>
+<td><div>id</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div></div></td> 
+</tr>
+<tr>      
+<td><div>2</div></td>
+<td><div>upid</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div>推荐人ID</div></td> 
+</tr>
+<tr>      
+<td><div>3</div></td>
+<td><div>money</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>余额(分)</div></td> 
+</tr>
+<tr>      
+<td><div>4</div></td>
+<td><div>level</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>用户级别,1.已注册,10.已认证</div></td> 
+</tr>
+<tr>      
+<td><div>5</div></td>
+<td><div>nickname</div></td>    
+<td><div>varchar</div></td>       
+<td><div>50</div></td>
+<td><div>昵称</div></td> 
+</tr>
+<tr>      
+<td><div>6</div></td>
+<td><div>mobile</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>手机号</div></td> 
+</tr>
+<tr>      
+<td><div>7</div></td>
+<td><div>pass</div></td>    
+<td><div>varchar</div></td>       
+<td><div>40</div></td>
+<td><div>密码</div></td> 
+</tr>
+<tr>      
+<td><div>8</div></td>
+<td><div>sid</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>Token</div></td> 
+</tr>
+<tr>      
+<td><div>9</div></td>
+<td><div>headimg</div></td>    
+<td><div>varchar</div></td>       
+<td><div>100</div></td>
+<td><div>头像</div></td> 
+</tr>
+<tr>      
+<td><div>10</div></td>
+<td><div>wxstatus</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>关注公众号,1.授权,9.取消关注,10.已关注</div></td> 
+</tr>
+<tr>      
+<td><div>11</div></td>
+<td><div>wxunionid</div></td>    
+<td><div>varchar</div></td>       
+<td><div>50</div></td>
+<td><div>微信UnionID</div></td> 
+</tr>
+<tr>      
+<td><div>12</div></td>
+<td><div>wxopenid</div></td>    
+<td><div>varchar</div></td>       
+<td><div>50</div></td>
+<td><div>微信OpenID</div></td> 
+</tr>
+<tr>      
+<td><div>13</div></td>
+<td><div>wxminaid</div></td>    
+<td><div>varchar</div></td>       
+<td><div>50</div></td>
+<td><div>小程序OpenID</div></td> 
+</tr>
+<tr>      
+<td><div>14</div></td>
+<td><div>wxminakey</div></td>    
+<td><div>varchar</div></td>       
+<td><div>25</div></td>
+<td><div>小程序Key</div></td> 
+</tr>
+<tr>      
+<td><div>15</div></td>
+<td><div>logintime</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div>登陆时间</div></td> 
+</tr>
+<tr>      
+<td><div>16</div></td>
+<td><div>addtimes</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div>注册时间</div></td> 
+</tr>
+<tr>      
+<td><div>17</div></td>
+<td><div>lng</div></td>    
+<td><div>double</div></td>       
+<td><div></div></td>
+<td><div>经度</div></td> 
+</tr>
+<tr>      
+<td><div>18</div></td>
+<td><div>lat</div></td>    
+<td><div>double</div></td>       
+<td><div></div></td>
+<td><div>纬度</div></td> 
+</tr>
+          </table>
+      </div>
+    <blockquote onclick="$(this).next().slideToggle();" style="cursor:pointer;">用户扩展表<code>p_user_ext</code></blockquote>
+      <div class='table' style="display:none;margin-left:1em;">
+          <table>
+              <tr>
+                  <th style="width:80px;">序号</th>
+                  <th style="width:150px;">字 段 名</th>
+                  <th style="width:100px;">字段类型</th>
+                  <th style="width:80px;">长度</th>
+                  <th style="min-width:300px;">备　　　注</th>
+              </tr>
+<tr>      
+<td><div>1</div></td>
+<td><div>id</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div></div></td> 
+</tr>
+<tr>      
+<td><div>2</div></td>
+<td><div>sex</div></td>    
+<td><div>varchar</div></td>       
+<td><div>5</div></td>
+<td><div>性别</div></td> 
+</tr>
+<tr>      
+<td><div>3</div></td>
+<td><div>dist</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>区县</div></td> 
+</tr>
+<tr>      
+<td><div>4</div></td>
+<td><div>city</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>城市</div></td> 
+</tr>
+<tr>      
+<td><div>5</div></td>
+<td><div>country</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>国家</div></td> 
+</tr>
+<tr>      
+<td><div>6</div></td>
+<td><div>province</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>省份</div></td> 
+</tr>
+<tr>      
+<td><div>7</div></td>
+<td><div>wxtimeline</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>分享到朋友圈次数</div></td> 
+</tr>
+<tr>      
+<td><div>8</div></td>
+<td><div>wxfriend</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>分享到朋友次数</div></td> 
+</tr>
+<tr>      
+<td><div>9</div></td>
+<td><div>ip</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>注册IP</div></td> 
+</tr>
+          </table>
+      </div>
+    <blockquote onclick="$(this).next().slideToggle();" style="cursor:pointer;">验证码表<code>p_vcode</code></blockquote>
+      <div class='table' style="display:none;margin-left:1em;">
+          <table>
+              <tr>
+                  <th style="width:80px;">序号</th>
+                  <th style="width:150px;">字 段 名</th>
+                  <th style="width:100px;">字段类型</th>
+                  <th style="width:80px;">长度</th>
+                  <th style="min-width:300px;">备　　　注</th>
+              </tr>
+<tr>      
+<td><div>1</div></td>
+<td><div>id</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div></div></td> 
+</tr>
+<tr>      
+<td><div>2</div></td>
+<td><div>userid</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div>用户ID</div></td> 
+</tr>
+<tr>      
+<td><div>3</div></td>
+<td><div>mobile</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>手机号</div></td> 
+</tr>
+<tr>      
+<td><div>4</div></td>
+<td><div>code</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>验证码</div></td> 
+</tr>
+<tr>      
+<td><div>5</div></td>
+<td><div>addtimes</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div>添加时间</div></td> 
+</tr>
+<tr>      
+<td><div>6</div></td>
+<td><div>ip</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>IP</div></td> 
+</tr>
+          </table>
+      </div>
+    <blockquote onclick="$(this).next().slideToggle();" style="cursor:pointer;">微信授权表<code>p_weixin</code></blockquote>
+      <div class='table' style="display:none;margin-left:1em;">
+          <table>
+              <tr>
+                  <th style="width:80px;">序号</th>
+                  <th style="width:150px;">字 段 名</th>
+                  <th style="width:100px;">字段类型</th>
+                  <th style="width:80px;">长度</th>
+                  <th style="min-width:300px;">备　　　注</th>
+              </tr>
+<tr>      
+<td><div>1</div></td>
+<td><div>id</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div></div></td> 
+</tr>
+<tr>      
+<td><div>2</div></td>
+<td><div>userid</div></td>    
+<td><div>int</div></td>       
+<td><div></div></td>
+<td><div>绑定企业</div></td> 
+</tr>
+<tr>      
+<td><div>3</div></td>
+<td><div>username</div></td>    
+<td><div>varchar</div></td>       
+<td><div>50</div></td>
+<td><div>登录名</div></td> 
+</tr>
+<tr>      
+<td><div>4</div></td>
+<td><div>name</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>显示名</div></td> 
+</tr>
+<tr>      
+<td><div>5</div></td>
+<td><div>baseid</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>原始ID</div></td> 
+</tr>
+<tr>      
+<td><div>6</div></td>
+<td><div>appid</div></td>    
+<td><div>varchar</div></td>       
+<td><div>50</div></td>
+<td><div>APIID</div></td> 
+</tr>
+<tr>      
+<td><div>7</div></td>
+<td><div>appsecret</div></td>    
+<td><div>varchar</div></td>       
+<td><div>50</div></td>
+<td><div>APIsecret</div></td> 
+</tr>
+<tr>      
+<td><div>8</div></td>
+<td><div>mchid</div></td>    
+<td><div>varchar</div></td>       
+<td><div>20</div></td>
+<td><div>支付ID</div></td> 
+</tr>
+<tr>      
+<td><div>9</div></td>
+<td><div>mchkey</div></td>    
+<td><div>varchar</div></td>       
+<td><div>50</div></td>
+<td><div>支付Key</div></td> 
+</tr>
+<tr>      
+<td><div>10</div></td>
+<td><div>accesstoken</div></td>    
+<td><div>varchar</div></td>       
+<td><div>600</div></td>
+<td><div>AccessToken</div></td> 
+</tr>
+<tr>      
+<td><div>11</div></td>
+<td><div>jsticket</div></td>    
+<td><div>varchar</div></td>       
+<td><div>600</div></td>
+<td><div>JSTicket</div></td> 
+</tr>
+<tr>      
+<td><div>12</div></td>
+<td><div>exptime</div></td>    
+<td><div>bigint</div></td>       
+<td><div></div></td>
+<td><div>过期时间</div></td> 
+</tr>
+          </table>
+      </div>
+<script src="/jscss/jquery-1.12.4.min.js" type="text/javascript"></script>
+<script src="/jscss/ciy.js" type="text/javascript"></script>
+</body></html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html><html>
+<head>
+<title></title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+<link href="/jscss/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div id="container" style="height:40em;"></div>
+<script src="/jscss/jquery-1.12.4.min.js" type="text/javascript"></script>
+<script src="/jscss/ciy.js" type="text/javascript"></script>
+<script src="https://map.qq.com/api/js?v=2.exp&key=TCEBZ-PACWI-OQCGA-5ST3L-CYEDS-OJFW4&callback=do_map" charset="utf-8"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+});
+function do_map()
+{
+    var urls = ciy_urlparam();
+    if(urls.lat == 0 && urls.lng == 0)
+        return ciy_alert('未获取到该用户位置',function(){
+            ciy_alertclose();
+        });
+    var center = new qq.maps.LatLng(urls.lat,urls.lng);
+    var map = new qq.maps.Map(document.getElementById('container'),{
+        center: center,
+        zoom: 9
+    });
+    var marker = new qq.maps.Marker({
+        position: center,
+        map: map
+    });
+}
+</script>
+</body></html>

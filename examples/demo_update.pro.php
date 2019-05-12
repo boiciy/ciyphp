@@ -1,6 +1,5 @@
 <?php
 $mydata = new ciy_data();
-$rsuser = verify();
 $table = 'd_test';
 ciy_runJSON();
 $id = getint('id');
@@ -9,7 +8,10 @@ $csql->where('id',$id);
 $updaterow = $mydata->getone($csql);
 $btnname = '更新';
 if($updaterow == null || $updaterow === false)
+{
+    $updaterow['activetime'] = time();
     $btnname = '新增';
+}
 
 function json_update() {
     global $mydata;
@@ -21,7 +23,12 @@ function json_update() {
     $updata['truename'] = $post->get('truename');
     $updata['icon'] = $post->get('icon');
     $updata['scores'] = $post->getint('scores');
-    $updata['activetime'] = time();
+    $updata['fxk'] = $post->get('fxk');
+    $updata['dxk'] = $post->getint('dxk');
+    $updata['lbk'] = $post->getint('lbk');
+    $updata['kg'] = $post->getbool('kg')?1:2;
+    $updata['dh'] = $post->get('dh');
+    $updata['activetime'] = strtotime($post->get('activetime'));
     $updatainsert['addtimes'] = time();
     $updatainsert['ip'] = getip();
     $csql = new ciy_sql($table);
