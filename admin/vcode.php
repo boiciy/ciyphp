@@ -7,7 +7,7 @@
 <link href="/jscss/style.css" rel="stylesheet" type="text/css" />
 <body>
 <div class="container">
-    <div class="crumbs">当前位置： 信息中心 → 验证码管理</div>
+    <div class="crumbs">当前位置： 用户中心 → 验证码管理</div>
     <form methodd="get" action="">
         <div class="form-group inline">
             <label>手机号</label>

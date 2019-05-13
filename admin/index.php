@@ -36,13 +36,13 @@
         <div class="ciy-side-scroll">
           <div class="ciy-logo ciy-header-height ciy-menu-width">
             <i class="icon" style='font-size:2em;vertical-align: middle;'>&#xe607;</i>
-            <cite>众产演示</cite>
+            <cite>中台演示</cite>
           </div>
           <ul class="ciy-menu-nav ciy-header-topm">
             <li>
               <a>
                 <i class="icon">&#xe607;</i>
-                <cite>信息中心</cite>
+                <cite>用户中心</cite>
               </a>
               <span class="ciy-menu-more"></span>
               <ul>

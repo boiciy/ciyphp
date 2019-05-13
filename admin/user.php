@@ -7,7 +7,7 @@
 <link href="/jscss/style.css" rel="stylesheet" type="text/css" />
 <body>
 <div class="container">
-    <div class="crumbs">当前位置： 信息中心 → 用户管理</div>
+    <div class="crumbs">当前位置： 用户中心 → 用户管理</div>
     <div class="ciy-tab ciy-tab-card">
         <ul><?php echo create_li($code_user_level,$liid);?>
         </ul>

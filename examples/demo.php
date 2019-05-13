@@ -54,7 +54,7 @@ else{
           <table>
             <tr>
                 <th>ID</th>
-                <th>头像</th>
+                <th style="width:60px;">头像</th>
                 <th>姓名<?php echo showorder('truename');?></th>
                 <th>分数<?php echo showorder('scores');?></th>
                 <th>日期<?php echo showorder('activetime');?></th>
