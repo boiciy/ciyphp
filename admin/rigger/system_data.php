@@ -30,9 +30,11 @@ $rsuser = verifyadmin();
                 <button class="btn" type="submit">开始执行</button>
             </div>
         </form>
-          <pre>
+<pre>
 地区XML入库：calcataarea
 </pre>
+          <code>这里适合写一次性或不定期执行的代码，如数据修正、导入导出、统计等</code>
+          <code>请注意权限限制</code>
       </div>
     </fieldset>
     <br/>

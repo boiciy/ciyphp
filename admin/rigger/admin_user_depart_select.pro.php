@@ -3,6 +3,7 @@ $mydata = new ciy_data();
 $rsuser = verifyadmin();
 $table = 'p_admindepart';
 ciy_runJSON();
+$selid = getint('id');
 $csql = new ciy_sql($table);
 $csql->where('title like',get('title'))->order('id');
 $rows = $mydata->get($csql);

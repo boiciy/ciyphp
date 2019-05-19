@@ -39,12 +39,12 @@ foreach($treerows as $row){
         <td><div<?php echo ($row['_count'] > 0)?' data-treeid="'.$id.'"':'';?> class="ciy-tree-spread"><?php
         echo str_repeat('　',$row['_deep']);
         if($row['_count']>0)
-            echo '<span class="ciy-tree-dot">▶</span> '.$row['title'].'<span style="font-size:0.5em;">('.$row['_count'].')</span>';
+            echo '<span class="ciy-tree-dot">▶</span> '.$row['title'].'<span style="font-size:0.7em;">('.$row['_count'].')</span>';
         else
             echo '　 '.$row['title'];
         ?></div></td>
         <td><div>
-            <a class="btn" onclick="selected(<?php echo $id;?>)">选中</a>
+            <?php echo ($id == $selid?'已选中':'<a class="btn" onclick="selected('.$id.')">选中</a>');?>
         </div></td>
         </tr>
 <?php } ?>

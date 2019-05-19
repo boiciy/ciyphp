@@ -15,13 +15,13 @@
           <div class="form-group" data-check>
               <label style="width:3em;color:#666666;">手机号</label>
               <div>
-              <input type="text" name="user"/>
+              <input type="text" name="user" style="width:12em;"/>
               </div>
           </div>
           <div class="form-group" data-check>
               <label style="width:3em;color:#666666;">密　码</label>
               <div>
-              <input type="password" name="pass"/>
+              <input type="password" name="pass" style="width:12em;"/>
               </div>
           </div>
           <div class="form-group">

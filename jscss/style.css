@@ -685,7 +685,6 @@ textarea[disabled],select[disabled],input[disabled],input[disabled]+i, .btn.disa
 }
 .table th{
     position: relative;
-    background:#f0f0f0;
     padding:0.5em 1em;
     text-align: left;
     border-bottom: 1px solid #cccccc;
@@ -712,6 +711,9 @@ textarea[disabled],select[disabled],input[disabled],input[disabled]+i, .btn.disa
 }
 .table tr:hover{
     background:#daedf4;
+}
+.table tr:first-child{
+    background:#f0f0f0;
 }
 .table th>i{
     position: absolute;

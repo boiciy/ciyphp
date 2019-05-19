@@ -2,7 +2,7 @@
 /* =================================================================================
  * 版权声明：保留开源作者及版权声明前提下，开源代码可进行修改及用于任何商业用途。
  * 开源作者：众产国际产业公会  http://ciy.cn/code
- * 版本：0.6.5
+ * 版本：0.6.6
 ====================================================================================*/
 /*
  * common.php 常用公共函数库
@@ -460,7 +460,7 @@ function get($name, $defvalue = '') {
     if(!isset($_GET[$name]))
         return $defvalue;
     $val = $_GET[$name];
-    return _checkstr($val,$defvalue);
+    return _checkstr($val,$defvalue,$name);
 }
 function getint($name, $defvalue = 0) {
     if(!isset($_GET[$name]))
@@ -469,176 +469,60 @@ function getint($name, $defvalue = 0) {
 }
 
 function cookie($name, $defvalue = '') {
-    return isset($_COOKIE[$name]) ? _checkstr($_COOKIE[$name],$defvalue) : $defvalue;
+    return isset($_COOKIE[$name]) ? _checkstr($_COOKIE[$name],$defvalue,'Cookie--'.$name) : $defvalue;
 }
 
 function post($name, $defvalue = '') {
-    return isset($_POST[$name]) ? _checkstr($_POST[$name],$defvalue) : $defvalue;
+    return isset($_POST[$name]) ? _checkstr($_POST[$name],$defvalue,$name) : $defvalue;
 }
 function request($name, $defvalue = '') {
-    return isset($_REQUEST[$name]) ? _checkstr($_REQUEST[$name],$defvalue) : $defvalue;
+    return isset($_REQUEST[$name]) ? _checkstr($_REQUEST[$name],$defvalue,$name) : $defvalue;
 }
-function _checkstr($val,$defvalue)
+function _checkstr($val,$defvalue,$name = '')
 {
-    if(is_bool($val))
+    if(!is_string($val))
         return $val;
     $cnt = strlen($val);
     for($i=0;$i<$cnt;$i++)
     {
         if(ord($val[$i]) == 0)
         {
-            //非法记录
+            savelogfile('checkstr',"ORD={$cnt},name={$name},value={$val},url=".@$_SERVER['HTTP_HOST'].@$_SERVER['REQUEST_URI'].",cookie=".@$_SERVER['HTTP_COOKIE']);
             return $defvalue;
         }
     }
+    if($cnt > 20)
+        savelogfile('checkstr',"len={$cnt},name={$name},value={$val},url=".@$_SERVER['HTTP_HOST'].@$_SERVER['REQUEST_URI'].",cookie=".@$_SERVER['HTTP_COOKIE']);
     return $val;
 }
 
 /**
- * 下载音视频文件到本地，图片可以直接保存为缩略图
- * url      下载链接地址
- * savepath 保存相对路径。如upload/
- * filename 保存文件名。默认日期文件名
- * thumb    生成缩略图参数的 如array('width'=>75,'height'=>75,'cut'=>true,'jpgquality'=>70)
- * timeout  下载超时时间 秒
+ * 保存log到本地。
  */
-function file_down($url,$savepath,$filename = '', $thumb = null,$timeout = 60)
+function savelogfile($types,$msg,$isrequest=false,$path='log/')
 {
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_TIMEOUT,$timeout);
-    curl_setopt($ch, CURLOPT_HEADER, 0);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-    @curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-    $data = curl_exec($ch);
-    if ($data === false || empty($data)) {
-        return 'ERR:下载失败';
-    }
-    $info = curl_getinfo($ch);
-    curl_close($ch);
-    if(empty($filename))
-        $filename = date('Ymd_His_').rand(1000,9999);
-    $fileext = '';
-    if($info['content_type'] == 'image/jpeg')
-        $fileext = '.jpg';
-    else if($info['content_type'] == 'image/jpg')
-        $fileext = '.jpg';
-    else if($info['content_type'] == 'image/png')
-        $fileext = '.png';
-    else if($info['content_type'] == 'image/gif')
-        $fileext = '.gif';
-    else if($info['content_type'] == 'audio/amr')
-        $fileext = '.amr';
-    else if($info['content_type'] == 'audio/wav')
-        $fileext = '.wav';
-    else if($info['content_type'] == 'audio/mpeg')
-        $fileext = '.mp3';
-    else if($info['content_type'] == 'audio/ogg')
-        $fileext = '.ogg';
-    if(empty($fileext))
-        return 'ERR:文件类型未知';
-    $fp= fopen(PATH_ROOT.$savepath.$filename.$fileext,'w');
-    fwrite($fp,$data);
-    @fclose($fp);
-    if($thumb !== null)
-    {
-        if(!img2thumb(PATH_ROOT.$savepath.$filename.$fileext, PATH_ROOT.$savepath.$filename.'_thumb.jpg', (int)@$thumb['width'], (int)@$thumb['height'], (bool)@$thumb['cut'], (int)@$thumb['jpgquality']))
-            return 'ERR:缩略图生成失败';
-        else
-        {
-            delfile(PATH_ROOT.$savepath.$filename.$fileext);
-            return $savepath.$filename.'_thumb.jpg';
-        }
-    }
-    return $savepath.$filename.$fileext;
-}
-/**
- * 生成缩略图
- * src_img      原图文件绝对完整地址。
- * dst_img      缩略图文件绝对完整地址。
- * width/height 缩略图宽高。不能同时为0。一个为0时，则等比例缩放。
- * cut          是否裁切图片
- * jpgquality   保存jpg的清晰度。
- */
-function img2thumb($src_img, $dst_img, $width = 75, $height = 75, $cut = false,$jpgquality=60)
-{
-    if(!is_file($src_img))
-        return false;
-    if($jpgquality < 10)
-        $jpgquality = 50;
-    $srcinfo = getimagesize($src_img);
-    $src_w = $srcinfo[0];
-    $src_h = $srcinfo[1];
-    $type  = strtolower(substr(image_type_to_extension($srcinfo[2]), 1));
-    $createfun = 'imagecreatefrom' . ($type == 'jpg' ? 'jpeg' : $type);
- 
-    $dst_h = $height;
-    $dst_w = $width;
-    $x = $y = 0;
-
-    if($width> $src_w)
-        $dst_w = $width = $src_w;
-    if($height> $src_h)
-        $dst_h = $height = $src_h;
- 
-    if(!$width && !$height)
-        return false;
-    if(!$cut)
-    {
-        if($dst_w && $dst_h)
-        {
-            if($dst_w/$src_w> $dst_h/$src_h)
+    if(strpos($types,'/') !== false || strpos($types,'\\') !== false)
+        $types = '_def';
+    $filename = PATH_ROOT.$path.$types.'.log';
+    if (makedir(dirname($filename))) {
+        if ($fp = fopen($filename, 'a')) {
+            if($isrequest)
             {
-                $dst_w = $src_w * ($dst_h / $src_h);
-                $x = 0 - ($dst_w - $width) / 2;
+                $msg.=' GET:';
+                foreach ($_GET as $key => $value)
+                    $msg.=$key.'='.$value.'&';
+                $msg.=' POST:'.file_get_contents('php://input');
             }
-            else
-            {
-                $dst_h = $src_h * ($dst_w / $src_w);
-                $y = 0 - ($dst_h - $height) / 2;
-            }
-        }
-        else if($dst_w xor $dst_h)
-        {
-            if($dst_w && !$dst_h)  //有宽无高
-            {
-                $propor = $dst_w / $src_w;
-                $height = $dst_h  = $src_h * $propor;
-            }
-            else if(!$dst_w && $dst_h)  //有高无宽
-            {
-                $propor = $dst_h / $src_h;
-                $width  = $dst_w = $src_w * $propor;
-            }
-        }
+            $msg .= "\r\n";
+            if (@fwrite($fp, date('Y-m-d H:i:s')."\t".$msg)) {
+                fclose($fp);
+                return true;
+            } else {
+                fclose($fp);
+                return false;
+            } 
+        } 
     }
-    else
-    {
-        if(!$dst_h)  //裁剪时无高
-            $height = $dst_h = $dst_w;
-        if(!$dst_w)  //裁剪时无宽
-            $width = $dst_w = $dst_h;
-        $propor = min(max($dst_w / $src_w, $dst_h / $src_h), 1);
-        $dst_w = (int)round($src_w * $propor);
-        $dst_h = (int)round($src_h * $propor);
-        $x = ($width - $dst_w) / 2;
-        $y = ($height - $dst_h) / 2;
-    }
- 
-    $src = $createfun($src_img);
-    $dst = imagecreatetruecolor($width ? $width : $dst_w, $height ? $height : $dst_h);
-    $white = imagecolorallocate($dst, 255, 255, 255);
-    imagefill($dst, 0, 0, $white);
- 
-    if(function_exists('imagecopyresampled'))
-        imagecopyresampled($dst, $src, $x, $y, 0, 0, $dst_w, $dst_h, $src_w, $src_h);
-    else
-        imagecopyresized($dst, $src, $x, $y, 0, 0, $dst_w, $dst_h, $src_w, $src_h);
-    imagejpeg($dst, $dst_img, $jpgquality);
-    imagedestroy($dst);
-    imagedestroy($src);
-    return true;
 }
 /**
  * 循环建立新文件夹。
@@ -715,7 +599,7 @@ class ciy_post {
         {
             if(!isset($this->post[$key]))
                 return $defvalue;
-            return _checkstr($this->post[$key],$defvalue);
+            return _checkstr($this->post[$key],$defvalue,$key);
         }
         $ks = explode('>', $key);
         if(!isset($this->post[$ks[0]]))
@@ -727,7 +611,7 @@ class ciy_post {
         {
             $i++;
             if($i >= $cnt)
-                return _checkstr($data,$defvalue);
+                return _checkstr($data,$defvalue,$key);
             if(!isset($data[$ks[$i]]))
                 return $defvalue;
             $data = $data[$ks[$i]];

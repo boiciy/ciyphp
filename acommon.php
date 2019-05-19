@@ -346,36 +346,161 @@ function get_mstime()
     $comps = explode(' ', $microtime);
     return sprintf('%d%03d', $comps[1], $comps[0] * 1000);
 }
-
-/**
- * 保存log到本地。
- */
-function savelogfile($types,$msg,$isrequest=false,$path='log/')
+function xssfilter($val)
 {
-    $filename = PATH_ROOT.$path.$types.'.log';
-    if (makedir(dirname($filename))) {
-        if ($fp = fopen($filename, 'a')) {
-            if($isrequest)
-            {
-                $msg.=' GET:';
-                foreach ($_GET as $key => $value)
-                    $msg.=$key.'='.$value.'&';
-                $msg.=' POST:';
-                foreach ($_POST as $key => $value)
-                    $msg.=$key.'='.$value.'&';
-            }
-            $msg .= "\r\n";
-            if (@fwrite($fp, date('Y-m-d H:i:s')."\t".$msg)) {
-                fclose($fp);
-                return true;
-            } else {
-                fclose($fp);
-                return false;
-            } 
-        } 
+    if(stripos($val,'\x3c') !== false || strpos($val,'\74') !== false || stripos($val,'eval') !== false)
+    {
+        return true;
     }
+    return false;
 }
 
+/**
+ * 下载音视频文件到本地，图片可以直接保存为缩略图
+ * url      下载链接地址
+ * savepath 保存相对路径。如upload/
+ * filename 保存文件名。默认日期文件名
+ * thumb    生成缩略图参数的 如array('width'=>75,'height'=>75,'cut'=>true,'jpgquality'=>70)
+ * timeout  下载超时时间 秒
+ */
+function file_down($url,$savepath,$filename = '', $thumb = null,$timeout = 60)
+{
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_TIMEOUT,$timeout);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    @curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+    $data = curl_exec($ch);
+    if ($data === false || empty($data)) {
+        return 'ERR:下载失败';
+    }
+    $info = curl_getinfo($ch);
+    curl_close($ch);
+    if(empty($filename))
+        $filename = date('Ymd_His_').rand(1000,9999);
+    $fileext = '';
+    if($info['content_type'] == 'image/jpeg')
+        $fileext = '.jpg';
+    else if($info['content_type'] == 'image/jpg')
+        $fileext = '.jpg';
+    else if($info['content_type'] == 'image/png')
+        $fileext = '.png';
+    else if($info['content_type'] == 'image/gif')
+        $fileext = '.gif';
+    else if($info['content_type'] == 'audio/amr')
+        $fileext = '.amr';
+    else if($info['content_type'] == 'audio/wav')
+        $fileext = '.wav';
+    else if($info['content_type'] == 'audio/mpeg')
+        $fileext = '.mp3';
+    else if($info['content_type'] == 'audio/ogg')
+        $fileext = '.ogg';
+    if(empty($fileext))
+        return 'ERR:文件类型未知';
+    $fp= fopen(PATH_ROOT.$savepath.$filename.$fileext,'w');
+    fwrite($fp,$data);
+    @fclose($fp);
+    if($thumb !== null)
+    {
+        if(!img2thumb(PATH_ROOT.$savepath.$filename.$fileext, PATH_ROOT.$savepath.$filename.'_thumb.jpg', (int)@$thumb['width'], (int)@$thumb['height'], (bool)@$thumb['cut'], (int)@$thumb['jpgquality']))
+            return 'ERR:缩略图生成失败';
+        else
+        {
+            delfile(PATH_ROOT.$savepath.$filename.$fileext);
+            return $savepath.$filename.'_thumb.jpg';
+        }
+    }
+    return $savepath.$filename.$fileext;
+}
+/**
+ * 生成缩略图
+ * src_img      原图文件绝对完整地址。
+ * dst_img      缩略图文件绝对完整地址。
+ * width/height 缩略图宽高。不能同时为0。一个为0时，则等比例缩放。
+ * cut          是否裁切图片
+ * jpgquality   保存jpg的清晰度。
+ */
+function img2thumb($src_img, $dst_img, $width = 75, $height = 75, $cut = false,$jpgquality=60)
+{
+    if(!is_file($src_img))
+        return false;
+    if($jpgquality < 10)
+        $jpgquality = 50;
+    $srcinfo = getimagesize($src_img);
+    $src_w = $srcinfo[0];
+    $src_h = $srcinfo[1];
+    $type  = strtolower(substr(image_type_to_extension($srcinfo[2]), 1));
+    $createfun = 'imagecreatefrom' . ($type == 'jpg' ? 'jpeg' : $type);
+ 
+    $dst_h = $height;
+    $dst_w = $width;
+    $x = $y = 0;
+
+    if($width> $src_w)
+        $dst_w = $width = $src_w;
+    if($height> $src_h)
+        $dst_h = $height = $src_h;
+ 
+    if(!$width && !$height)
+        return false;
+    if(!$cut)
+    {
+        if($dst_w && $dst_h)
+        {
+            if($dst_w/$src_w> $dst_h/$src_h)
+            {
+                $dst_w = $src_w * ($dst_h / $src_h);
+                $x = 0 - ($dst_w - $width) / 2;
+            }
+            else
+            {
+                $dst_h = $src_h * ($dst_w / $src_w);
+                $y = 0 - ($dst_h - $height) / 2;
+            }
+        }
+        else if($dst_w xor $dst_h)
+        {
+            if($dst_w && !$dst_h)  //有宽无高
+            {
+                $propor = $dst_w / $src_w;
+                $height = $dst_h  = $src_h * $propor;
+            }
+            else if(!$dst_w && $dst_h)  //有高无宽
+            {
+                $propor = $dst_h / $src_h;
+                $width  = $dst_w = $src_w * $propor;
+            }
+        }
+    }
+    else
+    {
+        if(!$dst_h)  //裁剪时无高
+            $height = $dst_h = $dst_w;
+        if(!$dst_w)  //裁剪时无宽
+            $width = $dst_w = $dst_h;
+        $propor = min(max($dst_w / $src_w, $dst_h / $src_h), 1);
+        $dst_w = (int)round($src_w * $propor);
+        $dst_h = (int)round($src_h * $propor);
+        $x = ($width - $dst_w) / 2;
+        $y = ($height - $dst_h) / 2;
+    }
+ 
+    $src = $createfun($src_img);
+    $dst = imagecreatetruecolor($width ? $width : $dst_w, $height ? $height : $dst_h);
+    $white = imagecolorallocate($dst, 255, 255, 255);
+    imagefill($dst, 0, 0, $white);
+ 
+    if(function_exists('imagecopyresampled'))
+        imagecopyresampled($dst, $src, $x, $y, 0, 0, $dst_w, $dst_h, $src_w, $src_h);
+    else
+        imagecopyresized($dst, $src, $x, $y, 0, 0, $dst_w, $dst_h, $src_w, $src_h);
+    imagejpeg($dst, $dst_img, $jpgquality);
+    imagedestroy($dst);
+    imagedestroy($src);
+    return true;
+}
 function savelogdb($types,$oldrow, $newrow, $msg = ''){
     if(is_array($oldrow) && is_array($newrow))
     {
@@ -440,10 +565,10 @@ function cookieadmin($oid,$uid,$sid,$exp,$logout = false) {
         $cookieexp = time()-1;
     else
         $cookieexp = time() + 360000000;
-    setcookie('aoid', $oid, $cookieexp,'/');
-    setcookie('auid', enid($uid), $cookieexp,'/');
-    setcookie('asid', $sid, $cookieexp,'/');
-    setcookie('aexp', $exp, $cookieexp,'/');
+    setcookie('aoid', $oid, $cookieexp,'/',null,false,true);
+    setcookie('auid', enid($uid), $cookieexp,'/',null,false,true);
+    setcookie('asid', $sid, $cookieexp,'/',null,false,true);
+    setcookie('aexp', $exp, $cookieexp,'/',null,false,true);
 }
 function verifyadmin($errfunc = null) {
     global $mydata;
