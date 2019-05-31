@@ -9,6 +9,8 @@ $rows = $mydata->get($msql);
 function json_del() {
     global $mydata;
     global $table;
+    if(nopower('admin'))
+        return errjson('您无权限');
     $post = new ciy_post();
     $id = $post->getint('id');
     $csql = new ciy_sql($table.'depart');

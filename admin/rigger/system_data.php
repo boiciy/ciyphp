@@ -2,6 +2,7 @@
 require 'init.php';
 $mydata = new ciy_data();
 $rsuser = verifyadmin();
+if(nopower('admin')) diehtml('您无权限');
 ?><!DOCTYPE html><html>
 <head>
 <title>Demo</title>

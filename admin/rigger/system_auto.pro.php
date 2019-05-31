@@ -1,6 +1,7 @@
 <?php
 $mydata = new ciy_data();
 $rsuser = verifyadmin();
+if(nopower('admin')) diehtml('您无权限');
 $table = 'p_system';
 ciy_runJSON();
 $msql = new ciy_sql($table);
@@ -9,10 +10,10 @@ $msql->where('name like',get('name'));
 $rows = $mydata->get($msql);
 $rows[] = array('id'=>0,'status'=>0,'expsec'=>1800,'nextsec'=>3600,'nexttime'=>time());
 function json_update() {
-    if(nopower('admin'))
-        return errjson('您无权操作');
     global $mydata;
     global $table;
+    if(nopower('admin'))
+        return errjson('您无权操作');
     $post = new ciy_post();
     $id = $post->getint('id');
     $name = $post->get('name');

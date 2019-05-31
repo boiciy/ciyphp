@@ -120,6 +120,7 @@ CREATE TABLE `p_cata`  (
   `types` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '分类',
   `codeid` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '值',
   `title` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
+  `extdata` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '扩展值',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `codeid`(`types`, `codeid`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '代码表' ROW_FORMAT = Compact;

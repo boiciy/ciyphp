@@ -29,6 +29,7 @@
             </div>
             <div class="form-group inline">
                 <button class="btn" type="submit">查询</button>
+                <a class="btn" onclick="multiadd()">批量新增代码</a>
             </div>
         </form>
     </div>
@@ -36,11 +37,12 @@
           <table>
             <tr>
                 <th>编号</th>
-                <th>上级ID</th>
-                <th>排序</th>
+                <th style="width:80px;">上级ID</th>
+                <th style="width:80px;">排序</th>
                 <th>分类</th>
                 <th>名称</th>
                 <th>值(char10)</th>
+                <th>扩展值</th>
                 <th>操作</th>
             </tr>
 <?php
@@ -54,6 +56,7 @@ foreach($rows as $row){
         <td><div><input style="width:100%;" type="text" name="types" value="<?php echo @$row['types'];?>"/></div></td>
         <td><div><input style="width:100%;" type="text" name="title" value="<?php echo @$row['title'];?>"/></div></td>
         <td><div><input style="width:100%;" type="text" name="codeid" value="<?php echo @$row['codeid'];?>"/></div></td>
+        <td><div><input style="width:100%;" type="text" name="extdata" value="<?php echo @$row['extdata'];?>"/></div></td>
         <td><div>
                 <?php
                 if($id == 0)
@@ -69,6 +72,10 @@ foreach($rows as $row){
       </div>
       <?php echo showpage($pageno,$pagecount,$mainrowcount);?>
 </div>
+<div id="alert_multiadd" style="display:none;">
+    <div class="form-group"><label style="width:3em;">分类</label><div><input name="multi_types" type="text"/></div></div>
+    <div class="form-group"><label style="width:3em;">代码</label><div><textarea name="multi_code" style="width: 100%;height:10em;white-space:nowrap;"></textarea><br/><code>名称,值,扩展值</code> <code>一行一条</code></div></div>
+</div>
 <script src="/jscss/jquery-1.12.4.min.js" type="text/javascript"></script>
 <script src="/jscss/ciy.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -77,11 +84,27 @@ $(function(){
 });
 function update(dom,act)
 {
-    ciy_fastfunc('确认更新？','update',ciy_getform(dom,'TR'),act);
+    ciy_fastfunc('','update',ciy_getform(dom,'TR'),act);
 }
 function del(id)
 {
     ciy_fastfunc('确认是否删除？','del','id='+id,'reload');
+}
+function multiadd()
+{
+    ciy_alert({
+        title:'批量新增代码',
+        content:document.getElementById("alert_multiadd").innerHTML,
+        cb:function(btn,inputs){
+            if(btn != "新增")
+                return;
+            callfunc('multiadd',inputs,function(json){
+                ciy_toast('操作成功',{done:function(){
+                    location.reload();
+                }});
+            });
+        },btns:["新增","取消"]
+    });
 }
 </script>
 </body></html>

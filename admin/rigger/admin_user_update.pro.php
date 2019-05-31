@@ -1,6 +1,7 @@
 <?php
 $mydata = new ciy_data();
 $rsuser = verifyadmin();
+if(nopower('admin')) diehtml('您无权限');
 $table = 'p_admin';
 ciy_runJSON();
 $id = getint('id');
@@ -14,6 +15,8 @@ if(!is_array($updaterow))
 function json_update() {
     global $mydata;
     global $table;
+    if(nopower('admin'))
+        return errjson('您无权限');
     $post = new ciy_post();
     $updata = array();
     $id = $post->getint('id');

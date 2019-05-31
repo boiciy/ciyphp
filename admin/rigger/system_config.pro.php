@@ -1,16 +1,17 @@
 <?php
 $mydata = new ciy_data();
 $rsuser = verifyadmin();
+if(nopower('admin')) diehtml('您无权限');
 $table = 'p_config';
 ciy_runJSON();
 $msql = new ciy_sql($table);
 $rows = $mydata->get($msql);
 $rows[] = array('id'=>0);
 function json_update() {
-    if(nopower('admin'))
-        return errjson('您无权操作');
     global $mydata;
     global $table;
+    if(nopower('admin'))
+        return errjson('您无权操作');
     $post = new ciy_post();
     $id = $post->getint('id');
     $updata = array();
@@ -27,10 +28,10 @@ function json_update() {
     return succjson();
 }
 function json_del() {
-    if(nopower('admin'))
-        return errjson('您无权操作');
     global $mydata;
     global $table;
+    if(nopower('admin'))
+        return errjson('您无权操作');
     $post = new ciy_post();
     $csql = new ciy_sql($table);
     $csql->where('id',$post->getint('id'));

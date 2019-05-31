@@ -1,6 +1,7 @@
 <?php
 $mydata = new ciy_data();
 $rsuser = verifyadmin();
+if(nopower('admin')) diehtml('您无权限');
 $table = 'p_log';
 ciy_runJSON();
 $msql = new ciy_sql($table);
@@ -17,6 +18,8 @@ function json_setact() {
     global $mydata;
     global $rsuser;
     global $table;
+    if(nopower('admin'))
+        return errjson('您无权操作');
     $post = new ciy_post();
     $act = $post->get('act');
     $ids = $post->get('ids');
@@ -45,8 +48,6 @@ function json_setact() {
     }
     if($act === 'unlock')
     {
-        if(nopower('admin'))
-            return errjson('您无权操作');
         $csql = new ciy_sql($table);
         $csql->where('id in',$ids);
         $updata = array();
@@ -60,10 +61,10 @@ function json_setact() {
     return succjson();
 }
 function json_clear() {
-    if(nopower('admin'))
-        return errjson('您无权操作');
     global $mydata;
     global $table;
+    if(nopower('admin'))
+        return errjson('您无权操作');
     $csql = new ciy_sql($table);
     $csql->where('status',1);
     $csql->where('addtimes<',time()-86400*100);

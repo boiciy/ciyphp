@@ -1,6 +1,7 @@
 <?php
 $mydata = new ciy_data();
 $rsuser = verifyadmin();
+if(nopower('admin')) diehtml('您无权限');
 $table = 'p_admin';
 ciy_runJSON();
 $code_user = getcodes('user');
@@ -29,6 +30,8 @@ $rows = $mydata->get($msql,$mainrowcount);
 function json_del() {
     global $mydata;
     global $table;
+    if(nopower('admin'))
+        return errjson('您无权限');
     $post = new ciy_post();
     $id = $post->getint('id');
     $csql = new ciy_sql($table);

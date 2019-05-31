@@ -256,7 +256,7 @@ function ciy_runJSON($isform = false) {
     if($isform)
         return $retarr;
     $cb = get('callback');
-    $jsonstr = json_encode($retarr);
+    $jsonstr = json_encode($retarr,JSON_PARTIAL_OUTPUT_ON_ERROR);
     if($jsonstr === false)
     {
         $retarr['msg'] = utf8_encode($retarr['msg']);
