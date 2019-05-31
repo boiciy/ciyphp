@@ -82,8 +82,8 @@ function json_multiadd() {
         $cs = explode(',',$c);
         if(count($cs) < 2)
             continue;
-        $codeid = $cs[0];
-        $title = $cs[1];
+        $title = $cs[0];
+        $codeid = $cs[1];
         $extdata = @$cs[2].'';
         $csql = new ciy_sql($table);
         $csql->where('types',$types)->where('codeid',$codeid)->column('id');
