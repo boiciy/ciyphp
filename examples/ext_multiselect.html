@@ -1,0 +1,135 @@
+<!DOCTYPE html> <html>
+<head>
+<title>Items</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+<link href="/jscss/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <div class="container">
+      
+<blockquote>无限级下拉联动</blockquote>
+应用场景不广泛，不做封装，共三个函数实现(multicata、fillcata、setcata)。<br/>
+全局变量multidata准备数据（表结构详见<a href="http://ciyphp.ciy.cn/admin/" target="_blank">后台演示</a>的代码维护）<br/>
+页面初始化时，调用multicata(domid,defvalue)函数。<br/>
+　domid参数：下拉容器DIV的ID值。<br/>
+　defvalue参数：默认选择项ID。<br/>
+<br/>
+
+<blockquote>示例代码</blockquote>
+<pre>
+&lt;div id="multi_type">&lt;/div>
+var multidata = [{"id":63,"upid":0,"title":"类目1"}...];//upid指向父类目ID
+multicata('multi_type',81);
+</pre>
+
+<blockquote>运行</blockquote>
+    <form>
+    <div class="form-group">
+        <label>多级下拉：</label>
+        <div id="multi_type">
+        </div>
+    </div>
+    <div class="form-group">
+        <label> </label>
+        <div>
+        <button type="button" class="btn" onclick="update(this);">提交按钮</button>
+        </div>
+    </div>
+    </form>
+
+  </div>
+<script src="/jscss/jquery-1.12.4.min.js"></script>
+<script src="/jscss/ciy.js"></script>
+<script src="/jscss/pullinput.js"></script>
+<script type="text/javascript">
+'use strict';
+var multidata = [{"id":63,"upid":0,"title":"类目1"},
+    {"id":64,"upid":0,"title":"类目2"},
+    {"id":65,"upid":0,"title":"类目3"},
+    {"id":66,"upid":63,"title":"类目1-1"},
+    {"id":67,"upid":63,"title":"类目1-2"},
+    {"id":68,"upid":63,"title":"类目1-3"},
+    {"id":69,"upid":64,"title":"类目2-1"},
+    {"id":70,"upid":64,"title":"类目2-2"},
+    {"id":71,"upid":65,"title":"类目3-1"},
+    {"id":72,"upid":70,"title":"类目2-2-1"},
+    {"id":73,"upid":70,"title":"类目2-2-2"},
+    {"id":74,"upid":70,"title":"类目2-2-3"},
+    {"id":75,"upid":73,"title":"类目2-2-2-1"},
+    {"id":76,"upid":73,"title":"类目2-2-2-2"},
+    {"id":77,"upid":76,"title":"类目2-2-2-2-1"},
+    {"id":78,"upid":76,"title":"类目2-2-2-2-2"},
+    {"id":79,"upid":76,"title":"类目2-2-2-2-3"},
+    {"id":80,"upid":78,"title":"类目2-2-2-2-2-1"},
+    {"id":81,"upid":78,"title":"类目2-2-2-2-2-2"},
+    {"id":82,"upid":71,"title":"类目3-1-1"},
+    {"id":83,"upid":71,"title":"类目3-1-2"},
+    {"id":84,"upid":71,"title":"类目3-1-3"},
+    {"id":85,"upid":83,"title":"类目3-1-2-1"}];
+$(function(){
+    multicata('multi_type',81);
+});
+function multicata(domid,id,ids)
+{
+    ids = ids||[];
+    ids.unshift(id);
+    if(id > 0){
+        for (var i = 0; i < multidata.length; i++){
+            if(id == multidata[i].id)
+                return multicata(domid,parseInt(multidata[i].upid),ids);
+        }
+        ids = [0];
+    }
+    if(ids.length == 1)
+        ids.push(0);
+    for(var i=0;i<ids.length-1;i++)
+        fillcata(domid,ids[i],ids[i+1],i);
+}
+function fillcata(domid,upid,id,deep)
+{
+    var html = '';
+    var bsel = true;
+    var nid = -1;
+    var opns = 0;
+    html += '<select name="'+domid+'" onchange="setcata(this)" data-deep="'+deep+'">';
+    for (var i = 0; i < multidata.length; i++)
+    {
+        if(upid == multidata[i].upid)
+        {
+            if(nid == -1)
+                nid = multidata[i].id;
+            html += '<option value="'+multidata[i].id+'"';
+            if(id == multidata[i].id)
+            {
+                html += ' selected="true"';
+                bsel = false;
+            }
+            html += '>'+multidata[i].title+'</option>';
+            opns++;
+        }
+    }
+    html += '</select> ';
+    if(opns == 0)
+        return;
+    $("#"+domid).append(html);
+    if(bsel)
+        fillcata(domid,nid,0,deep+1);
+}
+function setcata(dom)
+{
+    $(dom).nextAll().remove();
+    var deep = parseInt(dom.options[dom.options.selectedIndex].getAttribute('data-deep'));
+    fillcata(dom.name,dom.options[dom.options.selectedIndex].value,0,deep+1);
+}
+
+function update(dom) {
+    var postparam = ciy_getform(dom);
+    console.log(postparam);
+    var j = JSON.stringify(postparam);
+    j = j.replace(/,/g,',<br/>');
+    ciy_alert(j+"<br/><code>详细JSON，请F12看console信息</code>");
+}
+</script>
+</body></html>

@@ -21,14 +21,20 @@ function do_map()
         return ciy_alert('未获取到该用户位置',function(){
             ciy_alertclose();
         });
+    var zoom = getint(urls.zoom);
+    if(zoom<9)
+        zoom = 9;
     var center = new qq.maps.LatLng(urls.lat,urls.lng);
     var map = new qq.maps.Map(document.getElementById('container'),{
         center: center,
-        zoom: 9
+        zoom: zoom
     });
     var marker = new qq.maps.Marker({
         position: center,
         map: map
+    });
+    qq.maps.event.addListener(map,'click',function(event) {
+        ciy_alert('点击位置经纬度：<br/>' + event.latLng.getLng() + '<br/>' + event.latLng.getLat());
     });
 }
 </script>

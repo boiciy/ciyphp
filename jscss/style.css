@@ -771,6 +771,10 @@ textarea[disabled],select[disabled],input[disabled],input[disabled]+i, .btn.disa
     width:auto;
     padding-left:0.8em;
 }
+.form-group.inline.first>label{
+    width:7.5em;
+    padding-left:0;
+}
 
 form:after {
     display: table;
@@ -852,6 +856,7 @@ input[type=checkbox],input[type=radio]{
     display: none;
     min-width:4em;
     height: 1.8em;
+    text-align: left;
     line-height:1.8em;
     padding-left:1em;
     border-radius: 1em;
@@ -969,7 +974,7 @@ input.imp{
 }
 .ciy-dialog>.content{
     position: relative;
-    padding: 1.5em;
+    padding: 1.5em 1.5em 0 1.5em;
     line-height: 2em;
     word-break: break-all;
     overflow-x: hidden;
@@ -977,7 +982,7 @@ input.imp{
 }
 .ciy-dialog>.buttons{
     text-align: right;
-    padding: 1em;
+    padding: 0 1em 1em 1em;
     pointer-events: auto;
 }
 .ciy-dialog>.buttons>.btn{
@@ -1279,7 +1284,6 @@ fieldset.tips>div>ul>li{
     margin-top:0.5em;
 }
 .ciy-page {
-height: 1.5em;
 margin:5px;
 float: right;
 }
@@ -1307,9 +1311,8 @@ text-decoration: none;
 background-color: #e1edf7;
 }
 .ciy-tabbtn {
-height: 1.5em;
 margin:5px;
-float: left;
+display:inline-block;
 }
 .ciy-card {
     margin: 10px;

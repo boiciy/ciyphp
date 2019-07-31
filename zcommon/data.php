@@ -46,6 +46,7 @@ class ciy_sql{
     public $having;
     public $join;
     public $on;
+    public $err;
 
     function __construct($table = '') {
         $this->tsmt = array();
@@ -58,6 +59,7 @@ class ciy_sql{
         $this->having = '';
         $this->join = '';
         $this->on = '';
+        $this->err = '';
     }
     function table($table)
     {
@@ -123,7 +125,10 @@ class ciy_sql{
     {
         $data = trim($data);
         if(empty($data))
+        {
+            $this->err = 'wherenumber data null';
             return $this;
+        }
         if(strpos($data,'-') !== false)
         {
             $ds = explode('-', $data);
@@ -162,16 +167,38 @@ class ciy_sql{
     function _query($query,$data = null)
     {
         if(empty($query))
+        {
+            $this->err = '_query query null';
             return '';
+        }
         if($data === null)
+        {
+            if($query == 'id')
+                return 'id=0';//防止误操作
+            if(strpos($query,'=') === false && strpos($query,'>') === false && strpos($query,'<') === false && strpos($query,' ') === false)
+                return '';
             return ' and '.$query;
+        }
         $cnt = substr_count($query,'?');
         if($cnt>0)
         {
+            if($query[0] != ' ')
+                $query = ' and '.$query;
             if(!is_array($data))
+            {
+                if($cnt == 1)
+                {
+                    $this->tsmt[] = $data;
+                    return $query;
+                }
+                $this->err = '_query data length error';
                 return '';
+            }
             if(count($data) != $cnt)
+            {
+                $this->err = '_query data length mismatch';
                 return '';
+            }
             foreach($data as $d)
                 $this->tsmt[] = $d;
             return $query;

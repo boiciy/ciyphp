@@ -6,24 +6,6 @@ $rsuser = verifyadmin(function($err){
 });
 error_reporting(E_ALL^E_NOTICE);
 $uploadcfg = ciy_config::getupload();
-$path = get('delfile');
-if(!empty($path))
-{
-    $tpath = dirname(PATH_ROOT.$path);
-    $tpath = realpath($tpath);
-    if($tpath === false)
-        upload_outjson(errjson('文件夹不存在'));
-    $tpath.=DIRECTORY_SEPARATOR;
-    if(!upload_allowpath($tpath,$uploadcfg['dirs']))
-        upload_outjson(errjson('文件夹超范围'));
-    if(is_file(PATH_ROOT.$path))
-    {
-        $mtime = time()-filemtime(PATH_ROOT.$path);
-        if($mtime<300)//5分钟内可以删除。
-            delfile(PATH_ROOT.$path);
-    }
-    upload_outjson(succjson());
-}
 $path = get('filepath');
 if(empty($path))
     upload_outjson(errjson('filepath错误'));
@@ -72,12 +54,13 @@ $tpath = realpath($tpath);
 if($tpath === false)
     upload_outjson(errjson('文件夹不存在'));
 $tpath.=DIRECTORY_SEPARATOR;
-if(!upload_allowpath($tpath,$uploadcfg['dirs']))
+$tdpath = realpath(PATH_ROOT.$uploadcfg['dir']).DIRECTORY_SEPARATOR;
+if(strpos($tpath,$tdpath) !== 0)
     upload_outjson(errjson('上传文件夹超范围'));
 $tstr = file_get_contents($file["tmp_name"]);
 if(strpos($tstr,'<?php') !== false)
     upload_outjson(errjson('文件内容不合法'));
-move_uploaded_file($file["tmp_name"], PATH_ROOT.$path);
+move_uploaded_file($file['tmp_name'], PATH_ROOT.$path);
 $ret = succjson(array('url'=>$path,'name'=>$name));
 upload_outjson($ret);
 function upload_outjson($json)
@@ -91,15 +74,4 @@ function upload_outjson($json)
     }
     echo json_encode($json);
     exit;
-}
-function upload_allowpath($tpath,$dirs)
-{
-    //判断路径是否超范围
-    foreach($dirs as $dir)
-    {
-        $tdpath = realpath(PATH_ROOT.$dir).DIRECTORY_SEPARATOR;
-        if(strpos($tpath,$tdpath) === 0)
-            return true;
-    }
-    return false;
 }

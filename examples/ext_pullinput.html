@@ -1,0 +1,79 @@
+<!DOCTYPE html> <html>
+<head>
+<title>Items</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+<link href="/jscss/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <div class="container">
+<blockquote>文本框下拉联想输入(支持代码)</blockquote>
+引用<code>pullinput.js</code>，页面初始化时，在input文本框上绑定pull函数。<br/>
+　catadata参数（必填）：下拉列表可显示的数组，一般包括codeid,title（表结构详见<a href="http://ciyphp.ciy.cn/admin/" target="_blank">后台演示</a>的代码维护）<br/>
+　maxlist参数：默认同时显示最多条数。默认8条。<br/>
+　ulext参数：UL标签的属性字符串拼接，很灵活。一般用于自定义style、class或data等。<br/>
+　lifunc参数：带val和cata两个参数的函数。自定义弹出条目li样式和显示内容<br/>
+　valfunc参数：带li参数的函数。自定义最终在文本框中输入的内容，默认为li内的文本。<br/>
+<br/>
+
+<blockquote>示例代码</blockquote>
+<pre>
+&lt;input type="text" name="gbstr"/>
+&lt;script src="/jscss/pullinput.js" type="text/javascript">&lt;/script>
+$('input[name=gbstr]').pull({
+    catadata:[{"codeid":"HXN","title":"和谐N"},{"codeid":"DFD","title":"地方D"}]//必填，文本框可以联想输入汉字或拼音首字母
+    ,lifunc:function(val,cata){}//可选函数，自定义弹出条目li的样式和显示内容
+    ,valfunc:function(li){}//可选函数，自定义最终在文本框中输入的内容，默认为li内的文本。
+});
+</pre>
+
+<blockquote>运行</blockquote>
+    <div class="form-group" style="position:relative;">
+        <label>默　认：</label>
+        <div>
+            <input type="text" name="gbstr" value=""/>
+        </div>
+    </div>
+    <div class="form-group" style="position:relative;">
+        <label>自定义：</label>
+        <div>
+            <input type="text" name="gbstr2" value=""/>
+        </div>
+    </div>
+
+  </div>
+<script src="/jscss/jquery-1.12.4.min.js"></script>
+<script src="/jscss/ciy.js"></script>
+<script src="/jscss/pullinput.js"></script>
+<script type="text/javascript">
+'use strict';
+$(function(){
+    $('input[name=gbstr]').pull({
+        catadata:[{"id":"52","upid":"0","nums":"0","types":"6a.cx","codeid":"HXN","title":"\u548c\u8c10N","extdata":""},
+            {"id":"53","upid":"0","nums":"0","types":"6a.cx","codeid":"DFD","title":"\u5730\u65b9D","extdata":""}]
+    });
+    $('input[name=gbstr2]').pull({
+        catadata:[{"id":"6","eno":"12333","truename":"\u5730\u65b91"},
+            {"id":"7","eno":"133","truename":"\u624b\u5206\u5f97\u591a"},
+            {"id":"8","eno":"123","truename":"\u6731\u5b66\u5112"},
+            {"id":"11","eno":"002","truename":"\u674e\u53f8\u673a"},
+            {"id":"12","eno":"1831001","truename":"\u8d75\u4e00"},
+            {"id":"13","eno":"1831010","truename":"\u94b1\u4e8c"},
+            {"id":"14","eno":"1831011","truename":"\u5b59\u4e09"},
+            {"id":"15","eno":"1831015","truename":"\u674e\u56db"},
+            {"id":"17","eno":"1831016","truename":"\u5434\u516d"},
+            {"id":"19","eno":"1830001","truename":"\u4e8e\u98de"}]
+        ,lifunc:function(val,cata){
+            if(cata.truename.toUpperCase().indexOf(val) > -1 || cata.eno.toUpperCase().indexOf(val) > -1)
+                return '<li data-id="'+cata.id+'" data-eno="'+cata.eno+'" data-truename="'+cata.truename+'">'+cata.truename+' - <code>'+cata.eno+'</code></li>';
+            return '';
+        }
+        ,valfunc:function(li){
+            console.log(li);
+            return $(li).attr('data-truename');
+        }
+    });
+});
+</script>
+</body></html>

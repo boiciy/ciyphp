@@ -94,11 +94,13 @@ function getconfig($code)
     $csql->where('types',$code)->column('params');
     return $mydata->get1($csql);
 }
-function getcodes($code)
+function getcodes($code,$upid = -1)
 {
     global $mydata;
     $csql = new ciy_sql('p_cata');
-    $csql->where('types',$code)->order('nums desc,id');
+    $csql->where('types',$code)->order('nums,id');
+    if($upid>-1)
+        $csql->where('upid',$upid);
     $catarows = $mydata->get($csql);
     return $catarows;
 }
@@ -613,7 +615,6 @@ function verifyadmin($errfunc = null) {
         else
             savelog('LOGIN', "SID不一致，在尝试登录[OID={$oid}][UID={$uid}][SID={$sid}] DBSID=".$onlinerow['sid']);
     }
-    else
     if ($errfunc instanceof Closure)
     {
         $errfunc($err);

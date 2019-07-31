@@ -25,7 +25,6 @@
                     save: r.attr("data-save") ? r.attr("data-save") : "upload/tmp/{Rnd}", //保存路径文件名
                     inputname: r.attr("data-name") ? r.attr("data-name") : "upload", //input name
                     num: r.attr("data-num") ? r.attr("data-num") : 1, //最多上传文件数量
-                    nodel: r.attr("data-nodel")=='true' ? true : false, //是否自动删除已上传的文件
                     action: r.attr("action") ? r.attr("action") : "upload.php", //后端处理文件名
                     size: r.attr("data-size") ? r.attr("data-size") : 1024*1024*1024, //非图片文件尺寸限制
                     value: r.attr("data-value") ? r.attr("data-value") : "",
@@ -59,6 +58,26 @@
             z(a(i.currentTarget))
         }).on("click", ".delete", function(i) {
             z(a(i.currentTarget).parent("li.success"))
+        }).on("dragover", function(e) {
+            if(window.event.preventDefault) { 
+                window.event.preventDefault(); 
+            }else{ 
+                window.event.returnValue = false; 
+            }
+        }).on("drop", function(e) {
+            if(window.event.preventDefault) { 
+                window.event.preventDefault(); 
+            }else{ 
+                window.event.returnValue = false; 
+            }
+            var G = e.originalEvent.dataTransfer.files;
+            var i = [];
+            for (var F in G) {
+                if (typeof G[F] == "object") {
+                    i.push(G[F])
+                }
+            }
+            C(i)
         });
         if (B.value) {
             var p = B.value.split(","),pname = B.valuename.split(","),
@@ -67,7 +86,7 @@
             var f = 0;
             for (var x in p) {
                 if (s < B.num && p[s]) {
-                    h = a("<li class='item success'></li>").append(k(p[s].toLowerCase().split(".").splice(-1).join())).append(g).append("<div class='filename'>"+pname[s]+"</div>").attr("data-url", p[s]).attr("data-uname", pname[s]).attr("data-filename", c(p[s])).css("background-image", "url('" + p[s] + "')").insertBefore(A);
+                    h = a("<li class='item success'></li>").append(k(p[s].toLowerCase().split(".").splice(-1).join())).append(g).attr("data-url", p[s]).attr("data-uname", pname[s]).attr("data-filename", c(p[s])).css("background-image", "url('" + p[s] + "')").insertBefore(A);
                     r.data("num", ++f);//.removeClass("empty");
                     q()
                 }
@@ -106,13 +125,9 @@
                     J.insertBefore(A);
                     var filename = B.save;
                     var d = new Date();
-                    filename = filename.replace(/{Y}/,d.getFullYear()).replace(/{M}/,d.getMonth()+1).replace(/{D}/,d.getDate()).replace(/{H}/,d.getHours()).replace(/{I}/,d.getMinutes()).replace(/{S}/,d.getSeconds());
-                    filename = filename.replace(/{Rnd}/,d.getMilliseconds()+""+parseInt(Math.random()*1000));
                     //可扩展slice分片上传
                     var L = new FormData();
                     L.append(B.upname, K, I.name);
-                    if (B.num == 1)
-                        L.append('delfile', b.val());
                     //r.removeClass("empty");
                     a.ajax({
                         url: B.action + "?filepath=" + filename,
@@ -132,7 +147,7 @@
                             }
                             q();
                             if (D && typeof D == "function")
-                                D(M.msg);
+                                D(M);
                         },
                         xhr: function() {
                             var M = new XMLHttpRequest();
@@ -321,20 +336,6 @@
             var ii = [];
             if (b.val() != "")
                 ii = b.val().split(",");
-            if(!B.nodel)
-            {
-                for (var xx in ii)
-                {
-                    var bdel = true;
-                    for (var x in i)
-                    {
-                        if (i[x] == ii[xx])
-                            bdel = false;
-                    }
-                    if (bdel)
-                        a.ajax({url: B.action + "?delfile=" + ii[xx]});
-                }
-            }
             b.val(i.join(","));
             bname.val(iname.join(","));
         }

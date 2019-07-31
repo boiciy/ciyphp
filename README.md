@@ -1,16 +1,16 @@
 # 众产未来 - IT工程 - 全栈工程师
 
 ## WEB PHP框架
-编写轻封装的软件架构，让普通人都能看懂程序代码块。  
+极简封装的软件架构，附带一个后台UI，实现快速开发。  
 众产风格，能简化的，绝不繁杂，去概念化，回归本质。  
 1个目录，最少4个文件组成框架结构，函数式代码风格。  
 支持前端、后端、DBA协同开发，类似但有别于MVC架构。  
 
 提供了一套演示代码  
-后台UI演示地址：[前往查看](http://ciyphp.ciy.cn/examples/index.html)
+后台UI演示地址：[前往查看](http://ciyphp.ciy.cn/examples/)
 
 一套管理后台脚手架  
-带管理的后台演示地址：[前往查看](http://ciyphp.ciy.cn/admin/login.php)
+带管理的后台演示地址：[前往查看](http://ciyphp.ciy.cn/admin/)
 
 
 ## 目录结构
@@ -24,13 +24,7 @@
 >acommon.php  
 >jscss/  
 >examples/  
->>init.php  
->>demo.php  
->>demo.pro.php  
->>demo_update.php  
->>demo_update.pro.php  
->>serverdata.php  
->>upload.php  
+>upload.php  
 
 ### common.php 常用公共函数库。
 封装了 Ajax函数调用、Url参数拼接函数、CSV导出、用户安全输入、文件操作等  
@@ -57,7 +51,7 @@ class ciy_config {
         if($index == 1)
         {
             $ret['type'] = 'pdo';
-            $ret['mode'] = '';//空 单服务器模式；ns 一主多从模式；ms 单库多主多从模式。请替换专用data.php文件
+            $ret['mode'] = '';//空 单服务器模式；ns 一主多从模式；ms 单库多主多从模式。需替换专用data.php文件
             $ret['conn'] = array();
             $ret['conn'][] = array(
                 'dsn'=>'mysql:host=127.0.0.1;dbname=ciyphp;port=3306;',
@@ -94,7 +88,7 @@ require PATH_ROOT . 'zcommon/data.php';
 require PATH_ROOT . 'acommon.php';
 ```
 
-### demo.php demo.pro.php demo_update.php demo_update.pro.php
+### /examples (demo.php demo.pro.php demo_update.php demo_update.pro.php)
 例子程序，演示框架基本代码编写流程。包含数据增删改查、上传文件、导出等基本功能。  
 调用例子函数之前，请先用database.sql在mysql中建立d_user/d_test/d_test_bak表。  
 ```php
@@ -113,12 +107,13 @@ $mydata = new ciy_data();
 ciy_runJSON();
 $table = 'd_test';
 $msql = new ciy_sql($table);
-$msql->where('truename',get('truename'),'like');
+$msql->where('truename like',get('truename'));
 $msql->order(get('order','id desc'));
-$pageno = getint('pageno', 1);
-$rows = $mydata->get($msql,$pageno,$pagecount,$mainrowcount);
+$pageno = getint('pageno', 1);$pagecount = 20;
+$msql->limit($pageno,$pagecount);
+$rows = $mydata->get($msql,$mainrowcount); //不需页码的无限上拉加载，不要带mainrowcount参数，提升性能。
 
-function json_setact() {//Ajax交互函数，ciy_runJSON()调用。
+function json_setact() {//Ajax交互函数，ciy_runJSON()调用。本质是json数据交换。
     global $mydata;
     $post = new ciy_post();
     $id = $post->getint('id');
@@ -130,7 +125,7 @@ function json_setact() {//Ajax交互函数，ciy_runJSON()调用。
 
 ## 部署方式
 web根目录下拷贝zcommon目录，更改config.php配置文件。即可完成文件部署。  
-后端代码目录可以非WEB目录。只需对init.php 中的PATH_PROGRAM进行修改。  
+后端代码目录可以非WEB目录，提高安全性。只需对init.php 中的PATH_PROGRAM进行修改。  
 
 ## 框架建议
 与其他框架不同，前端无模板，而直接使用php。建议前端html化。  

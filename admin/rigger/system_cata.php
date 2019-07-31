@@ -17,7 +17,7 @@
             </div>
             <div class="form-group inline">
                 <label>分类</label>
-                <div><input type="text" name="types" value="<?php echo get('types');?>" style="width:10em;"/></div>
+                <div><input type="text" name="types" value="<?php echo get('types');?>" style="width:15em;"/></div>
             </div>
             <div class="form-group inline">
                 <label>名称</label>
@@ -62,7 +62,7 @@ foreach($rows as $row){
                 if($id == 0)
                     echo '<a class="btn" onclick="update(this,\'reload\')">新增</a>';
                 else
-                    echo '<a class="btn" onclick="update(this,\'reload\')">更新</a> <a class="btn" onclick="del('.$id.')">删除</a>';
+                    echo '<a class="btn" onclick="update(this)">更新</a>';
                 ?>
         </div></td>
     </tr>
@@ -70,6 +70,12 @@ foreach($rows as $row){
           </table>
           
       </div>
+    <div class="ciy-tabbtn">
+        <a class="btn btn-default" onclick="ciy_select_all('.table')">全选</a>
+        <a class="btn btn-default" onclick="ciy_select_diff('.table')">反选</a>
+        |
+        <a class="btn btn-default" onclick="ciy_select_act('.table','del','是否批量删除？')">批量删除</a>
+    </div>
       <?php echo showpage($pageno,$pagecount,$mainrowcount);?>
 </div>
 <div id="alert_multiadd" style="display:none;">
@@ -81,14 +87,11 @@ foreach($rows as $row){
 <script type="text/javascript">
 $(function(){
     ciy_table_adjust('.table');
+    ciy_select_init('.table');
 });
 function update(dom,act)
 {
     ciy_fastfunc('','update',ciy_getform(dom,'TR'),act);
-}
-function del(id)
-{
-    ciy_fastfunc('确认是否删除？','del','id='+id,'reload');
 }
 function multiadd()
 {

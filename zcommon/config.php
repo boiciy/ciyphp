@@ -25,7 +25,7 @@ class ciy_config {
                 'persistent'=>false,//持久连接，默认false
                 'charset'=>'utf8'//编码方式，默认utf8
                 );
-            if(isset($_SERVER['HTTP_HOST']) && stripos($_SERVER['HTTP_HOST'],'.local') !== false)
+            if(ciy_config::islocal())
             {
                 $ret['conn'][0]['pass'] = 'CiyPHP';
             }
@@ -60,10 +60,14 @@ class ciy_config {
         }
         return $ret;
     }
+    public static function islocal()
+    {
+        return isset($_SERVER['HTTP_HOST']) && stripos($_SERVER['HTTP_HOST'],'.local') !== false;
+    }
     public static function getupload()
     {
         $ret['drive'] = 'local';
-        $ret['dirs'] = array('upload');//这些目录应禁止可执行文件权限
+        $ret['dir'] = 'upload';
         $ret['exts'] = array('jpe','jpg','jpeg','gif','png','ai','bmp','psb','psd','tif','webp',
             'zip','7z','rar','tar','arj','iso','cab','gz',
             'txt','csv','doc','docx','pps','ppt','pptx','pdf','wps','wpt','xls','xlsx','et','ett',

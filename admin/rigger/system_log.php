@@ -79,7 +79,7 @@ foreach($rows as $row){
 <?php }?>
           </table>
       </div>
-    <div class="ciy_tabbtn">
+    <div class="ciy-tabbtn">
         <a class="btn btn-default" onclick="ciy_select_all('.table')">全选</a>
         <a class="btn btn-default" onclick="ciy_select_diff('.table')">反选</a>
         |

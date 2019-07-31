@@ -44,6 +44,9 @@ function callfunc(funcname, post, successfunc, opt){//opt  fail,complete,headers
     opt.data = post;
     opt.success = function(data,xhr){
         try{
+        var ind = data.indexOf('{');
+        if(ind>0)
+            data = data.substr(ind);
         var json = JSON.parse(data);
         }catch(err){
             uperr(err,data);
@@ -179,11 +182,33 @@ function ciy_getform(dom,parentTag){
     {
         if(els[i].tagName == 'SELECT')
         {
-            retdata[els[i].name] = els[i].value;
-            if(els[i].options.selectedIndex == -1)
-                retdata[els[i].name+"_name"] = '';
+            if(retdata[els[i].name] === undefined)
+                retdata[els[i].name] = els[i].value;
             else
-                retdata[els[i].name+"_name"] = els[i].options[els[i].options.selectedIndex].text;
+            {
+                if(typeof(retdata[els[i].name]) != 'object')
+                {
+                    var oldval = retdata[els[i].name];
+                    retdata[els[i].name] = [];
+                    retdata[els[i].name].push(oldval);
+                }
+                retdata[els[i].name].push(els[i].value);
+            }
+            var name = '';
+            if(els[i].options.selectedIndex > -1)
+                name = els[i].options[els[i].options.selectedIndex].text;
+            if(retdata[els[i].name+"_name"] === undefined)
+                retdata[els[i].name+"_name"] = name;
+            else
+            {
+                if(typeof(retdata[els[i].name+"_name"]) != 'object')
+                {
+                    var oldval = retdata[els[i].name+"_name"];
+                    retdata[els[i].name+"_name"] = [];
+                    retdata[els[i].name+"_name"].push(oldval);
+                }
+                retdata[els[i].name+"_name"].push(name);
+            }
         }
         else if(els[i].getAttribute('type') == 'radio')
         {
@@ -246,6 +271,8 @@ function ciy_getform(dom,parentTag){
             console.log('no Find FormData',els[i]);
             continue;
         }
+        if(!el[0].name)
+            continue;
         var val = retdata[el[0].name]||'';
         if(!ciy_check(check,val))
         {
@@ -259,6 +286,16 @@ function ciy_check(check,val)
 {
     if(check == 'mobile')
         return /^1\d{10}$/.test(val);
+    if(check == 'date')//2000-01-01
+        return /^\d{4}-([1-9]|0[1-9]|1[0-2])-([1-9]|[0-2][0-9]|3[0-1])$/.test(val);
+    if(check == 'datetime')//2000-01-01 00:00:00
+        return /^\d{4}-([1-9]|0[1-9]|1[0-2])-([1-9]|[0-2][0-9]|3[0-1])\s+([0-9]|[01][0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])$/.test(val);
+    if(check == 'dateminute')//2000-01-01 00:00
+        return /^\d{4}-([1-9]|0[1-9]|1[0-2])-([1-9]|[0-2][0-9]|3[0-1])\s+([0-9]|[01][0-9]|2[0-3]):([0-9]|[0-5][0-9])$/.test(val);
+    if(check == 'time')//00:00:00
+        return /^([0-9]|[01][0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])$/.test(val);
+    if(check == 'timeminute')//00:00
+        return /^([0-9]|[01][0-9]|2[0-3]):([0-9]|[0-5][0-9])$/.test(val);
     if(check == 'url')
         return /^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/)(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~\/])+$/.test(val);
     if(check == 'mail')
@@ -1132,6 +1169,15 @@ function ciy_menu(dom){
             {
                 $(dom).removeClass('show');
                 that.addClass('show');
+                var top = $(this).offset().top-$(document).scrollTop();
+                var left = $(this).offset().left-$(document).scrollLeft();
+                if($(document).width() < left + $('ul',this).outerWidth())
+                    left = left-$('ul',this).outerWidth()+$(this).outerWidth();
+                if(window.screen.availHeight-document.body.scrollTop-100 < top + $('ul',this).outerHeight())
+                    top = top - $('ul',this).outerHeight();
+                else
+                    top += $(this).outerHeight();
+                $('ul',this).css('position','fixed').css('left',left+'px').css('top',top+'px');
             }
         });
     }
@@ -1140,7 +1186,15 @@ function ciy_menu(dom){
         $(dom).on("mouseenter",function(ev){
             $(dom).removeClass('show');
             $(this).addClass('show');
-            
+            var top = $(this).offset().top-$(document).scrollTop();
+            var left = $(this).offset().left-$(document).scrollLeft();
+            if($(document).width() < left + $('ul',this).outerWidth())
+                left = left-$('ul',this).outerWidth()+$(this).outerWidth();
+            if(window.screen.availHeight-document.body.scrollTop-100 < top + $('ul',this).outerHeight())
+                top = top - $('ul',this).outerHeight();
+            else
+                top += $(this).outerHeight();
+            $('ul',this).css('position','fixed').css('left',left+'px').css('top',top+'px');
         });
         $(dom).on("mouseleave",function(ev){
             $(dom).removeClass('show');

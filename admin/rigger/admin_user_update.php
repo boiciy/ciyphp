@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="container">
-    <div class="crumbs">当前位置： 系统管理 → 管理员管理 →<?php echo $btnname;?></div>
+    <div class="crumbs">当前位置： 系统管理 → 管理员管理 → <?php echo $btnname;?></div>
     <form>
         <div class="form-group inline" id="inp_img">
             <label>　上传照片</label>
