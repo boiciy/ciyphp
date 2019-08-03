@@ -62,7 +62,6 @@ class http {
     private $request_headeronce = array();
     private $request_headerfixed = array();
     private $request_proxy = array();
-    private $request_method;
 
     public function __construct($cookiefile = '') {
         //能有效提高POST大于1M数据时的请求速度
@@ -234,63 +233,83 @@ class http {
     public function get_statcode() {
         return (int)$this->response_info['http_code'];
     }
-    public function request($url, $postdata = '') {
+    public function request($url, $post_data = '') {
         for($i=0;$i<$this->maxredirect;$i++)
         {
-            $ch = $this->_http_request($url, $postdata);
-            if (empty($postdata)) {
-                $this->request_method = 'GET';
-            } else {
-                $this->request_method = 'POST';
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_HEADER, 1);
+            curl_setopt($ch, CURLOPT_USERAGENT, $this->useragent);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
+            //强制使用IPV4协议解析域名，否则在支持IPV6的环境下请求会异常慢
+            @curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+            if ($post_data) {
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+            }
+            if(empty($this->cookiefile))
+            {
+                $purl = parse_url($url);
+                $doamin = $purl['host'];
+                if(isset($purl['path']))
+                    $path = $purl['path'];
+                else
+                    $path = '/';
+                $cook = '';
+                $cookdel = array();
+                foreach($this->cookiecontainer as $k=>$c)
+                {
+                    if($c['expires']<time())
+                        $cookdel[] = $k;
+                }
+                $cookdel = array_reverse($cookdel);
+                foreach($cookdel as $k)
+                    array_splice($this->cookiecontainer,$k,1);
+                foreach($this->cookiecontainer as $k=>$c)
+                {
+                    if($this->_verifycookie($c,$doamin,$path))
+                        $cook .= $c['name'].'='.$c['value'].'; ';
+                }
+                if($cook != '')
+                {
+                    $cook = substr($cook,0,-2);
+                    curl_setopt($ch, CURLOPT_COOKIE, $cook);
+                }
+            }
+            else
+            {
+                curl_setopt($ch, CURLOPT_COOKIEJAR, $this->cookiefile);
+                curl_setopt($ch, CURLOPT_COOKIEFILE, $this->cookiefile);
+            }
+
+            if (!empty($this->request_referer))
+                curl_setopt($ch, CURLOPT_REFERER, $this->request_referer);
+            $headers = array_merge($this->request_headeronce,$this->request_headerfixed);
+            if ($headers)
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            $this->request_headeronce = array();
+            if ($this->request_proxy) {
+                curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, true);
+                $host = $this->request_proxy['host'];
+                $host .= ($this->request_proxy['port']) ? ':' . $this->request_proxy['port'] : '';
+                curl_setopt($ch, CURLOPT_PROXY, $host);
+                if (isset($this->request_proxy['user']) && isset($this->request_proxy['pass'])) {
+                    curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->request_proxy['user'] . ':' . $this->request_proxy['pass']);
+                }
             }
             $this->response = curl_exec($ch);
             if ($this->response === false) {
                 $this->response_info['http_code'] = 204;
-                $this->response_data = 'URL：' . $url . ' cURL resource: ' . (string) $ch . '; cURL error: ' . curl_error($ch) . ' (' . curl_errno($ch) . ')';
+                $this->response_data = 'URL：' . $url . ' error: ' . curl_error($ch) . ' (' . curl_errno($ch) . ')';
                 return false;
             }
-            $this->_process_response($ch);
-            curl_close($ch);
-            $httpcode = (int)$this->response_info['http_code'];
-            if($httpcode>=300 && $httpcode<400)
-            {
-                if($this->response_info['redirect_url'])
-                {
-                    $url = $this->response_info['redirect_url'];
-                    $postdata = '';
-                    continue;
-                }
+            if (!is_resource($ch)) {
+                $this->response_info['http_code'] = 400;
+                $this->response_data = 'URL：' . $url . ' error: ' . curl_error($ch) . ' (' . curl_errno($ch) . ')';
+                return false;
             }
-            $this->request_headeronce = array();
-            if($httpcode == 200)
-                return true;
-            return false;
-        }
-        return false;
-    }
-    private function _verifycookie($cookie,$domain,$path){
-        $sel = false;
-        if($cookie['domain'][0] == '.')
-        {
-            $d = '.'.$domain;
-            $cc = substr($d,strlen($d)-strlen($cookie['domain']));
-            if($cc == $cookie['domain'])
-                $sel = true;
-        }
-        else
-        {
-            if($domain == $cookie['domain'])
-                $sel = true;
-        }
-        if($sel)
-        {
-            if(substr($path,0,strlen($cookie['path'])) == $cookie['path'])
-                return true;
-        }
-        return false;
-    }
-    private function _process_response($ch = null) {
-        if (is_resource($ch)) {
             $this->response_info = curl_getinfo($ch);
             $content_size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
             if ($content_size > 0) {
@@ -305,8 +324,7 @@ class http {
             $this->response_header = explode("\r\n\r\n", trim($this->response_header),2);
             $this->response_header = array_pop($this->response_header);
             $this->response_header = explode("\r\n", $this->response_header);
-            array_shift($this->response_header); //开头为状态
-            //分割数组
+            array_shift($this->response_header); //去掉第一行
             $purl = null;
             $header_assoc = array();
             foreach ($this->response_header as $header) {
@@ -365,74 +383,42 @@ class http {
                 $header_assoc[$kv[0]] = $kv[1];
             }
             $this->response_header = $header_assoc;
+            curl_close($ch);
+            $httpcode = (int)$this->response_info['http_code'];
+            if($httpcode>=300 && $httpcode<400)
+            {
+                if($this->response_info['redirect_url'])
+                {
+                    $url = $this->response_info['redirect_url'];
+                    $postdata = '';
+                    continue;
+                }
+            }
+            if($httpcode == 200)
+                return true;
+            return false;
         }
         return false;
     }
-    private function _http_request($url, $post_data) {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HEADER, 1);
-        curl_setopt($ch, CURLOPT_USERAGENT, $this->useragent);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
-        //强制使用IPV4协议解析域名，否则在支持IPV6的环境下请求会异常慢
-        @curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-        if ($post_data) {
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-        }
-        if(empty($this->cookiefile))
+    private function _verifycookie($cookie,$domain,$path){
+        $sel = false;
+        if($cookie['domain'][0] == '.')
         {
-            $purl = parse_url($url);
-            $doamin = $purl['host'];
-            if(isset($purl['path']))
-                $path = $purl['path'];
-            else
-                $path = '/';
-            $cook = '';
-            $cookdel = array();
-            foreach($this->cookiecontainer as $k=>$c)
-            {
-                if($c['expires']<time())
-                    $cookdel[] = $k;
-            }
-            $cookdel = array_reverse($cookdel);
-            foreach($cookdel as $k)
-                array_splice($this->cookiecontainer,$k,1);
-            foreach($this->cookiecontainer as $k=>$c)
-            {
-                if($this->_verifycookie($c,$doamin,$path))
-                    $cook .= $c['name'].'='.$c['value'].'; ';
-            }
-            if($cook != '')
-            {
-                $cook = substr($cook,0,-2);
-                curl_setopt($ch, CURLOPT_COOKIE, $cook);
-            }
+            $d = '.'.$domain;
+            $cc = substr($d,strlen($d)-strlen($cookie['domain']));
+            if($cc == $cookie['domain'])
+                $sel = true;
         }
         else
         {
-            curl_setopt($ch, CURLOPT_COOKIEJAR, $this->cookiefile);
-            curl_setopt($ch, CURLOPT_COOKIEFILE, $this->cookiefile);
+            if($domain == $cookie['domain'])
+                $sel = true;
         }
-        
-        if (!empty($this->request_referer)) {
-            curl_setopt($ch, CURLOPT_REFERER, $this->request_referer);
+        if($sel)
+        {
+            if(substr($path,0,strlen($cookie['path'])) == $cookie['path'])
+                return true;
         }
-        $headers = array_merge($this->request_headeronce,$this->request_headerfixed);
-        if ($headers) {
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        }
-        if ($this->request_proxy) {
-            curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, true);
-            $host = $this->request_proxy['host'];
-            $host .= ($this->request_proxy['port']) ? ':' . $this->request_proxy['port'] : '';
-            curl_setopt($ch, CURLOPT_PROXY, $host);
-            if (isset($this->request_proxy['user']) && isset($this->request_proxy['pass'])) {
-                curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->request_proxy['user'] . ':' . $this->request_proxy['pass']);
-            }
-        }
-        return $ch;
+        return false;
     }
 }
