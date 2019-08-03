@@ -28,8 +28,11 @@
               <label style="width:3em;"></label>
               <div>
                   <button type="submit" class="btn btn-lg">登录</button>
-                  <code>10000000000</code> <code>123</code>
               </div>
+          </div>
+          <div class="form-group">
+              默认账户：10000000000<br/>
+              默认密码：123
           </div>
       </form>
       </div>

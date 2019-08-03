@@ -22,7 +22,6 @@
                     type: r.attr("data-type") ? r.attr("data-type") : "png,jpg,jpeg,gif", //上传文件后缀
                     jpg: r.attr("data-jpg") ? parseFloat(r.attr("data-jpg")) : 0.6, //jpg压缩比例，0不压缩
                     upname: r.attr("data-file") ? r.attr("data-file") : "file", //formdata name
-                    save: r.attr("data-save") ? r.attr("data-save") : "upload/tmp/{Rnd}", //保存路径文件名
                     inputname: r.attr("data-name") ? r.attr("data-name") : "upload", //input name
                     num: r.attr("data-num") ? r.attr("data-num") : 1, //最多上传文件数量
                     action: r.attr("action") ? r.attr("action") : "upload.php", //后端处理文件名
@@ -30,7 +29,7 @@
                     value: r.attr("data-value") ? r.attr("data-value") : "",
                     valuename: r.attr("data-valuename") ? r.attr("data-valuename") : ""
                 };
-        r.append(A.attr("data-num", B.num).attr("data-type", B.type));
+        r.append(A.attr("data-num", B.num));//.attr("data-type", B.type)
         r.append(d.attr("multiple", B.num > 1 ? "multiple" : false));
         r.append(b.attr("name", B.inputname));
         r.append(bname.attr("name", B.inputname+"_name"));
@@ -123,7 +122,7 @@
                     continue;
                 var i = l(G[F], function(K, J, I) {
                     J.insertBefore(A);
-                    var filename = B.save;
+                    var filename = r.attr("data-save") ? r.attr("data-save") : "upload/tmp/{Rnd}";
                     var d = new Date();
                     //可扩展slice分片上传
                     var L = new FormData();
@@ -181,7 +180,8 @@
             var F = G.size,
                     J = G.name.toLowerCase().split(".").splice(-1).join(),
                     i = a(w);
-            var I = B.type.split(",");
+            
+            var I = (r.attr("data-type") ? r.attr("data-type") : "png,jpg,jpeg,gif").split(",");
             if (I.indexOf(J) < 0) {
                 var K = "不能上传." + J + "的文件!"
             }
@@ -189,17 +189,22 @@
                 var K = "不能上传大于." + B.size + "KB 的文件!"
             }
             if (K) {
+                if(r.css('display') == 'none')
+                {
+                    alert(K);
+                    return false;
+                }
                 i.append(k(J)).addClass("error").append("<div class='filename'>" + G.name + "</div>").attr("data-error", K).insertBefore(A);
                 //r.removeClass("empty");
                 q();
-                return false
+                return false;
             }
             var H = new FileReader();
             H.readAsDataURL(G);
             H.onload = function() {
                 var P = c(G.name) + c(G.type) + c(G.size.toString()) + c(H.result);
                 if (r.children('li[data-filename="' + P + '"]').size() > 0) {
-                    return false
+                    return false;
                 }
                 i.attr("data-filename", P);
                 if (["png", "jpg", "jpeg", "gif", "bmp"].indexOf(J) >= 0) {
@@ -314,7 +319,7 @@
                 return '<svg xmlns="http://www.w3.org/2000/svg" class="icon" version="1" viewBox="0 0 1024 1024"><path fill="#8095FF" d="M80 34h864v960H80z"/><path fill="#FFF" d="M136 112a40 40 0 1 0 80 0 40 40 0 1 0-80 0zM136 272a40 40 0 1 0 80 0 40 40 0 1 0-80 0zM136 432a40 40 0 1 0 80 0 40 40 0 1 0-80 0zM136 592a40 40 0 1 0 80 0 40 40 0 1 0-80 0zM136 752a40 40 0 1 0 80 0 40 40 0 1 0-80 0zM136 912a40 40 0 1 0 80 0 40 40 0 1 0-80 0zM824 112a40 40 0 1 0 80 0 40 40 0 1 0-80 0zM824 272a40 40 0 1 0 80 0 40 40 0 1 0-80 0zM824 432a40 40 0 1 0 80 0 40 40 0 1 0-80 0zM824 592a40 40 0 1 0 80 0 40 40 0 1 0-80 0zM824 752a40 40 0 1 0 80 0 40 40 0 1 0-80 0zM824 912a40 40 0 1 0 80 0 40 40 0 1 0-80 0zM648 508L436 362c-5-3-11-4-17 0-5 3-9 8-9 14v290c0 6 4 12 9 15 6 3 12 2 17-1l212-146c5-3 7-8 7-13s-3-10-7-13z"/></svg>'
             }
             if (["gif", "jpg", "jpeg", "png", "bmp"].indexOf(i) >= 0) {
-                return '<svg xmlns="http://www.w3.org/2000/svg" class="icon" version="1" viewBox="0 0 1024 1024"><defs/><path fill="#FF5562" d="M160 32a49 49 0 0 0-48 48v864c0 12 5 25 14 34 10 9 22 14 34 14h704c12 0 25-5 34-14 9-10 14-22 14-34V304L640 32H160z"/><path fill="#FFBBC0" d="M912 304H688c-12 0-25-5-34-14s-14-22-14-34V32l272 272z"/><path fill="#FFF" d="M758 706L658 550c-3-4-8-7-13-7s-11 3-14 7l-53 84-120-195c-4-5-8-7-14-7s-10 3-14 7L266 706c-4 4-4 11 0 16 3 5 8 8 13 8h466c5 0 11-4 14-8 3-6 3-12-1-16zM622 412a40 40 0 1 0 80 0 40 40 0 1 0-80 0z"/></svg>'
+                return '';//<svg xmlns="http://www.w3.org/2000/svg" class="icon" version="1" viewBox="0 0 1024 1024"><defs/><path fill="#FF5562" d="M160 32a49 49 0 0 0-48 48v864c0 12 5 25 14 34 10 9 22 14 34 14h704c12 0 25-5 34-14 9-10 14-22 14-34V304L640 32H160z"/><path fill="#FFBBC0" d="M912 304H688c-12 0-25-5-34-14s-14-22-14-34V32l272 272z"/><path fill="#FFF" d="M758 706L658 550c-3-4-8-7-13-7s-11 3-14 7l-53 84-120-195c-4-5-8-7-14-7s-10 3-14 7L266 706c-4 4-4 11 0 16 3 5 8 8 13 8h466c5 0 11-4 14-8 3-6 3-12-1-16zM622 412a40 40 0 1 0 80 0 40 40 0 1 0-80 0z"/></svg>'
             }
             return '<svg xmlns="http://www.w3.org/2000/svg" class="icon" version="1" viewBox="0 0 1024 1024"><path fill="#E5E5E5" d="M160 32a49 49 0 0 0-48 48v864c0 12 5 25 14 34 10 9 22 14 34 14h704c12 0 25-5 34-14 9-10 14-22 14-34V304L640 32H160z"/><path fill="#CCC" d="M912 304H688c-12 0-25-5-34-14s-14-22-14-34V32l272 272z"/></svg>'
         }

@@ -1,0 +1,91 @@
+<!DOCTYPE html><html>
+<head>
+<title>Items</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+<link href="/jscss/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class='container'>
+    <div class='table'>
+        <table>
+            <tr>
+                <th style="width:4em;">ID</th>
+                <th>用户名<i class="asc"></i><i class="desc"></i></th>
+                <th>性别<i class="asc active"></i><i class="desc"></i></th>
+                <th>签名</th>
+                <th>积分</th>
+                <th>评分</th>
+                <th>职业</th>
+                <th>财富</th>
+            </tr>
+            <tr data-id="1">
+                <td><div>众产国际</div></td>
+                <td><div>建立无条件的信任秩序</div></td>
+                <td><div>监督上链机制</div></td>
+                <td><div>独立维护公链 - 无币区块链</div></td>
+                <td><div>透明财务、透明分红</div></td>
+                <td><div>独立决策，决策结果奖惩承担机制</div></td>
+                <td><div>白皮书立项，五级目标</div></td>
+                <td><div>用规模反馈消费者，价格体系逐渐降低</div></td>
+            </tr>
+            <tr data-id="2">
+                <td><div style="text-align: center;"><label class="formi"><input type="checkbox"/><i></i></label></div></td>
+                <td><div><input type="text"></div></td>
+                <td><div><label class="formswitch"><input type="checkbox" name="xxx"/><y>男</y><n>女</n><i></i></label></div></td>
+                <td><div><select>
+                            <option value="3">上海</option>
+                            <option value="3" disabled>杭州</option>
+                            <option value="3">武汉</option>
+                        </select></div></td>
+                <td><div><input type="text" placeholder="ciy@ciy.cn"></div></td>
+                <td><div><a class='btn'>行编辑</a></div></td>
+                <td><div></div></td>
+                <td><div></div></td>
+            </tr>
+            <tr data-id="3"><td><div style="text-align: center;">居中</div></td><td><div style="text-align: right;">右对齐</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+            <tr data-id="4"><td><div>4</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+            <tr data-id="5"><td><div>5</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+            <tr data-id="6"><td><div>6</div></td><td><div>换行<br/>显示</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+            <tr data-id="7"><td><div>7</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+            <tr data-id="8"><td><div>8</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+        </table>
+    </div>
+      
+    <fieldset class="tips" style="min-width:35em;">
+        <legend>使用说明</legend>
+        <div>
+            支持移动端长按(200ms)弹出菜单，PC端右键弹出菜单。<br/>
+            初始化调用ciy_table_popmenu函数。<br/>
+            表格tr元素应绑定data-id唯一标识符。<br/>
+            <ul>
+                <li>参数1：绑定目标表格</li>
+                <li>参数2：绑定右键菜单</li>
+                <li>参数3：弹出菜单前回调函数。可根据选择项，动态调整菜单</li>
+            </ul>
+        </div>
+    </fieldset>
+</div>
+<ul class="ciy-popmenu" id="table_popmenu">
+    <li><a onclick="popmenu(this)">功能项1</a></li>
+    <li><a onclick="popmenu(this)">功能项2</a></li>
+</ul>
+<script src="/jscss/jquery-1.12.4.min.js"></script>
+<script src="/jscss/ciy.js"></script>
+<script type="text/javascript">
+'use strict';
+$(function(){
+    ciy_table_adjust(".table");
+    ciy_table_popmenu('.table','#table_popmenu');
+});
+function popmenu(dom){
+    var popmenu = $('#table_popmenu');
+    popmenu.hide();//关闭菜单
+    var selid = popmenu.attr('data-selectid');//已选择TR行的data-id
+    var tr = $('tr[data-id='+selid+']');//找到已选择TR行。
+    var menutext = $(dom).text();//菜单项
+    ciy_alert('行ID:'+selid+"<br/>菜单项："+menutext);
+}
+</script>
+</body></html>

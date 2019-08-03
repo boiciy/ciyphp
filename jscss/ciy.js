@@ -1,5 +1,5 @@
 /*
- * 版本：0.5.6
+ * 版本：0.5.7
  */
 'use strict';
 function uperr(err,msg){
@@ -845,6 +845,46 @@ function ciy_table_tree(domname){
             }
         }
     });
+}
+function ciy_table_popmenu(dom,menudom,modifymenufunc){
+    if('ontouchend' in window)
+    {
+        var longtime = null;
+        $(dom).on("touchstart",'tr[data-id]',function(ev){
+            if($(menudom).css('display') != 'none')
+                return $(menudom).hide(200);
+            longtime = setTimeout(function(){
+                $('tr[data-id]',dom).removeClass('selected');
+                $(ev.currentTarget).addClass('selected');
+                $(menudom).attr('data-selectid',$(ev.currentTarget).attr('data-id'));
+                var touch = ev.originalEvent.touches[0];
+                if(typeof(modifymenufunc) == 'function')//根据选择项，动态调整菜单用
+                    modifymenufunc(ev);
+                $(menudom).css('position','fixed').css('left',touch.clientX).css('top',touch.clientY).show();
+            },200);
+        });
+        $(dom).on("touchmove",function(ev){
+            clearTimeout(longtime);
+        });
+        $(dom).on("touchend",function(ev){
+            clearTimeout(longtime);
+        });
+    }
+    else
+    {
+        $(dom).on("contextmenu",'tr[data-id]',function(ev){
+            $('tr[data-id]',dom).removeClass('selected');
+            $(ev.currentTarget).addClass('selected');
+            $(menudom).attr('data-selectid',$(ev.currentTarget).attr('data-id'));
+            if(typeof(modifymenufunc) == 'function')//根据选择项，动态调整菜单用
+                modifymenufunc(ev);
+            $(menudom).css('position','fixed').css('left',ev.clientX).css('top',ev.clientY).show();
+            $(document).one("click", function(){
+                $(menudom).hide();
+            });
+            return false;
+        });
+    }
 }
 function ciy_select_init(dom){
     $(dom).on("click",'tr[data-id]',function(ev){
