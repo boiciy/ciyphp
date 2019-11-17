@@ -9,8 +9,7 @@
 <div class="container">
     <div class="crumbs">当前位置： 系统管理 → <a href="admin_user.php">管理员管理</a><?php echo $nav;?></div>
     <div class="ciy-tab ciy-tab-card">
-        <ul><?php echo create_li($code_user,$liid);?>
-        </ul>
+        <ul><?php echo create_li($code_user,$liid);?></ul>
         <div class="ciy-tab-box">
             <form methodd="get" action="">
                 <div class="form-group inline">
@@ -55,15 +54,14 @@ else{
                 <th>姓名</th>
                 <th>性别</th>
                 <th>手机号</th>
-                <th>权限</th>
+                <th>角色</th>
                 <th>活跃时间</th>
                 <th>创建时间</th>
                 <th>状态</th>
                 <th>操作</th>
             </tr>
 <?php
-$code_sex = getcodes('user.sex');
-$code_power = getcodes('user.power');
+$code_sex = getcodes('user_sex');
 foreach($rows as $row){
     $id = (int)$row['id'];
 ?>
@@ -75,7 +73,19 @@ foreach($rows as $row){
         <td><div><?php echo $row['truename'];?></div></td>
         <td><div style="text-align: center;"><?php echo ccode($code_sex,$row['sex']);?></div></td>
         <td><div><?php echo $row['mobile'];?></div></td>
-        <td><div><?php echo power_trans($code_power,$row['power']);?></div></td>
+        <td><div><?php
+        if($row['power'] == '.*.')
+            echo '<kbd>超级管理员</kbd>';
+        else
+        {
+            $csql = new ciy_sql('p_admin_urole');
+            $csql->where('userid',$id)->where('status',10);
+            $rolerows = $mydata->get($csql);
+            foreach ($rolerows as $rolerow) {
+                echo '<code>'.$rolerow['rolename'].'</code>';
+            }
+        }
+        ?></div></td>
         <td><div><?php echo todate($row['activetime']);?></div></td>
         <td><div><?php echo todate($row['addtimes']);?></div></td>
         <td><div style="text-align: center;"><?php

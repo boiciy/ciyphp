@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
     <link href="/jscss/style.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
+    h3{border-bottom:1px solid #1d9fff;margin-top:3em;margin-bottom:1em;text-indent: 0.6em;}
     </style>
 </head>
 <body>
@@ -21,9 +22,7 @@
     编写轻封装的软件架构，让普通人都能监督程序代码块
     源码编译前后，绑定监督员加密入链，保持历史可追溯</pre>
 
-        <br/>
-        <h3>组件效果展示</h3>
-        <br/>
+        <h3>fieldset/legend块效果</h3>
         <fieldset>
             <legend>分割线区块</legend>
         </fieldset>
@@ -47,11 +46,13 @@
                 </ul>
             </div>
         </fieldset>
-        <br/>
-        <br/>
-        <blockquote>引用区域的文字</blockquote>
-        <br/>
-        <br/>
+        
+        
+        <h3>blockquote引用区域效果</h3>
+        <blockquote>这里是一行</blockquote>
+
+
+        <h3>tab选项卡三种效果</h3>
         <div class="ciy-tab">
             <ul>
                 <li>网站设置</li>
@@ -100,11 +101,9 @@
                 url动态改变选项卡
             </div>
         </div>
-        <br/>
-        <br/>
-        <br/>
 
 
+        <h3>nav导航栏两种效果</h3>
         <ul class="ciy-nav ciy-nav-fill">
             <li>
                 <a>控制台</a>
@@ -130,18 +129,24 @@
             </li>
         </ul>
 
-        <hr/>
+
+        <h3>toast小提示效果</h3>
         <button class='btn' onclick="ciy_toast('信息提示')">toast</button>
         <button class='btn' onclick="ciy_toast('', {icon: 1})">toast1</button>
         <button class='btn' onclick="ciy_toast('加载中...', {icon: 2})">toast2</button>
         <button class='btn' onclick="ciy_toast('信息提示信息提示信息提示', {icon: 3})">toast3</button>
         <button class='btn' onclick="ciy_toast('', {icon: 4})">toast4</button>
         <button class='btn' onclick="ciy_toast('信息提示', {icon: 5})">toast5</button>
+
+
+        <h3>loading静默加载效果</h3>
         <button class='btn' onclick="ciy_loading()">静默加载</button>
         <button class='btn' onclick="ciy_loadclose('succ')">加载成功</button>
-        <button class='btn' onclick="ciy_loadclose('fail')">加载失败</button>请看顶部窄条
+        <button class='btn' onclick="ciy_loadclose('fail')">加载失败</button> 请先点击静默加载，再点击成功或失败，注意看顶部窄条
 
-        <hr/>
+
+
+        <h3>alert弹窗效果</h3>
         <button class='btn' onclick="ciy_alert('操作完成')">弹出对话框</button>
         <button class='btn' onclick="ciy_alert('手动阀阿斯蒂芬手动阀阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬安抚阿萨德发顺丰的阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬安抚阿萨德发顺丰的阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬安抚阿萨德发顺丰的阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿阿斯蒂芬<br/>手动阀阿斯蒂芬')">弹出自适应对话框</button>
         <button class='btn' onclick="alerttest(1)">多按钮对话框</button>
@@ -154,37 +159,63 @@
         <button class='btn' onclick="alerttest(9)">左对齐</button>
         <button class='btn' onclick="alerttest(10)">右对齐</button>
 
-        <hr/>
 
+
+        <h3>progress进度条效果</h3>
         <div class="progress">
             <div style="width: 60%;">
             </div>
             <span>60%</span>
         </div>
 
+        <h3>button按钮效果</h3>
+
+        <button class='btn btn-lg' disabled>禁用</button>
+        <button class='btn btn-lg'>大按钮button</button>
+        <a class='btn btn-lg'>大按钮a</a>
+        <button class='btn'>按钮</button>
+        <a class='btn'>按钮</a>
+        <button class='btn btn-sm'>小按钮</button>
+        <a class='btn btn-sm'>小按钮</a>
+        <button class='btn btn-xs'>微按钮</button>
+        <a class='btn btn-xs'>微按钮</a>
+        <button class='btn btn-default'>一般按钮</button>
+        <button class='btn' style="background:#ff0000;">颜色1</button>
+        <button class='btn' style="background:#ffff00;color:#000000;">颜色2</button>
+        <button class='btn' style="background:#484848;color:#dddddd;">颜色3</button>
+
+        <h3>button-menu菜单按钮效果</h3>
         <button class='btn'><i>&#xe6b9</i>按钮</button>
         <button class='btn'><i>&#xe6b9</i></button>
         <a class='btn btn-menu btn-menu-caret'>下拉菜单<ul class="ciy-popmenu" style="top:2em;"><li onclick="javascript:alert('ccktt')">aaa</li><li>aaa</li><li>aaa</li><li>aaa</li><li>aaa</li></ul></a>
+        　JS实现的下拉菜单，触碰弹出(在移动端不易操作)
+        <br/>
         <br/>
         <div class="btn-group">
             <button type="button" class="btn">Left</button>
             <button type="button" class="btn">Middle</button>
             <label class='btn'><input type="checkbox" /><ul class="ciy-popmenu" style="bottom:2em;"><li onclick="javascript:alert('ccktt')">aaa</li><li>aaa</li><li>aaa</li><li>aaa</li><li>aaa</li></ul><span class="caret"></span></label>
-纯CSS代码弹出菜单
+        　纯CSS代码下拉菜单，点击弹出(PC端感觉一般，但移动端容易操作)
         </div>
 
+
+
+        <h3>button-group分组按钮效果</h3>
         <div class="btn-group-vertical">
             <button type="button" class="btn">Left</button>
             <button type="button" class="btn">Middle</button>
             <button type="button" class="btn">Right</button>
         </div>
+        <br/><br/>
         <div class="btn-group">
             <button type="button" class="btn">Left</button>
             <button type="button" class="btn">Middle</button>
-            <label class='btn'>多列并排弹出菜单<input type="checkbox" /><ul class="ciy-popmenu" style="bottom:2em;width:16em;"><li onclick="javascript:alert('ccktt')" style="width:8em;float:left;">aaa</li><li style="width:8em;float:left;">aaa</li><li style="width:8em;float:left;">aaa</li><li style="width:8em;float:left;">aaa</li><li style="width:8em;float:left;">aaa</li></ul><span class="caret"></span></label>
+            <label class='btn'>多列并排弹出菜单<input type="checkbox" /><ul class="ciy-popmenu" style="bottom:2em;width:16em;"><li onclick="javascript:alert('ccktt')" style="width:8em;float:left;">aaabb</li><li style="width:8em;float:left;">aaa2</li><li style="width:8em;float:left;">aaa</li><li style="width:8em;float:left;">aaa</li><li style="width:8em;float:left;">aaa3</li></ul><span class="caret"></span></label>
         </div>
-        <hr/>
 
+
+
+        <h3>check/radio/switch表单选择效果</h3>
         <form>
             <div class="form-group">
                 <label>复选框</label>
@@ -205,6 +236,60 @@
                     <label><input type="radio" name="xxx"/>南飞雁</label>
                 </div>
             </div>
+            <div class="form-group">
+                <label>开关按钮</label>
+                <div>
+                    <label class="formswitch"><input type="checkbox" name="xxx1"/><y>ON</y><n>OFF</n><i></i></label>
+                    <label class="formswitch"><input type="checkbox" name="xxx2" checked='checked'/><y>开</y><n>关</n><i></i></label>
+                    <label class="formswitch"><input type="checkbox" name="xxx3"/><y>启用</y><n>禁用</n><i></i></label>
+                </div>
+            </div>
+
+
+        <h3>select表单列表框效果</h3>
+            <div class="form-group">
+                <label>下拉列表框</label>
+                <div>
+                    <select style="width:10em;">
+                        <option value="1">上海</option>
+                        <option value="2" disabled>杭州</option>
+                        <option value="3">武汉</option>
+                    </select>
+                </div>
+            </div>
+
+        <h3>multi-select无限联动列表框效果</h3>
+            <div class="form-group">
+                <label>多级列表框</label>
+                <div id="multi_type">
+                </div>
+            </div>
+
+        <h3>input-select输入联动选择框效果</h3>
+            <div class="form-group">
+                <label>输入提示框</label>
+                <div style="position:relative;">
+                	<input type="text" name="gbstr2" value=""/> <span id="gbstr2_selected"></span>
+                </div>
+            </div>
+
+        <h3>datetime选择日期时间效果</h3>
+
+	        <div class="form-group">
+	            <label>选择区间</label>
+	            <div>
+	                <input style="width:21em;" type="text" name="datess" value="2019-01-01 05:30:08 ~ 2019-01-30 01:30:45">
+	            </div>
+	        </div>
+	        <div class="form-group">
+	            <label>选择日期</label>
+	            <div>
+	                <input style="width:7em;" type="text" name="dateee" value="2019-01-18">
+	            </div>
+	        </div>
+        <code>注：仅日期组件引用了外部laydate组件，但引用文件较多。未来将重写单文件。</code>
+
+        <h3>input表单文本框效果</h3>
             <div class="form-group inline">
                 <label>内联文本框</label>
                 <div style="width:200px;">
@@ -236,24 +321,6 @@
                 </div>
             </div>
             <div class="form-group">
-                <label>下拉列表框</label>
-                <div>
-                    <select style="width:10em;">
-                        <option value="1">上海</option>
-                        <option value="2" disabled>杭州</option>
-                        <option value="3">武汉</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>开关按钮</label>
-                <div>
-                    <label class="formswitch"><input type="checkbox" name="xxx1"/><y>ON</y><n>OFF</n><i></i></label>
-                    <label class="formswitch"><input type="checkbox" name="xxx2" checked='checked'/><y>开</y><n>关</n><i></i></label>
-                    <label class="formswitch"><input type="checkbox" name="xxx3"/><y>启用</y><n>禁用</n><i></i></label>
-                </div>
-            </div>
-            <div class="form-group">
                 <label>连体文本框</label>
                 <div>￥ <input type="text" style="width:4em;"> 元</div>
             </div>
@@ -267,12 +334,12 @@
                     <textarea style="height:8em;"></textarea>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="width:28em;">
                 <label>右侧按钮框</label>
-                <div>
-                    <input type="text" placeholder="主flex:12，按比例等分">
+                <div style="flex:1;">
+                    <input type="text" style="width:12em;" placeholder="主flex:12，按比例等分">
                 </div>
-                <div style="flex:3;">
+                <div>
                     <button type="submit" class="btn">验证码</button>
                 </div>
             </div>
@@ -284,12 +351,13 @@
             </div>
             <div class="form-group">
                 <div style="text-align:center;">
-                    <button type="submit" class="btn">中间布局按钮</button>
+                    <button type="submit" class="btn btn-lg">提交按钮</button>
                 </div>
             </div>
         </form>
 
 
+        <h3>table表格效果(拖动列宽记忆)</h3>
         <div class='table'>
             <table>
                 <tr>
@@ -302,7 +370,7 @@
                     <th>职业</th>
                     <th>财富</th>
                 </tr>
-                <tr>
+                <tr data-id="1">
                     <td><div>众产国际</div></td>
                     <td><div>建立无条件的信任秩序</div></td>
                     <td><div>监督上链机制</div></td>
@@ -312,7 +380,7 @@
                     <td><div>白皮书立项，五级目标</div></td>
                     <td><div>用规模反馈消费者，价格体系逐渐降低</div></td>
                 </tr>
-                <tr>
+                <tr data-id="2">
                     <td><div style="text-align: center;"><label class="formi"><input type="checkbox"/><i></i></label></div></td>
                     <td><div><input type="text"></div></td>
                     <td><div><label class="formswitch"><input type="checkbox" name="xxx"/><y>男</y><n>女</n><i></i></label></div></td>
@@ -326,34 +394,25 @@
                     <td><div></div></td>
                     <td><div></div></td>
                 </tr>
-                <tr><td><div style="text-align: center;">居中</div></td><td><div style="text-align: right;">右对齐</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
-                <tr><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
-                <tr><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
-                <tr><td><div>ID</div></td><td><div>换行<br/>显示</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
-                <tr><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
-                <tr><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+                <tr data-id="3"><td><div style="text-align: center;">居中</div></td><td><div style="text-align: right;">右对齐</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+                <tr data-id="4"><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+                <tr data-id="5"><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+                <tr data-id="6"><td><div>ID</div></td><td><div>换行<br/>显示</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+                <tr data-id="7"><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
+                <tr data-id="8"><td><div>ID</div></td><td><div>用户名</div></td><td><div>性别</div></td><td><div>签名</div></td><td><div>积分</div></td><td><div>评分</div></td><td><div>职业</div></td><td><div>财富</div></td></tr>
             </table>
         </div>
 
 
-
-        <button class='btn btn-lg' disabled>禁用</button>
-        <button class='btn btn-lg'>大按钮</button>
-        <a class='btn btn-lg'>大按钮</a>
-        <button class='btn'>按钮</button>
-        <a class='btn'>按钮</a>
-        <button class='btn btn-sm'>小按钮</button>
-        <a class='btn btn-sm'>小按钮</a>
-        <button class='btn btn-xs'>微按钮</button>
-        <a class='btn btn-xs'>微按钮</a>
-        <button class='btn btn-default'>一般按钮</button>
-        <hr/>
+        <h3>kbd/code文中标记效果</h3>
 
         To switch directories, type <kbd>cd</kbd> followed by the name of the directory.<br>
         To edit settings, press <kbd>ctrl + ,</kbd><br/>
         For example, <code>&lt;section&gt;</code> should be wrapped as inline.
 
 
+
+        <h3>pre文中标记效果</h3>
 
         <pre>
 //代码区域
@@ -366,35 +425,47 @@ res === false && result === null && (result = false);
         </pre>
 <pre>
 <ul>
-<li>调用ciy_repre();</li>
+<li>如果pre包含了html标签，就调用ciy_repre();</li>
 <li>HTML将不会被解析</li>
-<li>有木有感觉非常方便</li>
+<li>有木有感觉<b>非常方便</b></li>
 </ul>
 </pre>
-        <div class="form-group">
-            <label>选择区间</label>
-            <div>
-                <input style="width:21em;" type="text" name="datess" value="2019-01-01 05:30:08 ~ 2019-01-30 01:30:45">
-            </div>
-        </div>
-        <div class="form-group">
-            <label>选择日期</label>
-            <div>
-                <input style="width:7em;" type="text" name="dateee" value="2019-01-18">
-            </div>
-        </div>
-        <code>注：仅日期组件引用了外部laydate组件。</code>
-
         <br/>
     </div>
     <script src="/jscss/jquery-1.12.4.min.js"></script>
     <script src="/jscss/ciy.js"></script>
     <script src="/jscss/laydate.js"></script>
+	<script src="/jscss/pinyin.js"></script>
+	<script src="/jscss/pullinput.js"></script>
     <script type="text/javascript">
     'use strict';
+	var multidata = [{"id":63,"upid":0,"title":"类目1"},
+	    {"id":64,"upid":0,"title":"类目2"},
+	    {"id":65,"upid":0,"title":"类目3"},
+	    {"id":66,"upid":63,"title":"类目1-1"},
+	    {"id":67,"upid":63,"title":"类目1-2"},
+	    {"id":68,"upid":63,"title":"类目1-3"},
+	    {"id":69,"upid":64,"title":"类目2-1"},
+	    {"id":70,"upid":64,"title":"类目2-2"},
+	    {"id":71,"upid":65,"title":"类目3-1"},
+	    {"id":72,"upid":70,"title":"类目2-2-1"},
+	    {"id":73,"upid":70,"title":"类目2-2-2"},
+	    {"id":74,"upid":70,"title":"类目2-2-3"},
+	    {"id":75,"upid":73,"title":"类目2-2-2-1"},
+	    {"id":76,"upid":73,"title":"类目2-2-2-2"},
+	    {"id":77,"upid":76,"title":"类目2-2-2-2-1"},
+	    {"id":78,"upid":76,"title":"类目2-2-2-2-2"},
+	    {"id":79,"upid":76,"title":"类目2-2-2-2-3"},
+	    {"id":80,"upid":78,"title":"类目2-2-2-2-2-1"},
+	    {"id":81,"upid":78,"title":"类目2-2-2-2-2-2"},
+	    {"id":82,"upid":71,"title":"类目3-1-1"},
+	    {"id":83,"upid":71,"title":"类目3-1-2"},
+	    {"id":84,"upid":71,"title":"类目3-1-3"},
+	    {"id":85,"upid":83,"title":"类目3-1-2-1"}];
     $(function() {
         ciy_fix();
         ciy_repre();
+        ciy_select_init('.table');
         ciy_table_adjust(".table");
         ciy_menu(".ciy-nav>li,.btn-menu");
         ciy_tab();
@@ -408,7 +479,87 @@ res === false && result === null && (result = false);
             elem: document.getElementsByName('dateee')[0]
             , type: 'date'
         });
+        multicata('multi_type',81);
+        var data = [{"id":"6","eno":"0412333","truename":"\u5730\u65b91"},
+            {"id":"7","eno":"6264133","truename":"\u624b\u5206\u5f97\u591a"},
+            {"id":"8","eno":"7345523","truename":"\u6731\u5b66\u5112"},
+            {"id":"11","eno":"1743002","truename":"\u674e\u53f8\u673a"},
+            {"id":"12","eno":"1831001","truename":"\u8d75\u4e00"},
+            {"id":"13","eno":"2531010","truename":"\u94b1\u4e8c"},
+            {"id":"14","eno":"3741011","truename":"\u5b59\u4e09"},
+            {"id":"15","eno":"4661015","truename":"\u674e\u56db"},
+            {"id":"17","eno":"5921016","truename":"\u5434\u516d"},
+            {"id":"19","eno":"8531001","truename":"\u4e8e\u98de"}];
+    	//js将汉字转成拼音
+        for(var i=0;i<data.length;i++)
+        	data[i].truename_py = pinyin_first(data[i].truename);
+        $('input[name=gbstr2]').pull({
+            catadata:data,
+            lifunc:function(val,cata){
+                if(cata.truename.toUpperCase().indexOf(val) > -1 || cata.truename_py.toUpperCase().indexOf(val) > -1 || cata.eno.toUpperCase().indexOf(val) > -1)
+                    return '<li data-id="'+cata.id+'" data-eno="'+cata.eno+'" data-truename="'+cata.truename+'">'+cata.truename+' - <code>'+cata.eno+'</code></li>';
+                return '';
+            },
+            valfunc:function(li){
+                console.log(li);
+                $("#gbstr2_selected").html($(li).attr('data-truename')+' - <kbd>'+$(li).attr('data-eno')+'</kbd>');
+                return '';//$(li).attr('data-truename');
+            }
+        });
     });
+    function multicata(domid,id,ids)
+    {
+        ids = ids||[];
+        ids.unshift(id);
+        if(id > 0){
+            for (var i = 0; i < multidata.length; i++){
+                if(id == multidata[i].id)
+                    return multicata(domid,parseInt(multidata[i].upid),ids);
+            }
+            ids = [0];
+        }
+        if(ids.length == 1)
+            ids.push(0);
+        for(var i=0;i<ids.length-1;i++)
+            fillcata(domid,ids[i],ids[i+1],i);
+    }
+    function fillcata(domid,upid,id,deep)
+    {
+        var html = '';
+        var bsel = true;
+        var nid = -1;
+        var opns = 0;
+        html += '<select name="'+domid+'" onchange="setcata(this)" data-deep="'+deep+'">';
+        for (var i = 0; i < multidata.length; i++)
+        {
+            if(upid == multidata[i].upid)
+            {
+                if(nid == -1)
+                    nid = multidata[i].id;
+                html += '<option value="'+multidata[i].id+'"';
+                if(id == multidata[i].id)
+                {
+                    html += ' selected="true"';
+                    bsel = false;
+                }
+                html += '>'+multidata[i].title+'</option>';
+                opns++;
+            }
+        }
+        html += '</select> ';
+        if(opns == 0)
+            return;
+        $("#"+domid).append(html);
+        if(bsel)
+            fillcata(domid,nid,0,deep+1);
+    }
+    function setcata(dom)
+    {
+        $(dom).nextAll().remove();
+        var deep = parseInt(dom.options[dom.options.selectedIndex].getAttribute('data-deep'));
+        fillcata(dom.name,dom.options[dom.options.selectedIndex].value,0,deep+1);
+    }
+
     function alerttest(type) {
         if (type == 1)//多按钮对话框
         {

@@ -1,7 +1,7 @@
 <?php
 $mydata = new ciy_data();
 $rsuser = verifyadmin();
-$table = 'p_admindepart';
+$table = 'p_admin_depart';
 ciy_runJSON();
 $selid = getint('id');
 $csql = new ciy_sql($table);
@@ -19,7 +19,7 @@ function json_getdepart() {
     if(!is_array($row))
         return errjson('部门不存在.');
     $depart = getdepart($id);
-    return succjson(array('depart'=>$depart,'power'=>$row['power'],'powerleader'=>$row['power'].$row['powerleader']));
+    return succjson(array('depart'=>$depart,'defroles'=>$row['defroles']));
 }
 function getdepart($id)
 {

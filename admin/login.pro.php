@@ -50,7 +50,7 @@ function json_login() {
     $updata['sid'] = $sid;
     $updata['exptime'] = $exp;
     $updata['ip'] = getip();
-    $execute = $mydata->data($updata)->set(new ciy_sql($table.'online'));
+    $execute = $mydata->data($updata)->set(new ciy_sql($table.'_online'));
     if($execute === false)
         return errjson('online数据库更新失败:'.$mydata->error);
     $oid = (int)$execute;

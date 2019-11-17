@@ -10,3 +10,4 @@ require PATH_ROOT . 'zcommon/config.php';
 require PATH_ROOT . 'zcommon/common.php';
 require PATH_ROOT . 'zcommon/data.php';
 require PATH_ROOT . 'acommon.php';
+require PATH_ROOT . 'aitemfunc.php';

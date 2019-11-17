@@ -2,26 +2,14 @@
 $mydata = new ciy_data();
 $rsuser = verifyadmin();
 if(nopower('admin')) diehtml('您无权限');
-$table = 'p_admin';
+$table = 'p_admin_role';
 ciy_runJSON();
-$code_user = getcodes('user');
+$code_rolegroup = getcodes('user_rolegroup');
 $msql = new ciy_sql($table);
 $liid = getint('liid');
 if($liid > 0)
-    $msql->where('status',$liid);
-$nav = '';
-$departid = getint('departid');
-if($departid > 0)
-{
-    $msql->where('departid',$departid);
-    $csql = new ciy_sql($table.'_depart');
-    $csql->where('id',$departid)->column('title');
-    $nav = ' → '.$mydata->get1($csql);
-}
-$msql->where('truename like',get('truename'));
-$msql->where('depart like',get('depart'));
-$msql->where('mobile',get('mobile'));
-$msql->where('id',get('id'));
+    $msql->where('groups',$liid);
+$msql->where('title like',get('title'));
 $msql->order(get('order','id desc'));
 $pageno = getint('pageno', 1);$pagecount = 20;
 $msql->limit($pageno,$pagecount);
@@ -34,14 +22,23 @@ function json_del() {
         return errjson('您无权限');
     $post = new ciy_post();
     $id = $post->getint('id');
+    $csql = new ciy_sql('p_admin_urole');
+    $csql->where('roleid',$id)->where('status',10);
+    $urrow = $mydata->getone($csql);
+    if(is_array($urrow))
+        return errjson('该角色正在被使用，不能删除');
+    
     $csql = new ciy_sql($table);
     $csql->where('id',$id);
     $oldrow = $mydata->getone($csql);
-    $ret = $mydata->tran(function()use($mydata,$csql){
-        return $mydata->delete($csql);
-    });
-    if($ret === false)
+    $execute = $mydata->delete($csql);
+    if($execute === false)
         return errjson('删除失败:'.$mydata->error);
-    savelogdb($table, $oldrow, null, '删除了管理员，');
+    $csql = new ciy_sql('p_admin_urole');
+    $csql->where('roleid',$id);
+    $execute = $mydata->delete($csql);
+    if($execute === false)
+        return errjson('删除授权失败:'.$mydata->error);
+    savelogdb($table, $oldrow, null, '删除了角色，');
     return succjson();
 }

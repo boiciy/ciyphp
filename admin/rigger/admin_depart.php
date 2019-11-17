@@ -30,13 +30,12 @@ else{
           <table>
             <tr>
                 <th style="width:200px;">部门名称</th>
-                <th style="width:200px;">默认权限</th>
-                <th style="width:200px;">负责人权限</th>
+                <th style="width:200px;">默认角色</th>
                 <th>操作</th>
             </tr>
 <?php
 $rows = treerows_sort($rows);
-$code_power = getcodes('user.power');
+$code_power = getcodes('user_power');
 foreach($rows as $row){
     $id = (int)$row['id'];
 ?>
@@ -48,8 +47,19 @@ foreach($rows as $row){
         else
             echo '　 '.$row['title'];
         ?></div></td>
-        <td><div><?php echo power_trans($code_power,$row['power']);?></div></td>
-        <td><div><?php echo power_trans($code_power,$row['powerleader']);?></div></td>
+        <td><div><?php
+        if(!empty($row['defroles']))
+        {
+            $csql = new ciy_sql('p_admin_role');
+            $csql->where('id in ('.$row['defroles'].')');
+            $roles = $mydata->get($csql);
+            foreach ($roles as $role) {
+                echo '<code>'.$role['title'].'</code>';
+            }
+        }
+        else
+            echo '--';
+        ?></div></td>
         <td><div>
             <a class="btn" onclick="edit(0,<?php echo $id;?>)">添加子部门</a>
             <a class="btn" onclick="edit(<?php echo $id;?>,<?php echo $row['upid'];?>)">编辑</a>
@@ -71,7 +81,7 @@ $(function(){
 });
 function edit(id,upid)
 {
-    ciy_alert({title:'部门管理',contentstyle:'width:680px;height:40em;',frame:'rigger/admin_user_depart_update.php?id='+id+"&upid="+upid,nobutton:true});
+    ciy_alert({title:'部门管理',contentstyle:'width:680px;height:40em;',frame:'rigger/admin_depart_update.php?id='+id+"&upid="+upid,nobutton:true});
 }
 </script>
 </body>

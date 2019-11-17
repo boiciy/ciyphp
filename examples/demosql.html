@@ -9,7 +9,10 @@
 <link href="/jscss/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <h2>SQL文件在 /ciyphp.sql</h2>
+    <h2 style="margin:1em;">SQL文件在 /ciyphp.sql</h2>
+    <code>以下仅作为参考，请以实际ciyphp.sql为准</code>
+    <br/>
+    <br/>
     <blockquote onclick="$(this).next().slideToggle();" style="cursor:pointer;">增删改查Demo表<code>d_test</code></blockquote>
       <div class='table' style="display:none;margin-left:1em;">
           <table>
@@ -282,7 +285,7 @@
 <td><div></div></td>
 <td><div>负责人,1.是,2.否</div></td> 
 </tr>
-<tr>      
+<tr>
 <td><div>11</div></td>
 <td><div>departid</div></td>    
 <td><div>int</div></td>       
@@ -326,7 +329,7 @@
 </tr>
           </table>
       </div>
-    <blockquote onclick="$(this).next().slideToggle();" style="cursor:pointer;">管理部门表<code>p_admindepart</code></blockquote>
+    <blockquote onclick="$(this).next().slideToggle();" style="cursor:pointer;">管理部门表<code>p_admin_depart</code></blockquote>
       <div class='table' style="display:none;margin-left:1em;">
           <table>
               <tr>
@@ -359,21 +362,14 @@
 </tr>
 <tr>      
 <td><div>4</div></td>
-<td><div>power</div></td>    
+<td><div>defroles</div></td>    
 <td><div>varchar</div></td>       
-<td><div>200</div></td>
-<td><div>默认权限</div></td> 
-</tr>
-<tr>      
-<td><div>5</div></td>
-<td><div>powerleader</div></td>    
-<td><div>varchar</div></td>       
-<td><div>200</div></td>
-<td><div>领导权限</div></td> 
+<td><div>100</div></td>
+<td><div>默认角色</div></td> 
 </tr>
           </table>
       </div>
-    <blockquote onclick="$(this).next().slideToggle();" style="cursor:pointer;">管理员登录状态表<code>p_adminonline</code></blockquote>
+    <blockquote onclick="$(this).next().slideToggle();" style="cursor:pointer;">管理员登录状态表<code>p_admin_online</code></blockquote>
       <div class='table' style="display:none;margin-left:1em;">
           <table>
               <tr>

@@ -3,8 +3,8 @@ $mydata = new ciy_data();
 $rsuser = verifyadmin();
 $table = 'p_user';
 ciy_runJSON();
-$code_user_level = getcodes('user.level');
-$code_user_wxstatus = getcodes('user.wxstatus');
+$code_user_level = getcodes('user_level');
+$code_user_wxstatus = getcodes('user_wxstatus');
 $msql = new ciy_sql($table);
 $liid = getint('liid');
 if($liid > 0)

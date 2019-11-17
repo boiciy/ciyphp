@@ -1,4 +1,5 @@
 <?php
+require PATH_ROOT . 'zcommon/excel.php';
 $mydata = new ciy_data();
 $table = 'd_test';
 ciy_runJSON();
@@ -14,7 +15,8 @@ if(count($val) == 2)
 $msql->order(get('order','id desc'));
 ciy_runExcelxml($msql);
 ciy_runExcelcsv($msql);
-$pageno = getint('pageno', 1);$pagecount = 20;
+$pageno = getint('pageno', 1);
+$pagecount = 20;
 $msql->limit($pageno,$pagecount);
 $rows = $mydata->get($msql,$mainrowcount);
 function excel_cc($msql)//Excel CSV数据导出函数，ciy_runCSV()调用。

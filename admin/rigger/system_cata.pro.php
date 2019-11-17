@@ -56,6 +56,7 @@ function json_multiadd() {
         return errjson('您无权操作');
     $post = new ciy_post();
     $types = $post->get('multi_types');
+    $format = $post->getint('multi_format');
     $code = $post->get('multi_code');
     if($types == '')
         return errjson('请填写分类');
@@ -104,8 +105,16 @@ function json_multiadd() {
             $cs = explode(',',$c);
             if(count($cs) < 2)
                 continue;
-            $title = $cs[0];
-            $codeid = $cs[1];
+            if($format == 1)
+            {
+                $title = $cs[0];
+                $codeid = $cs[1];
+            }
+            else
+            {
+                $title = $cs[1];
+                $codeid = $cs[0];
+            }
             $extdata = @$cs[2].'';
             $csql = new ciy_sql($table);
             $csql->where('types',$types)->where('codeid',$codeid)->column('id');

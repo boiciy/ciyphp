@@ -15,7 +15,9 @@
                 <th>编号</th>
                 <th>标题</th>
                 <th>代码</th>
-                <th>设定值</th>
+                <th>设定值1</th>
+                <th>设定值2</th>
+                <th>设定值3</th>
                 <th>操作</th>
             </tr>
 <?php
@@ -27,6 +29,8 @@ foreach($rows as $row){
         <td><div><input style="width:100%;" type="text" name="title" value="<?php echo @$row['title'];?>"/></div></td>
         <td><div><input style="width:100%;" type="text" name="types" value="<?php echo @$row['types'];?>"/></div></td>
         <td><div><input style="width:100%;" type="text" name="params" value="<?php echo str_replace('"','&quot;',@$row['params']);?>"/></div></td>
+        <td><div><input style="width:100%;" type="text" name="param2" value="<?php echo str_replace('"','&quot;',@$row['param2']);?>"/></div></td>
+        <td><div><input style="width:100%;" type="text" name="param3" value="<?php echo str_replace('"','&quot;',@$row['param3']);?>"/></div></td>
         <td><div>
                 <?php
                 if($id == 0)
@@ -39,6 +43,25 @@ foreach($rows as $row){
 <?php } ?>
           </table>
       </div>
+<fieldset class="tips">
+  <legend>配置说明</legend>
+  <div>
+    <ul>
+        <li>建议使用getconfig函数调用。<br/>
+            <code>例1:</code><br/>
+            $data = getconfig('代码','默认设定值1');<br/>
+            结果字符串: $data = <kbd>值1</kbd><br/>
+            <code>例2:</code><br/>
+            $data = getconfig('代码','默认设定值1','默认设定值2');<br/>
+            结果数组: $data = <kbd>array(值1,值2)</kbd><br/>
+            <code>例3:</code><br/>
+            $data = getconfig('代码','默认设定值1','默认设定值2','默认设定值3');<br/>
+            结果数组: $data = <kbd>array(值1,值2,值3)</kbd><br/>
+        </li>
+        <li>getconfig函数在acommon.php中</li>
+    </ul>
+  </div>
+</fieldset>
 </div>
 <script src="/jscss/jquery-1.12.4.min.js" type="text/javascript"></script>
 <script src="/jscss/ciy.js" type="text/javascript"></script>

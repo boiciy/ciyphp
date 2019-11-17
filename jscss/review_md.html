@@ -52,11 +52,11 @@ function convertmd(markdown)
                 html += '</div>';
             }
             if(mds[m].substr(0,3) == '###')
-                html += '<h1 class="rich-h3">'+mds[m].substr(3)+'</h1>';
+                html += '<h3 class="rich-h3">'+mds[m].substr(3)+'</h3>';
             else if(mds[m].substr(0,2) == '##')
                 html += '<h2 class="rich-h2">'+mds[m].substr(2)+'</h2>';
             else
-                html += '<h3 class="rich-h1">'+mds[m].substr(1)+'</h3>';
+                html += '<h1 class="rich-h1">'+mds[m].substr(1)+'</h1>';
             
         }
         else if(mds[m][0] == '@'){//l，靠左，c居中，r靠右

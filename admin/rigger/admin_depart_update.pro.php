@@ -2,7 +2,7 @@
 $mydata = new ciy_data();
 $rsuser = verifyadmin();
 if(nopower('admin')) diehtml('您无权限');
-$table = 'p_admindepart';
+$table = 'p_admin_depart';
 ciy_runJSON();
 $id = (int)get('id');
 $upid = (int)get('upid');
@@ -23,7 +23,9 @@ else
     $csql->where('id',$upid)->column('title');
     $updepart = $mydata->get1($csql);
 }
-$code_power = getcodes('user.power');
+$code_power = getcodes('user_power');
+$csql = new ciy_sql('p_admin_role');
+$roles = $mydata->get($csql);
 
 function json_update() {
     global $mydata;
@@ -39,8 +41,7 @@ function json_update() {
         return errjson('请填写部门名称');
     $updata['title'] = $title;
     $updata['upid'] = $post->getint('upid');
-    $updata['power'] = '.'.str_replace(',', '.', $post->get('power')).'.';
-    $updata['powerleader'] = '.'.str_replace(',', '.', $post->get('powerleader')).'.';
+    $updata['defroles'] = $post->get('defroles');
     $csql = new ciy_sql($table);
     $csql->where('id',$id);
     $oldrow = $mydata->getone($csql);

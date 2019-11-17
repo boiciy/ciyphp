@@ -1,3 +1,7 @@
+/*
+ * 开源作者：众产国际产业公会  http://ciy.cn/code
+ * 版本：0.1.0
+ */
 (function(a) {
     a.fn.pull = function(D) {
         var styleElement = document.getElementById('style_pull');
@@ -55,7 +59,6 @@
                 uldom.slideUp(50);
                 return;
             }
-            
             html = $(html).on('click',function(){
                 if(this.nodeName == 'DIV')
                 {

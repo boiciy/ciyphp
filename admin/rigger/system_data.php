@@ -32,7 +32,7 @@ if(nopower('admin')) diehtml('您无权限');
             </div>
         </form>
 <pre>
-地区XML入库：calcataarea
+数据库状态：dbstatus
 </pre>
           <code>这里适合写一次性或不定期执行的代码，如数据修正、导入导出、统计等</code>
           <code>请注意权限限制</code>
@@ -46,8 +46,9 @@ $param = get('param');
 if(!empty($func))
 {
     pr($func.' 执行中...');
-    if($func == 'calcataarea')
+    if($func == 'dbstatus')
     {
+        include 'system_data_db.php';
     }
     pr($func.' 执行完成');
 }

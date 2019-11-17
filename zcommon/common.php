@@ -311,8 +311,6 @@ function _checkstr($val,$defvalue,$name = '')
             return $defvalue;
         }
     }
-    if($cnt > 20)
-        savelogfile('checkstr',"len={$cnt},name={$name},value={$val},url=".@$_SERVER['HTTP_HOST'].@$_SERVER['REQUEST_URI'].",cookie=".@$_SERVER['HTTP_COOKIE']);
     return $val;
 }
 

@@ -15,6 +15,11 @@
  * get_mstime   获取当前微秒数
  * savelog      在数据库保存log信息。
  */
+function cmoney($money)
+{
+    $money/=100;
+    return number_format($money, 2);
+}
 function create_li($rows, $default,$exturl = '',$first = array('title'=>'全部','codeid'=>''))
 {
     if(is_array($first))
@@ -35,16 +40,16 @@ function create_select($rows, $default, $formname, $itemfunc = null)
     $ret = '<select name="'.$formname.'">';
     foreach ($rows as $row) {
         if ($itemfunc instanceof Closure)
-            $kw = $itemfunc($row);
+            $ret .= $itemfunc($row);
         else
         {
             $kw['title'] = $row['title'];
             $kw['value'] = $row['codeid'];
+            $ret .= '<option value="'.$kw['value'].'"';
+            if($default == $kw['value'])
+                $ret .= ' selected="true"';
+            $ret .= '>'.$kw['title'].'</option>';
         }
-        $ret .= '<option value="'.$kw['value'].'"';
-        if($default == $kw['value'])
-            $ret .= ' selected="true"';
-        $ret .= '>'.$kw['title'].'</option>';
     }
     $ret .= '</select>';
     return $ret;
@@ -87,12 +92,24 @@ function create_radio($rows, $default, $formname, $itemfunc = null)
     }
     return $ret;
 }
-function getconfig($code)
-{
+function getconfig($code,$defp1,$defp2 = null,$defp3 = null){
     global $mydata;
     $csql = new ciy_sql('p_config');
-    $csql->where('types',$code)->column('params');
-    return $mydata->get1($csql);
+    $csql->where('types',$code);
+    $row = $mydata->getone($csql);
+    if(is_array($row)){
+        if($defp2 == null)
+            return $row['params'];
+        if($defp3 == null)
+            return array($row['params'],$row['param2']);
+        return array($row['params'],$row['param2'],$row['param3']);
+    }else{
+        if($defp2 == null)
+            return $defp1;
+        if($defp3 == null)
+            return array($defp1,$defp2);
+        return array($defp1,$defp2,$defp3);
+    }
 }
 function getcodes($code,$upid = -1)
 {
@@ -198,11 +215,23 @@ function showorder($field)
     }
     return '<i class="asc'.$asc.'" title="从小到大，升序排序" onclick="location.href=\''.urlparam('', array('order' => $field)).'\';"></i><i class="desc'.$desc.'" title="从大到小，降序排序" onclick="location.href=\''.urlparam('', array('order' => $field.' desc')).'\';"></i>';
 }
-/*
-db.power: .xxx.
-    if(nopower('admin,xxx'))
-        return errjson('您无权操作');
- */
+function refreshpower($uid){
+    global $mydata;
+    $csql = new ciy_sql('p_admin_role');
+    $csql->where('id in (select roleid from p_admin_urole where userid=? and status=10)',array($uid));
+    $rolerows = $mydata->get($csql);
+    $pss = array();
+    foreach($rolerows as $rolerow)
+    {
+        $ps = explode('.',$rolerow['power']);
+        $pss = array_merge($pss,$ps);
+    }
+    $newpower = implode('.',array_unique($pss)).'.';
+    
+    $execute = $mydata->execute('update p_admin set power=? where id=?',array($newpower,$uid));
+    if ($execute === false)
+        throw new Exception('操作admin数据库power失败:'.$mydata->error);
+}
 function nopower($rig)
 {
     global $rsuser;
@@ -211,6 +240,8 @@ function nopower($rig)
     $power = @$rsuser['power'];
     if(empty($power))
         return true;
+    if($power == '.*.')//超级管理员
+        return false;
     if(strpos($rig,',') === false)
         return (strpos($power,'.'.$rig.'.') === false);
     $rigs = explode(',', $rig);
@@ -367,6 +398,8 @@ function xssfilter($val)
  */
 function file_down($url,$savepath,$filename = '', $thumb = null,$timeout = 60)
 {
+    if (!makedir(PATH_ROOT.$savepath))
+        return 'ERR:保存目录建立失败';
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_TIMEOUT,$timeout);
@@ -428,6 +461,7 @@ function img2thumb($src_img, $dst_img, $width = 75, $height = 75, $cut = false,$
 {
     if(!is_file($src_img))
         return false;
+    ini_set ('memory_limit', '1128M');
     if($jpgquality < 10)
         $jpgquality = 50;
     $srcinfo = getimagesize($src_img);
@@ -578,7 +612,7 @@ function verifyadmin($errfunc = null) {
     $exp = (int)cookie('aexp');
     $sid = cookie('asid');
     $uid = deid(cookie('auid'));
-    $csql = new ciy_sql('p_adminonline');
+    $csql = new ciy_sql('p_admin_online');
     $csql->where('id',$oid);
     $onlinerow = $mydata->getone($csql);
     $err = '您尚未登录或已超时';
@@ -596,7 +630,7 @@ function verifyadmin($errfunc = null) {
                     {
                         $sid = uniqid();
                         $exp = time()+259200;
-                        $execute = $mydata->execute('update p_adminonline set sid=?,exptime=? where id='.$oid,array($sid,$exp));
+                        $execute = $mydata->execute('update p_admin_online set sid=?,exptime=? where id='.$oid,array($sid,$exp));
                         if($execute !== false)
                             cookieadmin($oid,$uid,$sid,$exp);
                     }

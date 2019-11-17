@@ -8,18 +8,18 @@
 </head>
 <body>
 <div class="container">
-    <div class="crumbs">当前位置： 系统管理 → 部门管理 → <?php echo $btnname;?></div>
+    <div class="crumbs">当前位置： 系统管理 → 角色管理 → <?php echo $btnname;?></div>
     <form>
         <div class="form-group">
-            <label>上级部门</label>
-            <div><?php echo $updepart;?><input type="hidden" name="upid" value="<?php echo @$updaterow['upid'];?>"/></div>
+            <label>角色分组</label>
+            <div><?php echo create_select($code_rolegroup,@$updaterow['groups'],'groups');?></div>
         </div>
         <div class="form-group" data-check>
-            <label>部门名称</label>
+            <label>角色名称</label>
             <div><input type="text" name="title" style='width:15em;' value="<?php echo @$updaterow['title'];?>"/></div>
         </div>
         <div class="form-group">
-            <label>员工权限</label>
+            <label>角色权限</label>
             <div>
                   <?php 
                   echo create_checkbox($code_power,@$updaterow['power'],'power',array('dot'=>'.'));
@@ -27,12 +27,8 @@
             </div>
         </div>
         <div class="form-group">
-            <label>领导权限</label>
-            <div>
-                  <?php 
-                  echo create_checkbox($code_power,@$updaterow['powerleader'],'powerleader',array('dot'=>'.'));
-                  ?>
-            </div>
+            <label>角色说明</label>
+            <div><input type="text" name="memo" style='width:100%;' value="<?php echo @$updaterow['memo'];?>"/></div>
         </div>
         <div class="form-group">
             <div style="text-align:center;">

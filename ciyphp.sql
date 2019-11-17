@@ -69,37 +69,36 @@ CREATE TABLE `p_admin`  (
 -- ----------------------------
 -- Records of p_admin
 -- ----------------------------
-INSERT INTO `p_admin` VALUES (10, 0, 10, 0, '10000000000', '67d7efa04a58f5c3a2640e593ae81ccf', '默认管理员', '.admin.', 1, 1, 3, '职能中心', '', 1557684322, 1547695138, 0);
+INSERT INTO `p_admin` VALUES (10, 0, 10, 0, '10000000000', '67d7efa04a58f5c3a2640e593ae81ccf', '超级管理员', '.*.', 1, 1, 3, '职能中心', '', 1564541598, 1547695138, 0);
 
 -- ----------------------------
--- Table structure for p_admindepart
+-- Table structure for p_admin_depart
 -- ----------------------------
-DROP TABLE IF EXISTS `p_admindepart`;
-CREATE TABLE `p_admindepart`  (
+DROP TABLE IF EXISTS `p_admin_depart`;
+CREATE TABLE `p_admin_depart`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `upid` int(11) NOT NULL COMMENT '上级部门',
   `title` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '部门名称',
-  `power` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '默认权限',
-  `powerleader` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '领导权限',
+  `defroles` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '默认角色',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理部门表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '组织机构表' ROW_FORMAT = Compact;
 
 -- ----------------------------
--- Records of p_admindepart
+-- Records of p_admin_depart
 -- ----------------------------
-INSERT INTO `p_admindepart` VALUES (1, 0, '运营中心', '..', '..');
-INSERT INTO `p_admindepart` VALUES (2, 0, '技术中心', '..', '..');
-INSERT INTO `p_admindepart` VALUES (3, 0, '职能中心', '.admin.', '..');
-INSERT INTO `p_admindepart` VALUES (4, 1, '市场部门', '..', '..');
-INSERT INTO `p_admindepart` VALUES (5, 1, '销售部门', '..', '..');
-INSERT INTO `p_admindepart` VALUES (6, 2, '开发部门', '..', '..');
-INSERT INTO `p_admindepart` VALUES (7, 2, '运维部门', '..', '..');
+INSERT INTO `p_admin_depart` VALUES (1, 0, '运营中心', '1');
+INSERT INTO `p_admin_depart` VALUES (2, 0, '技术中心', '');
+INSERT INTO `p_admin_depart` VALUES (3, 0, '职能中心', '');
+INSERT INTO `p_admin_depart` VALUES (4, 1, '市场部门', '');
+INSERT INTO `p_admin_depart` VALUES (5, 1, '销售部门', '');
+INSERT INTO `p_admin_depart` VALUES (6, 2, '开发部门', '');
+INSERT INTO `p_admin_depart` VALUES (7, 2, '运维部门', '');
 
 -- ----------------------------
--- Table structure for p_adminonline
+-- Table structure for p_admin_online
 -- ----------------------------
-DROP TABLE IF EXISTS `p_adminonline`;
-CREATE TABLE `p_adminonline`  (
+DROP TABLE IF EXISTS `p_admin_online`;
+CREATE TABLE `p_admin_online`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userid` int(11) NOT NULL COMMENT '登录用户ID',
   `target` int(11) NOT NULL COMMENT '登录平台,10.中台登录,11.代登录',
@@ -108,6 +107,40 @@ CREATE TABLE `p_adminonline`  (
   `ip` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'IP',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员登录状态表' ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for p_admin_role
+-- ----------------------------
+DROP TABLE IF EXISTS `p_admin_role`;
+CREATE TABLE `p_admin_role`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `groups` int(11) NOT NULL COMMENT '分组ID',
+  `title` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色名称',
+  `power` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色权限',
+  `memo` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色说明',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色表' ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of p_admin_role
+-- ----------------------------
+INSERT INTO `p_admin_role` VALUES (1, 1, '管理员', '.admin.', '');
+
+-- ----------------------------
+-- Table structure for p_admin_urole
+-- ----------------------------
+DROP TABLE IF EXISTS `p_admin_urole`;
+CREATE TABLE `p_admin_urole`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL COMMENT '用户ID',
+  `username` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名称',
+  `roleid` int(11) NOT NULL COMMENT '角色ID',
+  `rolename` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色名称',
+  `status` int(11) NOT NULL COMMENT '状态,1.提交申请,2.拒绝,9.停用,10.正常',
+  `adminid` int(11) NOT NULL COMMENT '授权人',
+  `addtimes` bigint(20) NOT NULL COMMENT '授权时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户角色表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for p_cata
@@ -128,18 +161,23 @@ CREATE TABLE `p_cata`  (
 -- ----------------------------
 -- Records of p_cata
 -- ----------------------------
-INSERT INTO `p_cata` VALUES (1, 0, 0, 'user.sex', '0', '未知');
-INSERT INTO `p_cata` VALUES (2, 0, 0, 'user.sex', '1', '男');
-INSERT INTO `p_cata` VALUES (3, 0, 0, 'user.sex', '2', '女');
-INSERT INTO `p_cata` VALUES (4, 0, 0, 'user.power', 'admin', '管理员');
-INSERT INTO `p_cata` VALUES (5, 0, 0, 'user.power', 'p1', '权限1');
-INSERT INTO `p_cata` VALUES (6, 0, 0, 'user.power', 'p2', '权限2');
-INSERT INTO `p_cata` VALUES (7, 0, 0, 'user.level', '1', '注册用户');
-INSERT INTO `p_cata` VALUES (8, 0, 0, 'user.level', '10', '认证用户');
-INSERT INTO `p_cata` VALUES (9, 0, 0, 'user.wxstatus', '1', '授权');
-INSERT INTO `p_cata` VALUES (10, 0, 0, 'user.wxstatus', '9', '取消关注');
-INSERT INTO `p_cata` VALUES (11, 0, 0, 'user.wxstatus', '10', '已关注');
-INSERT INTO `p_cata` VALUES (12, 0, 0, 'user.wxstatus', '0', '无');
+INSERT INTO `p_cata` VALUES (1, 0, 0, 'user_sex', '0', '未知', '');
+INSERT INTO `p_cata` VALUES (2, 0, 0, 'user_sex', '1', '男', '');
+INSERT INTO `p_cata` VALUES (3, 0, 0, 'user_sex', '2', '女', '');
+INSERT INTO `p_cata` VALUES (4, 0, 0, 'user_power', 'admin', '管理员', '');
+INSERT INTO `p_cata` VALUES (5, 0, 0, 'user_power', 'p1', '权限1', '');
+INSERT INTO `p_cata` VALUES (6, 0, 0, 'user_power', 'p2', '权限2', '');
+INSERT INTO `p_cata` VALUES (7, 0, 0, 'user_level', '1', '注册用户', '');
+INSERT INTO `p_cata` VALUES (8, 0, 0, 'user_level', '10', '认证用户', '');
+INSERT INTO `p_cata` VALUES (9, 0, 0, 'user_wxstatus', '1', '授权', '');
+INSERT INTO `p_cata` VALUES (10, 0, 0, 'user_wxstatus', '9', '取消关注', '');
+INSERT INTO `p_cata` VALUES (11, 0, 0, 'user_wxstatus', '10', '已关注', '');
+INSERT INTO `p_cata` VALUES (12, 0, 0, 'user_wxstatus', '0', '无', '');
+INSERT INTO `p_cata` VALUES (13, 0, 0, 'user_rolegroup', '1', '默认分组', '');
+INSERT INTO `p_cata` VALUES (14, 0, 0, 'user_urole', '1', '申请中', '');
+INSERT INTO `p_cata` VALUES (15, 0, 0, 'user_urole', '2', '拒绝', '');
+INSERT INTO `p_cata` VALUES (16, 0, 0, 'user_urole', '9', '停用', '');
+INSERT INTO `p_cata` VALUES (17, 0, 0, 'user_urole', '10', '正常', '');
 
 -- ----------------------------
 -- Table structure for p_config
@@ -149,9 +187,11 @@ CREATE TABLE `p_config`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '参数标题',
   `types` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '参数代码',
-  `params` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '参数含义',
+  `params` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '参数1',
+  `param2` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '参数2',
+  `param3` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '参数3',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '快捷配置表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '字典表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of p_config
@@ -198,11 +238,11 @@ CREATE TABLE `p_system`  (
 -- ----------------------------
 INSERT INTO `p_system` VALUES (1, '每天执行', 'day', 'timer.php', '', 0, 1514736000, 86400, 1514736000, 0, '');
 INSERT INTO `p_system` VALUES (2, '每小时执行', 'hour', 'timer.php', '', 0, 1514736000, 3600, 1514736000, 0, '');
-INSERT INTO `p_system` VALUES (4, '每月执行', 'month', 'timer.php', '', 0, 1514736000, 1, 1514736000, 0, '');
-INSERT INTO `p_system` VALUES (7, '每分钟执行', 'minute', 'timer.php', '', 0, 1514736000, 60, 1514736000, 0, '');
-INSERT INTO `p_system` VALUES (8, '每年执行', 'year', 'timer.php', '', 0, 1514736000, 12, 1514736000, 0, '');
-INSERT INTO `p_system` VALUES (9, '每周执行', 'week', 'timer.php', '', 0, 1514736000, 604800, 1514736000, 0, '');
-INSERT INTO `p_system` VALUES (10, '区块链同步', 'sync', 'blocktc.php', '', 0, 1514736000, 60, 1514736000, 10, '');
+INSERT INTO `p_system` VALUES (3, '每月执行', 'month', 'timer.php', '', 0, 1514736000, 1, 1514736000, 0, '');
+INSERT INTO `p_system` VALUES (4, '每分钟执行', 'minute', 'timer.php', '', 0, 1514736000, 60, 1514736000, 0, '');
+INSERT INTO `p_system` VALUES (5, '每年执行', 'year', 'timer.php', '', 0, 1514736000, 12, 1514736000, 0, '');
+INSERT INTO `p_system` VALUES (6, '每周执行', 'week', 'timer.php', '', 0, 1514736000, 604800, 1514736000, 0, '');
+INSERT INTO `p_system` VALUES (7, '区块链同步', 'sync', 'blocktc.php', '', 0, 1514736000, 60, 1514736000, 10, '');
 
 -- ----------------------------
 -- Table structure for p_user

@@ -42,13 +42,13 @@
             </div>
         </div>
         <div class="clearfix"></div>
-        <div class="form-group inline">
-            <label>是否负责人</label>
+        <div class="form-group">
+            <label>部门领导</label>
             <div>
                   <label class="formswitch"><input type="checkbox" name="leader"<?php if($updaterow['leader'] == 1) echo ' checked="true"'; ?>/><y>是</y><n>否</n><i></i></label>
             </div>
         </div>
-        <div class="form-group inline">
+        <div class="form-group">
             <label>选择部门</label>
             <div>
                 <input type="hidden" name="departid" value="<?php echo @$updaterow['departid'];?>"/>
@@ -56,13 +56,25 @@
                 <span id="departname"><?php echo @$updaterow['depart'];?></span>
             </div>
         </div>
-        <div class="clearfix"></div>
         <div class="form-group">
-            <label>权限</label>
+            <label>选择角色</label>
             <div>
                   <?php 
-                  $code_power = getcodes('user.power');
-                  echo create_checkbox($code_power,@$updaterow['power'],'power',array('dot'=>'.'));
+                    if(@$updaterow['power'] == '.*.')
+                        echo '超级管理员';
+                    else
+                    {
+                        $ret = '';
+                        foreach ($roles as $row) {
+                            $ret.='<label class="formi"><input type="checkbox" name="role" value="'.$row['id'].'"';
+                            foreach ($urole as $urrow) {
+                                if($row['id'] == $urrow['roleid'])
+                                    $ret.=' checked="checked"';
+                            }
+                            $ret.='/><i></i>'.$row['title'].'</label>';
+                        }
+                        echo $ret;
+                    }
                   ?>
             </div>
         </div>
@@ -88,20 +100,25 @@ function select_depart(dom)
     ciy_alert({
         title:'选择部门',
         contentstyle:'width:400px;height:30em;',
-        frame:'rigger/admin_user_depart_select.php?id='+departid,
+        frame:'rigger/admin_depart_select.php?id='+departid,
         nobutton:true,
         cb:function(btn,data){
             callfunc("getdepart",'id='+data.id,function(json){
                 $('#departname').text(json.depart);
                 $('input[name=departid]').val(data.id);
-                var power = json.power;
-                if($('input[name=leader]:checked').length > 0)
-                    power = json.powerleader;
-                var inppower = $('input[name=power]');
-                inppower.each(function(res){
-                    inppower[res].checked = (power.indexOf('.'+inppower[res].value+'.') > -1);
+                var roles = json.defroles.split(',');
+                var inprole = $('input[name=role]');
+                inprole.each(function(res){
+                    var sel = false;
+                    for(var i in roles){
+                        if(roles[i]==inprole[res].value){
+                            sel = true;
+                            break;
+                        }
+                    }
+                    inprole[res].checked = sel;
                 });
-            },{murl:'admin_user_depart_select.php'});
+            },{murl:'admin_depart_select.php'});
         }
     });
 }

@@ -2,7 +2,7 @@
 /* =================================================================================
  * 版权声明：保留开源作者及版权声明前提下，开源代码可进行修改及用于任何商业用途。
  * 开源作者：众产国际产业公会  http://ciy.cn/code
- * 版本：0.6.0
+ * 版本：0.6.1
 ====================================================================================*/
 /**
  * 应用数据层类库（单服版）
@@ -270,6 +270,7 @@ class ciy_sql{
 class ciy_data {
     public $linkmaster;//写服务器驱动层类实例。
     public $dbindex;//指定数据库集群，参数在config.php中配置，可配置多个数据库服务器集群。
+    public $dbparam;
     public $error;
     public $master;
     public $dataupdate;
@@ -291,9 +292,10 @@ class ciy_data {
         return $this;
     }
 
-    function __construct($dbindex = 1) {
+    function __construct($dbindex = 1,$dbparam = '') {
         $this->linkmaster = false;
         $this->dbindex = $dbindex;
+        $this->dbparam = $dbparam;
         $this->error = '';
     }
 /**
@@ -302,7 +304,7 @@ class ciy_data {
     function connect($master) {
         if($this->linkmaster === false)
         {
-            $cfg = ciy_config::getdb($this->dbindex);
+            $cfg = ciy_config::getdb($this->dbindex,$this->dbparam);
             if($cfg['type'] == 'http')
             {
                 require_once 'dbajax.php';
@@ -397,7 +399,7 @@ if(is_array($rows)){
  * 例：
  * $row = $mydata->getraw('select * from xxx where id=?',[3]);
  */
-    function getraw($sql,$tsmt) {
+    function getraw($sql,$tsmt=array()) {
         $ret = $this->connect($this->master)->get(1,$sql,$tsmt);
         if($ret === false)
             return $this->errdata($ret);

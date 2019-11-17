@@ -1,5 +1,6 @@
 /*
- * 版本：0.5.7
+ * 开源作者：众产国际产业公会  http://ciy.cn/code
+ * 版本：0.6.1
  */
 'use strict';
 function uperr(err,msg){
@@ -167,15 +168,8 @@ function ciy_ajax(opt){//IE8 OK
     }
     var aborttime = window.setTimeout( function() {request.abort("timeout");}, timeout);
 }
-function ciy_getform(dom,parentTag){
-    while(true)
-    {
-        if(parentTag && dom.tagName == parentTag)
-            break;
-        if(dom.tagName == 'BODY' || dom.tagName == 'FORM' || dom == null)
-            break;
-        dom = dom.parentNode;
-    }
+function _ciy_getform_dom(dom)
+{
     var retdata = {};
     var els = dom.querySelectorAll("input,textarea,select");
     for (var i = 0; i < els.length; i++)
@@ -255,7 +249,19 @@ function ciy_getform(dom,parentTag){
             retdata[els[i].name] = els[i].value;
         }
     }
-    els = dom.getElementsByClassName("form-group");
+    return retdata;
+}
+function ciy_getform(dom,parentTag){
+    while(true)
+    {
+        if(parentTag && dom.tagName == parentTag)
+            break;
+        if(dom.tagName == 'BODY' || dom.tagName == 'FORM' || dom == null)
+            break;
+        dom = dom.parentNode;
+    }
+    var retdata = _ciy_getform_dom(dom);
+    var els = dom.getElementsByClassName("form-group");
     for (var i = 0; i < els.length; i++)
     {
         var check = els[i].getAttribute('data-check');
@@ -276,6 +282,11 @@ function ciy_getform(dom,parentTag){
         var val = retdata[el[0].name]||'';
         if(!ciy_check(check,val))
         {
+            if(getComputedStyle(els[i])['display'] == 'none')
+                continue;
+            var empty = els[i].getAttribute('data-empty');
+            if(empty != null && val == '')
+                continue;
             var title = els[i].querySelector('label').textContent;
             retdata['_check'] = els[i].getAttribute('data-checkmsg')||'请正确填写'+title;
         }
@@ -1012,11 +1023,7 @@ function ciy_alert(content, cb, option){
     }
     htmldom.on('click','.btn',function(){
         var btntit = this.textContent;
-        var inputs = {};
-        var xx = htmldom.find('input,select,textarea');
-        xx.each(function(){
-            inputs[this.name] = this.value;
-        });
+        var inputs = _ciy_getform_dom(htmldom[0]);
         alertclose();
         if(typeof(cb) == 'function')
             cb(btntit,inputs);
@@ -1051,7 +1058,7 @@ function ciy_alert(content, cb, option){
         else if(option.align === 'left')
             htmldom.css('left',15);
         else
-        htmldom.css('left',(window.innerWidth-htmldom.outerWidth())/2);
+        	htmldom.css('left',(window.innerWidth-htmldom.outerWidth())/2);
         if(window.innerHeight>htmldom.height())
             htmldom.css('top',(window.innerHeight-htmldom.outerHeight())/3);
         else
@@ -1241,6 +1248,18 @@ function ciy_menu(dom){
         });
     }
 }
+function ciy_menu_navmask(cites){
+	if(cites == 'all')
+		return $(".ciy-menu-nav>li").show(500);
+	var cs = cites.split(',');
+	$(".ciy-menu-nav cite").each(function(i,n) {
+		if(cs.indexOf(n.textContent.trim())>-1)
+			$(n).parents('li').slideDown(500);
+		else
+			$(n).parents('li').slideUp(500);
+	});
+    $(".ciy-nav-bar").css('top','4em');
+}
 function ciy_tab(afterfunc){
     $(".ciy-tab>ul>li").on("click",function(ev){
         var tab = $(this).parents('.ciy-tab');
@@ -1284,7 +1303,7 @@ function ciy_cookie(name, value, options) {
             }
             expires = '; expires=' + date.toUTCString(); // use expires attribute, max-age is not supported by IE
         }
-        var path = options.path ? '; path=' + options.path : '';
+        var path = options.path ? '; path=' + options.path : '/';
         var domain = options.domain ? '; domain=' + options.domain : '';
         var secure = options.secure ? '; secure' : '';
         document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join('');
@@ -1360,22 +1379,24 @@ function ciy_formhtml(sp,datas){
         ret += ' data-check="'+sp.check+'"';
     if(sp.checkmsg)
         ret += ' data-checkmsg="'+sp.checkmsg+'"';
-    ret += '>';
-    ret += '<label>'+sp.title+'</label><div>';
+    ret += '><label>'+sp.title+'</label><div>';
     var val;
     if(datas)
         val = datas[sp.name];
     if(val === undefined)
         val = sp.defvalue||'';
+    var prop = '';
+    if(sp.prop)
+    	prop = ' '+sp.prop;
     if(sp.type == 'input')
-        ret += '<input type="text" name="'+sp.name+'" value="'+val+'"/>';
+        ret += '<input type="text" name="'+sp.name+'" value="'+val+'"'+prop+'/>';
     else if(sp.type == 'textarea')
     {
-        ret += '<textarea name="'+sp.name+'" style="width:100%;">'+val+'</textarea>';
+        ret += '<textarea name="'+sp.name+'"'+prop+'>'+val+'</textarea>';
     }
     else if(sp.type == 'select')
     {
-        ret += '<select name="'+sp.name+'">';
+        ret += '<select name="'+sp.name+'"'+prop+'>';
         var vals = sp.value.split(',');
         var valcodes = (sp.code||'').split(',');
         if(vals.length != valcodes.length)
@@ -1400,7 +1421,7 @@ function ciy_formhtml(sp,datas){
             ret += '<label class="formi"><input type="radio" name="'+sp.name+'" value="'+valcodes[i]+'"';
             if(val == valcodes[i])
                 ret += ' checked="checked"';
-            ret += '/><i></i>'+vals[i]+'</label>';
+            ret += prop+'/><i></i>'+vals[i]+'</label>';
         }
     }
     else if(sp.type == 'checkbox')
@@ -1415,13 +1436,15 @@ function ciy_formhtml(sp,datas){
             ret += '<label class="formi"><input type="checkbox" name="'+sp.name+'" value="'+valcodes[i]+'"';
             if($.inArray(valcodes[i], valns) > -1)
                 ret += ' checked="checked"';
-            ret += '/><i></i>'+vals[i]+'</label>';
+            ret += prop+'/><i></i>'+vals[i]+'</label>';
         }
     }
     else
     {
         ret += 'No FormData,'+sp.type;
     }
+    if(sp.behind)
+        ret += sp.behind;
     if(sp.tip)
         ret += '<code>'+sp.tip+'</code>';
     ret += '</div></div>';

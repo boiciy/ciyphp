@@ -57,11 +57,33 @@ $tpath.=DIRECTORY_SEPARATOR;
 $tdpath = realpath(PATH_ROOT.$uploadcfg['dir']).DIRECTORY_SEPARATOR;
 if(strpos($tpath,$tdpath) !== 0)
     upload_outjson(errjson('上传文件夹超范围'));
-$tstr = file_get_contents($file["tmp_name"]);
-if(strpos($tstr,'<?php') !== false)
-    upload_outjson(errjson('文件内容不合法'));
-move_uploaded_file($file['tmp_name'], PATH_ROOT.$path);
-$ret = succjson(array('url'=>$path,'name'=>$name));
+if($uploadcfg['drive'] == 'tccos')
+{
+    require PATH_ROOT. 'zcommon/qdbucket.php';
+    $cosClient = new Qcloud\Cos\Client(array('region' => $uploadcfg['tc_region'],
+        'credentials'=> array(
+            'appId' => $uploadcfg['tc_appId'],
+            'secretId'    => $uploadcfg['tc_secretId'],
+            'secretKey' => $uploadcfg['tc_secretKey'])));
+    try {
+        $result = $cosClient->upload(
+            $bucket=$uploadcfg['tc_bucket'],
+            $key = $path,
+            $body = fopen($file['tmp_name'], 'rb'),
+            $options = array('CacheControl' => 'private'));
+    } catch (\Exception $e) {
+        upload_outjson(errjson('上传到腾讯云COS失败:'.$e));
+    }
+    $ret = succjson(array('url'=>$path,'name'=>$name));
+}
+else
+{
+    $tstr = file_get_contents($file['tmp_name']);
+    if(strpos($tstr,'<?php') !== false)
+        upload_outjson(errjson('文件内容不合法'));
+    move_uploaded_file($file['tmp_name'], PATH_ROOT.$path);
+    $ret = succjson(array('url'=>$path,'name'=>$name));
+}
 upload_outjson($ret);
 function upload_outjson($json)
 {

@@ -26,50 +26,58 @@ $('input[name=gbstr]').pull({
     ,lifunc:function(val,cata){}//可选函数，自定义弹出条目li的样式和显示内容
     ,valfunc:function(li){}//可选函数，自定义最终在文本框中输入的内容，默认为li内的文本。
 });
+注意:应在上一级容器中加入position:relative;
 </pre>
 
 <blockquote>运行</blockquote>
-    <div class="form-group" style="position:relative;">
+    <div class="form-group">
         <label>默　认：</label>
-        <div>
-            <input type="text" name="gbstr" value=""/>
+        <div style="position:relative;">
+            <input type="text" name="gbstr" value=""/> 请输入 df <code>或</code> hx <code>或</code> 地 <code>或</code> 和
         </div>
     </div>
-    <div class="form-group" style="position:relative;">
+    <div class="form-group">
         <label>自定义：</label>
-        <div>
-            <input type="text" name="gbstr2" value=""/>
+        <div style="position:relative;">
+            <input type="text" name="gbstr2" value=""/> 请输入 30 <code>或</code> 李 <code>或</code> z
         </div>
     </div>
 
   </div>
 <script src="/jscss/jquery-1.12.4.min.js"></script>
 <script src="/jscss/ciy.js"></script>
+<script src="/jscss/pinyin.js"></script>
 <script src="/jscss/pullinput.js"></script>
 <script type="text/javascript">
 'use strict';
 $(function(){
+	//第一个默认初始化
     $('input[name=gbstr]').pull({
         catadata:[{"id":"52","upid":"0","nums":"0","types":"6a.cx","codeid":"HXN","title":"\u548c\u8c10N","extdata":""},
             {"id":"53","upid":"0","nums":"0","types":"6a.cx","codeid":"DFD","title":"\u5730\u65b9D","extdata":""}]
     });
+	//第二个自定义初始化
+    var data = [{"id":"6","eno":"0412333","truename":"\u5730\u65b91"},
+        {"id":"7","eno":"6264133","truename":"\u624b\u5206\u5f97\u591a"},
+        {"id":"8","eno":"7345523","truename":"\u6731\u5b66\u5112"},
+        {"id":"11","eno":"1743002","truename":"\u674e\u53f8\u673a"},
+        {"id":"12","eno":"1831001","truename":"\u8d75\u4e00"},
+        {"id":"13","eno":"2531010","truename":"\u94b1\u4e8c"},
+        {"id":"14","eno":"3741011","truename":"\u5b59\u4e09"},
+        {"id":"15","eno":"4661015","truename":"\u674e\u56db"},
+        {"id":"17","eno":"5921016","truename":"\u5434\u516d"},
+        {"id":"19","eno":"8531001","truename":"\u4e8e\u98de"}];
+	//js将汉字转成拼音
+    for(var i=0;i<data.length;i++)
+    	data[i].truename_py = pinyin_first(data[i].truename);
     $('input[name=gbstr2]').pull({
-        catadata:[{"id":"6","eno":"12333","truename":"\u5730\u65b91"},
-            {"id":"7","eno":"133","truename":"\u624b\u5206\u5f97\u591a"},
-            {"id":"8","eno":"123","truename":"\u6731\u5b66\u5112"},
-            {"id":"11","eno":"002","truename":"\u674e\u53f8\u673a"},
-            {"id":"12","eno":"1831001","truename":"\u8d75\u4e00"},
-            {"id":"13","eno":"1831010","truename":"\u94b1\u4e8c"},
-            {"id":"14","eno":"1831011","truename":"\u5b59\u4e09"},
-            {"id":"15","eno":"1831015","truename":"\u674e\u56db"},
-            {"id":"17","eno":"1831016","truename":"\u5434\u516d"},
-            {"id":"19","eno":"1830001","truename":"\u4e8e\u98de"}]
-        ,lifunc:function(val,cata){
-            if(cata.truename.toUpperCase().indexOf(val) > -1 || cata.eno.toUpperCase().indexOf(val) > -1)
+        catadata:data,
+        lifunc:function(val,cata){
+            if(cata.truename.toUpperCase().indexOf(val) > -1 || cata.truename_py.toUpperCase().indexOf(val) > -1 || cata.eno.toUpperCase().indexOf(val) > -1)
                 return '<li data-id="'+cata.id+'" data-eno="'+cata.eno+'" data-truename="'+cata.truename+'">'+cata.truename+' - <code>'+cata.eno+'</code></li>';
             return '';
-        }
-        ,valfunc:function(li){
+        },
+        valfunc:function(li){
             console.log(li);
             return $(li).attr('data-truename');
         }

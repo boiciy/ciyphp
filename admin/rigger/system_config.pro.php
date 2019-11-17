@@ -18,6 +18,8 @@ function json_update() {
     $updata['title'] = $post->get('title');
     $updata['types'] = $post->get('types');
     $updata['params'] = $post->get('params');
+    $updata['param2'] = $post->get('param2');
+    $updata['param3'] = $post->get('param3');
     $csql = new ciy_sql($table);
     $csql->where('id',$id);
     $oldrow = $mydata->getone($csql);

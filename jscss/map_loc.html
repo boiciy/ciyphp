@@ -14,27 +14,31 @@
 <script type="text/javascript">
 $(document).ready(function(){
 });
+var map;
 function do_map()
 {
     var urls = ciy_urlparam();
-    if(urls.lat == 0 && urls.lng == 0)
-        return ciy_alert('未获取到该用户位置',function(){
-            ciy_alertclose();
-        });
+    if(urls.lat == 0 && urls.lng == 0){
+        urls.lng = 121.49984;
+        urls.lat = 31.23957;
+    }
     var zoom = getint(urls.zoom);
     if(zoom<9)
         zoom = 9;
     var center = new qq.maps.LatLng(urls.lat,urls.lng);
-    var map = new qq.maps.Map(document.getElementById('container'),{
+    map = new qq.maps.Map(document.getElementById('container'),{
         center: center,
         zoom: zoom
     });
-    var marker = new qq.maps.Marker({
+    map.marker = new qq.maps.Marker({
         position: center,
         map: map
     });
+    qq.maps.event.addListener(map.marker, 'dblclick', function(event) {
+        window.alertcb(true,'更新',{lng:event.latLng.getLng(),lat:event.latLng.getLat(),zoom:map.zoom});
+    });
     qq.maps.event.addListener(map,'click',function(event) {
-        ciy_alert('点击位置经纬度：<br/>' + event.latLng.getLng() + '<br/>' + event.latLng.getLat());
+        map.marker.setPosition(event.latLng);
     });
 }
 </script>

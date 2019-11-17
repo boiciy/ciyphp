@@ -79,8 +79,21 @@ foreach($rows as $row){
       <?php echo showpage($pageno,$pagecount,$mainrowcount);?>
 </div>
 <div id="alert_multiadd" style="display:none;">
-    <div class="form-group"><label style="width:3em;">分类</label><div><input name="multi_types" type="text"/></div></div>
-    <div class="form-group"><label style="width:3em;">代码</label><div><textarea name="multi_code" style="width: 100%;height:10em;white-space:nowrap;"></textarea><br/><code>名称,值,扩展值</code> <code>一行一条</code></div></div>
+    <div class="form-group">
+        <label style="width:3em;">分类</label>
+        <div><input name="multi_types" type="text"/></div>
+    </div>
+    <div class="form-group">
+        <label style="width:3em;">格式</label>
+        <div>
+            <label class="formi"><input type="radio" name="multi_format" value="1" checked><i></i>名称,值,扩展值</label>
+            <label class="formi"><input type="radio" name="multi_format" value="2"><i></i>值,名称,扩展值</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label style="width:3em;">代码</label>
+        <div><textarea name="multi_code" style="width: 100%;height:10em;white-space:nowrap;"></textarea><br/><code>一行一条</code></div>
+    </div>
 </div>
 <script src="/jscss/jquery-1.12.4.min.js" type="text/javascript"></script>
 <script src="/jscss/ciy.js" type="text/javascript"></script>
