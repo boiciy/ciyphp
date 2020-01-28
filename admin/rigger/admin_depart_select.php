@@ -7,7 +7,7 @@
 <link href="/jscss/style.css" rel="stylesheet" type="text/css" />
 <body>
 <div class="container">
-    <form methodd="get" action="">
+    <form method="get" action="">
         <div class="form-group inline">
             <label>部门名称</label>
             <div><input type="text" name="title" value="<?php echo get('title');?>" style="width:10em;"/></div>

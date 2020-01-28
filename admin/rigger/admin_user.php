@@ -11,7 +11,7 @@
     <div class="ciy-tab ciy-tab-card">
         <ul><?php echo create_li($code_user,$liid);?></ul>
         <div class="ciy-tab-box">
-            <form methodd="get" action="">
+            <form method="get" action="">
                 <div class="form-group inline">
                     <label>ID</label>
                     <div><input type="text" name="id" value="<?php echo get('id');?>" style="width:5em;"/></div>

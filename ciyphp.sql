@@ -7,17 +7,17 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `d_test`;
 CREATE TABLE `d_test`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `icon` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '上传图片',
+  `icon` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '上传图片,IMG',
   `truename` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '姓名',
   `scores` int(11) NOT NULL COMMENT '分数',
   `fxk` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '复选框',
   `dxk` int(11) NOT NULL COMMENT '单选框',
   `lbk` int(11) NOT NULL COMMENT '下拉列表框',
-  `kg` int(11) NOT NULL COMMENT '开关',
+  `kg` int(11) NOT NULL COMMENT '开关,1.关,2.开',
   `dh` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '多行文本框',
-  `activetime` bigint(20) NOT NULL COMMENT '日期时间',
-  `addtimes` bigint(20) NOT NULL COMMENT '新建时间',
-  `ip` int(11) NOT NULL COMMENT 'IP',
+  `activetime` bigint(20) NOT NULL COMMENT '日期时间,DATE,yyyy-m-d',
+  `addtimes` datetime(0) NOT NULL COMMENT '新建时间,DATE',
+  `ip` int(11) NOT NULL COMMENT 'IP,INTIP',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '增删改查Demo表' ROW_FORMAT = Compact;
 
@@ -27,16 +27,16 @@ CREATE TABLE `d_test`  (
 DROP TABLE IF EXISTS `d_test_bak`;
 CREATE TABLE `d_test_bak`  (
   `id` bigint(20) NOT NULL,
-  `icon` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '上传图片',
+  `icon` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '上传图片',
   `truename` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '姓名',
   `scores` int(11) NOT NULL COMMENT '分数',
   `fxk` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '复选框',
   `dxk` int(11) NOT NULL COMMENT '单选框',
   `lbk` int(11) NOT NULL COMMENT '下拉列表框',
-  `kg` int(11) NOT NULL COMMENT '开关',
+  `kg` int(11) NOT NULL COMMENT '开关,1.关,2.开',
   `dh` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '多行文本框',
-  `activetime` bigint(20) NOT NULL COMMENT '日期时间',
-  `addtimes` bigint(20) NOT NULL COMMENT '新建时间',
+  `activetime` bigint(20) NOT NULL COMMENT '日期时间,DATE,yyyy-m-d',
+  `addtimes` datetime(0) NOT NULL COMMENT '新建时间,DATE',
   `ip` int(11) NOT NULL COMMENT 'IP',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '增删改查Demo备份表' ROW_FORMAT = Compact;
@@ -93,6 +93,23 @@ INSERT INTO `p_admin_depart` VALUES (4, 1, '市场部门', '');
 INSERT INTO `p_admin_depart` VALUES (5, 1, '销售部门', '');
 INSERT INTO `p_admin_depart` VALUES (6, 2, '开发部门', '');
 INSERT INTO `p_admin_depart` VALUES (7, 2, '运维部门', '');
+
+-- ----------------------------
+-- Table structure for p_admin_msg
+-- ----------------------------
+DROP TABLE IF EXISTS `p_admin_msg`;
+CREATE TABLE `p_admin_msg`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL COMMENT '用户ID',
+  `status` int(11) NOT NULL COMMENT '处理状态,1.未读,10.已读',
+  `fromuid` int(11) NOT NULL COMMENT '来自用户ID',
+  `frommsg` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '来自',
+  `types` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '分类',
+  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '内容',
+  `addtimes` bigint(20) NOT NULL COMMENT '添加时间',
+  `readtimes` bigint(20) NOT NULL COMMENT '阅读时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员消息通知表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for p_admin_online

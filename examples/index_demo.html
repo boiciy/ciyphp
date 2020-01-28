@@ -62,11 +62,11 @@
                 <li>订单管理</li>
             </ul>
             <div>
-                <div>页面中切换，或者跨页面url切换选项卡都可以使用</div>
-                <div>内容2</div>
-                <div>内容3</div>
-                <div>内容4</div>
-                <div>内容5</div>
+                <div class="tabcont">页面中切换，或者跨页面url切换选项卡都可以使用</div>
+                <div class="tabcont">内容2</div>
+                <div class="tabcont">内容3</div>
+                <div class="tabcont">内容4</div>
+                <div class="tabcont">内容5</div>
             </div>
         </div>
         <br/>
@@ -80,11 +80,11 @@
                 <li>订单管理</li>
             </ul>
             <div class="ciy-tab-box">
-                <div>内容1</div>
-                <div>页面中改变默认选项卡</div>
-                <div>内容3</div>
-                <div>内容4</div>
-                <div>内容5</div>
+                <div class="tabcont">内容1</div>
+                <div class="tabcont">页面中改变默认选项卡</div>
+                <div class="tabcont">内容3</div>
+                <div class="tabcont">内容4</div>
+                <div class="tabcont">内容5</div>
             </div>
         </div>
         <br/>
@@ -412,7 +412,7 @@
 
 
 
-        <h3>pre文中标记效果</h3>
+        <h3>pre块标记效果</h3>
 
         <pre>
 //代码区域
@@ -490,9 +490,6 @@ res === false && result === null && (result = false);
             {"id":"15","eno":"4661015","truename":"\u674e\u56db"},
             {"id":"17","eno":"5921016","truename":"\u5434\u516d"},
             {"id":"19","eno":"8531001","truename":"\u4e8e\u98de"}];
-    	//js将汉字转成拼音
-        for(var i=0;i<data.length;i++)
-        	data[i].truename_py = pinyin_first(data[i].truename);
         $('input[name=gbstr2]').pull({
             catadata:data,
             lifunc:function(val,cata){

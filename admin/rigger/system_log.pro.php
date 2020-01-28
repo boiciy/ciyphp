@@ -14,50 +14,60 @@ $msql->order(get('order','id desc'));
 $pageno = getint('pageno', 1);$pagecount = 20;
 $msql->limit($pageno,$pagecount);
 $rows = $mydata->get($msql,$mainrowcount);
-function json_setact() {
+function json_read() {
     global $mydata;
     global $rsuser;
     global $table;
     if(nopower('admin'))
         return errjson('您无权操作');
     $post = new ciy_post();
-    $act = $post->get('act');
     $ids = $post->get('ids');
-    if($act === 'read')
-    {
-        $csql = new ciy_sql($table);
-        $csql->where('status',0);
-        $csql->where('id in',$ids);
-        $updata = array();
-        $updata['status'] = 1;
-        $updata['readid'] = $rsuser['id'];
-        $execute = $mydata->data($updata)->set($csql);
-        if ($execute === false)
-            return errjson('操作失败:'.$mydata->error);
-    }
-    if($act === 'lock')
-    {
-        $csql = new ciy_sql($table);
-        $csql->where('id in',$ids);
-        $updata = array();
-        $updata['status'] = 2;
-        $updata['readid'] = $rsuser['id'];
-        $execute = $mydata->data($updata)->set($csql);
-        if ($execute === false)
-            return errjson('操作失败:'.$mydata->error);
-    }
-    if($act === 'unlock')
-    {
-        $csql = new ciy_sql($table);
-        $csql->where('id in',$ids);
-        $updata = array();
-        $updata['status'] = 1;
-        $updata['readid'] = $rsuser['id'];
-        $execute = $mydata->data($updata)->set($csql);
-        if ($execute === false)
-            return errjson('操作失败:'.$mydata->error);
-        savelog('LOG', '解锁ID：'.$ids);
-    }
+    $csql = new ciy_sql($table);
+    $csql->where('status',0);
+    $csql->where('id in',$ids);
+    $updata = array();
+    $updata['status'] = 1;
+    $updata['readid'] = $rsuser['id'];
+    $execute = $mydata->data($updata)->set($csql);
+    if ($execute === false)
+        return errjson('操作失败:'.$mydata->error);
+    return succjson();
+}
+function json_lock() {
+    global $mydata;
+    global $rsuser;
+    global $table;
+    if(nopower('admin'))
+        return errjson('您无权操作');
+    $post = new ciy_post();
+    $ids = $post->get('ids');
+    $csql = new ciy_sql($table);
+    $csql->where('id in',$ids);
+    $updata = array();
+    $updata['status'] = 2;
+    $updata['readid'] = $rsuser['id'];
+    $execute = $mydata->data($updata)->set($csql);
+    if ($execute === false)
+        return errjson('操作失败:'.$mydata->error);
+    return succjson();
+}
+function json_unlock() {
+    global $mydata;
+    global $rsuser;
+    global $table;
+    if(nopower('admin'))
+        return errjson('您无权操作');
+    $post = new ciy_post();
+    $ids = $post->get('ids');
+    $csql = new ciy_sql($table);
+    $csql->where('id in',$ids);
+    $updata = array();
+    $updata['status'] = 1;
+    $updata['readid'] = $rsuser['id'];
+    $execute = $mydata->data($updata)->set($csql);
+    if ($execute === false)
+        return errjson('操作失败:'.$mydata->error);
+    savelog('LOG', '解锁ID：'.$ids);
     return succjson();
 }
 function json_clear() {

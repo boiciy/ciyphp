@@ -12,7 +12,7 @@
         <ul><?php echo create_li($code_user_level,$liid);?>
         </ul>
         <div class="ciy-tab-box">
-            <form methodd="get" action="">
+            <form method="get" action="">
                 <div class="form-group inline">
                     <label>ID</label>
                     <div><input type="text" name="eid" value="<?php echo get('eid');?>" style="width:10em;"/></div>

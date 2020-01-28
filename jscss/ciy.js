@@ -1,6 +1,6 @@
 /*
  * 开源作者：众产国际产业公会  http://ciy.cn/code
- * 版本：0.6.1
+ * 版本：0.6.2
  */
 'use strict';
 function uperr(err,msg){
@@ -40,8 +40,10 @@ function ciy_fastfunc(confirmmsg,func,postparam,succfunc){
 }
 function callfunc(funcname, post, successfunc, opt){//opt  fail,complete,headers,timeout
     opt = opt || {};
-    opt.murl = opt.murl || "";
-    opt.url = opt.murl + "?json=true&func="+funcname;
+    if(funcname.indexOf('?') > -1 || funcname.indexOf('://') > -1)
+        opt.url = funcname;
+    else
+        opt.url = "?json=true&func="+funcname;
     opt.data = post;
     opt.success = function(data,xhr){
         try{
@@ -206,23 +208,15 @@ function _ciy_getform_dom(dom)
         }
         else if(els[i].getAttribute('type') == 'radio')
         {
+            retdata[els[i].name+"_name"] = els[i].parentNode.textContent;
             if(els[i].checked)
-            {
                 retdata[els[i].name] = els[i].value;
-                retdata[els[i].name+"_name"] = els[i].parentNode.textContent;
-            }
             else
-            {
-                if(retdata[els[i].name] === undefined)
-                {
-                    retdata[els[i].name] = '';
-                    retdata[els[i].name+"_name"] = '';
-                }
-            }
+                retdata[els[i].name] = 'false';
         }
         else if(els[i].getAttribute('type') == 'checkbox')
         {
-            if(els[i].nextElementSibling != null && els[i].nextElementSibling.tagName == 'Y')
+            if(els[i].nextElementSibling != null && els[i].nextElementSibling.tagName == 'Y')//处理开关按钮
             {
                 retdata[els[i].name] = els[i].checked;
                 if(els[i].checked)
@@ -246,7 +240,10 @@ function _ciy_getform_dom(dom)
         }
         else
         {
-            retdata[els[i].name] = els[i].value;
+            if(retdata[els[i].name] === undefined)
+                retdata[els[i].name] = els[i].value;
+            else
+                retdata[els[i].name] += "," + els[i].value;
         }
     }
     return retdata;
@@ -629,19 +626,25 @@ function ciy_table_adjust(domname,pathname){
     if(dom == null)
         return;
     pathname = pathname||location.pathname;
-    pathname = 'table_'+pathname;
+    pathname = '_t_'+pathname;
     var style = document.createElement('style');
     style.type = 'text/css';
     dom.appendChild(style);
     var itext = localStorage.getItem(pathname);
-    var trs = dom.querySelectorAll("th");
+    var htrs = dom.querySelectorAll("tr");
+    var trs = [];
+    for(var i=0;i<htrs.length;i++){
+    	if(htrs[i].querySelectorAll("th").length > 0)
+    		trs = htrs[i].querySelectorAll("th");
+    }
+    dom.setAttribute('_adjust',1);
     if(itext == null)
     {
         itext = '';
         for(var i=0;i<trs.length;i++)
         {
             if(trs[i].style.width != '')
-                itext+=domname+" tr > td:nth-child("+(i+1)+") > div { width: "+trs[i].style.width+" }";
+                itext+=domname+" tr > td:nth-child("+(i+1)+") > div { width: "+trs[i].style.width+";}";
         }
     }
     else
@@ -651,11 +654,13 @@ function ciy_table_adjust(domname,pathname){
         for(var i=0;i<trs.length;i++)
         {
             if(itms[i] && itms[i] != '')
-                itext+=domname+" tr > td:nth-child("+(i+1)+") > div { width: "+itms[i]+" }";
+                itext+=domname+" tr > td:nth-child("+(i+1)+") > div { width: "+itms[i]+"}";
         }
     }
-    for (var i = 0; i < trs.length; i++)
+    for (var i = 0; i < trs.length; i++){
       trs[i].style.width = null;
+      trs[i].setAttribute('_canadjust',1);
+    }
     style.innerText=itext;
     if(dom.scrollWidth <= dom.clientWidth)
         dom.style.borderRight = null;
@@ -665,7 +670,7 @@ function ciy_table_adjust(domname,pathname){
     {
         var longtime = null;
         dom.addEventListener("touchstart",function(ev){
-            if(ev.target.tagName != 'TH')
+            if(ev.target.getAttribute('_canadjust') != 1)
                 return;
             longtime = setTimeout(function(){
                 var index = 0;
@@ -732,7 +737,7 @@ function ciy_table_adjust(domname,pathname){
         document.addEventListener("mousedown",function(ev){
             if(dodrag == null)
                 return;
-            if(ev.target.tagName != 'TH')
+            if(ev.target.getAttribute('_canadjust') != 1)
                 return;
             var index = 0;
             for (var i = 0; i < trs.length; i++)
@@ -768,7 +773,7 @@ function ciy_table_adjust(domname,pathname){
         document.addEventListener("mouseup",function(ev){
             if(dodrag == null)
                 return;
-            if(ev.target.tagName != 'TH')
+            if(ev.target.getAttribute('_canadjust') != 1)
                 return;
             dodrag.mouseDown = false;
             dodrag = null;
@@ -800,7 +805,7 @@ function ciy_table_adjust(domname,pathname){
                     dom.style.borderRight = '1px solid #cccccc';
                 return;
             }
-            if(ev.target.tagName == 'TH')
+            if(ev.target.getAttribute('_canadjust') == 1)
             {
                 if(ev.target.clientWidth-ev.offsetX<5)
                 {
@@ -861,11 +866,11 @@ function ciy_table_popmenu(dom,menudom,modifymenufunc){
     if('ontouchend' in window)
     {
         var longtime = null;
-        $(dom).on("touchstart",'tr[data-id]',function(ev){
+        $(dom).on("touchstart",'[data-id]',function(ev){
             if($(menudom).css('display') != 'none')
                 return $(menudom).hide(200);
             longtime = setTimeout(function(){
-                $('tr[data-id]',dom).removeClass('selected');
+                $('[data-id]',dom).removeClass('selected');
                 $(ev.currentTarget).addClass('selected');
                 $(menudom).attr('data-selectid',$(ev.currentTarget).attr('data-id'));
                 var touch = ev.originalEvent.touches[0];
@@ -883,8 +888,8 @@ function ciy_table_popmenu(dom,menudom,modifymenufunc){
     }
     else
     {
-        $(dom).on("contextmenu",'tr[data-id]',function(ev){
-            $('tr[data-id]',dom).removeClass('selected');
+        $(dom).on("contextmenu",'[data-id]',function(ev){
+            $('[data-id]',dom).removeClass('selected');
             $(ev.currentTarget).addClass('selected');
             $(menudom).attr('data-selectid',$(ev.currentTarget).attr('data-id'));
             if(typeof(modifymenufunc) == 'function')//根据选择项，动态调整菜单用
@@ -898,26 +903,25 @@ function ciy_table_popmenu(dom,menudom,modifymenufunc){
     }
 }
 function ciy_select_init(dom){
-    $(dom).on("click",'tr[data-id]',function(ev){
+    $(dom).on("click",'[data-id]',function(ev){
         $(ev.currentTarget).toggleClass('selected');
     });
 }
 function ciy_select_all(dom){
-    $('tr[data-id]',dom).each(function () {
+    $('[data-id]',dom).each(function () {
         $(this).addClass("selected");
     });
 }
 function ciy_select_diff(dom){
-    $('tr[data-id]',dom).each(function () {
+    $('[data-id]',dom).each(function () {
         $(this).toggleClass("selected");
     });
 }
-function ciy_select_act(dom,act,confirmmsg,postparam,successfunc){
+function ciy_select_act(dom,funcname,confirmmsg,postparam,successfunc){
     if(typeof(postparam) != 'object')
         postparam = {};
-    postparam.act = act;
     var array = new Array();
-    $('tr[data-id]',dom).each(function () {
+    $('[data-id]',dom).each(function () {
         if ($(this).hasClass("selected"))
             array.push($(this).attr("data-id"));
     })
@@ -929,7 +933,7 @@ function ciy_select_act(dom,act,confirmmsg,postparam,successfunc){
         ciy_alert(confirmmsg,function(btn){
             if(btn == "继续")
             {
-                callfunc("setact",postparam,function(json){
+                callfunc(funcname,postparam,function(json){
                     if(typeof(successfunc) === "function")
                         successfunc();
                     else
@@ -940,7 +944,7 @@ function ciy_select_act(dom,act,confirmmsg,postparam,successfunc){
     }
     else
     {
-        callfunc("setact",postparam,function(json){
+        callfunc(funcname,postparam,function(json){
             if(typeof(successfunc) === "function")
                 successfunc();
             else
@@ -1341,7 +1345,12 @@ function getfloat(val, defval) {
     else
         return ret;
 }
-function formattime(dt,bestr){
+function fixint(num, length) {
+  if ((num + "").length>length)
+    return num;
+  return (Array(length).join('0') + num).slice(-length);
+}
+function ciy_formatspantime(dt,bestr){
     if(bestr == undefined)
         bestr = "";
     var diff = (new Date() - new Date(dt));
@@ -1359,6 +1368,42 @@ function formattime(dt,bestr){
     if(diff < 31536000)//12月以内
         return parseInt(diff/2592000) +"月" + bestr;
     return parseInt(diff/31536000) +"年" + bestr;
+}
+function ciy_formatdatetime(time,format){
+	var t;
+	if (time == -1)
+		t = new Date();
+	else if (/^\d+$/.test(time)) {
+		if (time == 0)
+			return '--';
+		t = new Date(time * 1000);
+	} else {
+		t = new Date(time.replace(/\-/g, '/'));
+	}
+	if (isNaN(t.getTime()))
+		return 'ERR';
+	if(!format)
+		format = 'Y-m-d H:i';
+	var ret = format;
+	ret = ret.replace('yyyy', t.getFullYear()).replace('Y', t.getFullYear());
+	ret = ret.replace('y', (t.getFullYear() + "").substr(2));
+	ret = ret.replace('m', fixint(t.getMonth() + 1, 2));
+	ret = ret.replace('n', t.getMonth() + 1);
+	ret = ret.replace('d', fixint(t.getDate(), 2));
+	ret = ret.replace('j', t.getDate());
+	ret = ret.replace('H', fixint(t.getHours(), 2));
+	ret = ret.replace('G', t.getHours());
+	ret = ret.replace('h', fixint(t.getHours() % 12, 2));
+	ret = ret.replace('g', t.getHours() % 12);
+	ret = ret.replace('i', fixint(t.getMinutes(), 2));
+	ret = ret.replace('sss', fixint(t.getMilliseconds(), 3));
+	ret = ret.replace('s', fixint(t.getSeconds(), 2));
+	if (t.getHours() < 12)
+		ret = ret.replace('A', 'AM').replace('a', 'am');
+	else
+		ret = ret.replace('A', 'PM').replace('a', 'pm');
+	ret = ret.replace('w', t.getDay());
+	return ret;
 }
 function ciy_getstrparam(str,split){
     var strs = str.split(split);

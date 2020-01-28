@@ -12,6 +12,7 @@
 引用<code>pullinput.js</code>，页面初始化时，在input文本框上绑定pull函数。<br/>
 　catadata参数（必填）：下拉列表可显示的数组，一般包括codeid,title（表结构详见<a href="http://ciyphp.ciy.cn/admin/" target="_blank">后台演示</a>的代码维护）<br/>
 　maxlist参数：默认同时显示最多条数。默认8条。<br/>
+　multi参数：允许同时最多选择条数。默认1条(单选)。<br/>
 　ulext参数：UL标签的属性字符串拼接，很灵活。一般用于自定义style、class或data等。<br/>
 　lifunc参数：带val和cata两个参数的函数。自定义弹出条目li样式和显示内容<br/>
 　valfunc参数：带li参数的函数。自定义最终在文本框中输入的内容，默认为li内的文本。<br/>
@@ -30,57 +31,70 @@ $('input[name=gbstr]').pull({
 </pre>
 
 <blockquote>运行</blockquote>
+<form>
     <div class="form-group">
-        <label>默　认：</label>
-        <div style="position:relative;">
-            <input type="text" name="gbstr" value=""/> 请输入 df <code>或</code> hx <code>或</code> 地 <code>或</code> 和
+        <label>单条选择：</label>
+        <div>
+	        <input type="text" name="inp1" value=""/>
+	         请输入 20 <code>或</code> zc <code>或</code> 众产
         </div>
     </div>
     <div class="form-group">
-        <label>自定义：</label>
-        <div style="position:relative;">
-            <input type="text" name="gbstr2" value=""/> 请输入 30 <code>或</code> 李 <code>或</code> z
+        <label>多条选择：</label>
+        <div>
+	        <div><table><tr><td style="flex-wrap: wrap;display:flex;"></td><td style="vertical-align:top;">
+	        	<input type="text" name="inp2" value="IT工程规范,其他"/>
+	        </td></tr></table></div>
         </div>
+       	<span> 请输入 20 <code>或</code> zc <code>或</code> 众产</span>
     </div>
-
+                    <div class="form-group">
+                        <div style='text-align:center;'>
+                        <button type="button" class="btn" onclick="update(this);">提交按钮</button>
+                        </div>
+                    </div>
+</form>    
   </div>
+  <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 <script src="/jscss/jquery-1.12.4.min.js"></script>
 <script src="/jscss/ciy.js"></script>
 <script src="/jscss/pinyin.js"></script>
 <script src="/jscss/pullinput.js"></script>
 <script type="text/javascript">
 'use strict';
+//第一个默认初始化
+var datas = [{"codeid":"001","title":"众产未来"},
+	{"codeid":"101","title":"众产农林"},
+	{"codeid":"102","title":"智慧农牧"},
+	{"codeid":"201","title":"信任链"},
+	{"codeid":"202","title":"信任生态"},
+	{"codeid":"203","title":"无条件信任"},
+	{"codeid":"204","title":"督控体系"},
+	{"codeid":"205","title":"信息披露"},
+	{"codeid":"210","title":"IT工程规范"},
+	{"codeid":"300","title":"事业白皮书"}];
+function update(dom) {
+    var postparam = ciy_getform(dom);
+    console.log(postparam);
+    var pdatas = postparam.inp2_data.split(',');
+    var pindexs = postparam.inp2_index.split(',');
+    for(var i in pindexs){
+    	if(pindexs[i] > -1)
+    		console.log(datas[pindexs[i]]);
+    	else
+    		console.log('自定义:'+pdatas[i]);
+    }
+    var j = JSON.stringify(postparam);
+    j = j.replace(/,/g,',<br/>');
+    ciy_alert(j+"<br/><code>详细JSON，请F12看console信息</code>");
+}
 $(function(){
-	//第一个默认初始化
-    $('input[name=gbstr]').pull({
-        catadata:[{"id":"52","upid":"0","nums":"0","types":"6a.cx","codeid":"HXN","title":"\u548c\u8c10N","extdata":""},
-            {"id":"53","upid":"0","nums":"0","types":"6a.cx","codeid":"DFD","title":"\u5730\u65b9D","extdata":""}]
+    $('input[name=inp1]').pull({
+        catadata:datas
     });
-	//第二个自定义初始化
-    var data = [{"id":"6","eno":"0412333","truename":"\u5730\u65b91"},
-        {"id":"7","eno":"6264133","truename":"\u624b\u5206\u5f97\u591a"},
-        {"id":"8","eno":"7345523","truename":"\u6731\u5b66\u5112"},
-        {"id":"11","eno":"1743002","truename":"\u674e\u53f8\u673a"},
-        {"id":"12","eno":"1831001","truename":"\u8d75\u4e00"},
-        {"id":"13","eno":"2531010","truename":"\u94b1\u4e8c"},
-        {"id":"14","eno":"3741011","truename":"\u5b59\u4e09"},
-        {"id":"15","eno":"4661015","truename":"\u674e\u56db"},
-        {"id":"17","eno":"5921016","truename":"\u5434\u516d"},
-        {"id":"19","eno":"8531001","truename":"\u4e8e\u98de"}];
-	//js将汉字转成拼音
-    for(var i=0;i<data.length;i++)
-    	data[i].truename_py = ciyext_pinyin_first(data[i].truename);
-    $('input[name=gbstr2]').pull({
-        catadata:data,
-        lifunc:function(val,cata){
-            if(cata.truename.toUpperCase().indexOf(val) > -1 || cata.truename_py.toUpperCase().indexOf(val) > -1 || cata.eno.toUpperCase().indexOf(val) > -1)
-                return '<li data-dbid="'+cata.id+'" data-eno="'+cata.eno+'" data-truename="'+cata.truename+'">'+cata.truename+' - <code>'+cata.eno+'</code></li>';
-            return '';
-        },
-        valfunc:function(li){
-            console.log(li);
-            return $(li).attr('data-truename');
-        }
+    $('input[name=inp2]').pull({
+        catadata:datas,
+        multi:10
     });
 });
 </script>

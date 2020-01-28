@@ -40,6 +40,20 @@ function json_update() {
     $chkrow = $mydata->getone($csql);
     if(is_array($chkrow) && $chkrow['id'] != $id)
         return errjson('手机号重复');
+    $pass = $post->get('password');
+    if(!empty($pass)){
+        if(strlen($pass) < 6)
+            return errjson('密码应至少6位');
+        if(!preg_match('/[@#$%^&*()_+!]/',$pass))
+            return errjson('密码应包含特殊符号@#$%^&*()_+!等');
+        if(!preg_match('/[a-z]/',$pass))
+            return errjson('密码应包含小写字母');
+        if(!preg_match('/[A-Z]/',$pass))
+            return errjson('密码应包含大写字母');
+        if(!preg_match('/[0-9]/',$pass))
+            return errjson('密码应包含数字');
+        $pass = md5($pass.ciy_config::$conmmonkey);
+    }
     try{
         $mydata->begin();
         $updata = array();
@@ -48,9 +62,8 @@ function json_update() {
         $updata['departid'] = $departid;
         $updata['depart'] = getdepart($departid);
         $updata['mobile'] = $mobile;
-        $pass = $post->get('password');
         if(!empty($pass))
-            $updata['password'] = md5($pass.ciy_config::$conmmonkey);
+            $updata['password'] = $pass;
         $updata['status'] = $post->getbool('status')?1:10;
         $updata['sex'] = $post->getbool('sex')?1:2;
         $updata['leader'] = $post->getbool('leader')?1:2;

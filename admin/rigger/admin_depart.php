@@ -8,7 +8,7 @@
 <body>
 <div class="container">
     <div class="crumbs">当前位置： 系统管理 → 部门管理</div>
-    <form methodd="get" action="">
+    <form method="get" action="">
         <div class="form-group inline">
             <label>部门名称</label>
             <div><input type="text" name="title" value="<?php echo get('title');?>" style="width:10em;"/></div>

@@ -1,0 +1,115 @@
+<!DOCTYPE html> <html>
+<head>
+<title>12 Grid</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+<link href="/jscss/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <div class='container'>
+    <div>当前位置： 浏览器信息</div>
+    <blockquote>浏览器信息</blockquote>
+    <div style="position:fixed;top:0.5em;right:1em;">
+	    <button class="btn" onclick="getbrowser();">获取窗口参数</button>
+	    <button class="btn" onclick="getdiv();">获取DIV参数</button>
+    </div>
+    <div id="div_browser">
+    </div>
+    <div id="div1" style="margin:3em;padding:1em;border:2px solid #cccccc;width:300px;">
+	    <div id="div2" style="margin:2em;padding:1em;border:2px solid #cccccc;height:100px;">
+	    </div>
+    </div>
+    <div style="width:2000px;height:2px;"></div>
+    1<br/><br/><br/><br/><br/>
+    2<br/><br/><br/><br/><br/>
+    3<br/><br/><br/><br/><br/>
+    4<br/><br/><br/><br/><br/>
+    5<br/><br/><br/><br/><br/>
+    6<br/><br/><br/><br/><br/>
+    7
+    <div id="div_msg">
+    </div>
+  </div>
+  
+
+<script src="/jscss/jquery-1.12.4.min.js"></script>
+<script src="/jscss/ciy.js"></script>
+<script type="text/javascript">
+'use strict';
+$(function(){
+	var html = '';
+	html += "色彩深度: <code>" + screen.colorDepth + "</code><br/>";
+	html += "色彩分辨率: <code>" + screen.pixelDepth + "</code><br/>";
+	html += "document.URL: <code>" + document.URL + "</code><br/>";
+	html += "location.host: <code>" + location.host + "</code><br/>";
+	html += "location.hostname: <code>" + location.hostname + "</code><br/>";
+	html += "location.href: <code>" + location.href + "</code><br/>";
+	html += "location.origin: <code>" + location.origin + "</code><br/>";
+	html += "location.pathname: <code>" + location.pathname + "</code><br/>";
+	html += "location.port: <code>" + location.port + "</code><br/>";
+	html += "location.protocol: <code>" + location.protocol + "</code><br/>";
+	html += "浏览器代号: <code>" + navigator.appCodeName + "</code><br/>";
+	html += "浏览器名称: <code>" + navigator.appName + "</code><br/>";
+	html += "浏览器版本: <code>" + navigator.appVersion + "</code><br/>";
+	html += "启用Cookies: <code>" + navigator.cookieEnabled + "</code><br/>";
+	html += "语言: <code>" + navigator.language + "</code><br/>";
+	html += "CPU核心数: <code>" + navigator.hardwareConcurrency + "</code><br/>";
+	html += "触控点数: <code>" + navigator.maxTouchPoints + "</code><br/>";
+	html += "是否在线: <code>" + navigator.online + "</code><br/>";
+	html += "硬件平台: <code>" + navigator.platform + "</code><br/>";
+	html += "内核: <code>" + navigator.product + "</code><br/>";
+	html += "内核版本: <code>" + navigator.productSub + "</code><br/>";
+	html += "浏览器作者: <code>" + navigator.vendor + "</code><br/>";
+	html += "浏览器作者版本: <code>" + navigator.vendorSub + "</code><br/>";
+	html += "用户代理语言: <code>" + navigator.systemLanguage + "</code><br/>";
+	html += "用户代理: <code>" + navigator.userAgent + "</code><br/>";
+	html += "Cookies: <code>" + document.cookie + "</code><br/>";
+	html += "Referrer: <code>" + document.referrer + "</code><br/>";
+	//console.log(navigator);
+    $('#div_browser').append(html);
+});
+function getbrowser(){
+	var html = '';
+	html += "总宽度,高度: " + screen.width + "*" + screen.height + "<br/>";
+	html += "可用宽度,高度: " + screen.availWidth + "*" + screen.availHeight + "<br/>";
+	html += "浏览器窗口尺寸1: " + window.innerWidth + "*" + window.innerHeight + "<br/>";
+	html += "浏览器窗口尺寸2: " + document.documentElement.clientWidth + "*" + document.documentElement.clientHeight + "<br/>";
+	html += "浏览器窗口尺寸3: " + document.body.clientWidth + "*" + document.body.clientHeight + "<br/>";
+	var w=window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+	var h=window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+	html += "浏览器窗口尺寸: " + w + "*" + h + "<br/>";
+	html += "浏览器窗口外部尺寸: " + window.outerWidth + "*" + window.outerHeight + "<br/>";
+	html += "屏幕窗口左上坐标: " + window.screenX + "*" + window.screenY + "<br/>";
+	html += "屏幕窗口左上坐标: " + window.screenLeft + "*" + window.screenTop + "<br/>";
+	html += "滚动位置: " + window.pageXOffset + "*" + window.pageYOffset + "<br/>";
+	html += "滚动位置old1: " + document.body.scrollLeft + "*" + document.body.scrollTop + "<br/>";
+	html += "滚动位置old2: " + document.documentElement.scrollLeft + "*" + document.documentElement.scrollTop + "<br/>";
+    ciy_alert(html);
+    $('#div_msg').append('<div style="float:left;display:inline-block;padding:0.5em;border-radius:0.5em;border:1px solid #cccccc;margin:0.5em;">'+html+"</div>");
+}
+function getdiv(){
+	var html = '';
+	var div1 = document.getElementById('div1');
+	html += "外层DIV宽高: " + div1.offsetWidth + "*" + div1.offsetHeight + "<br/>";
+	html += "外层DIV左上: " + div1.offsetLeft + "*" + div1.offsetTop + "<br/>";
+	html += "外层DIV滚动宽高: " + div1.scrollWidth + "*" + div1.scrollHeight + "<br/>";
+	html += "外层DIV滚动左上: " + div1.scrollLeft + "*" + div1.scrollTop + "<br/>";
+	html += "外层DIV可视宽高: " + div1.clientWidth + "*" + div1.clientHeight + "<br/>";
+	var div1rect = div1.getBoundingClientRect();
+	html += "外层DIV LTRB: " + div1rect.left + "," + div1rect.top + "," + div1rect.right + "," + div1rect.bottom + "<br/>";
+	html += "外层DIV WHXY: " + div1rect.width + "," + div1rect.height + "," + div1rect.x + "," + div1rect.y + "<br/>";
+
+	var div2 = document.getElementById('div2');
+	html += "内层DIV宽高: " + div2.offsetWidth + "*" + div2.offsetHeight + "<br/>";
+	html += "内层DIV左上: " + div2.offsetLeft + "*" + div2.offsetTop + "<br/>";
+	html += "内层DIV滚动宽高: " + div2.scrollWidth + "*" + div2.scrollHeight + "<br/>";
+	html += "内层DIV滚动左上: " + div2.scrollLeft + "*" + div2.scrollTop + "<br/>";
+	html += "内层DIV可视宽高: " + div2.clientWidth + "*" + div2.clientHeight + "<br/>";
+	var div2rect = div2.getBoundingClientRect();
+	html += "内层DIV LTRB: " + div2rect.left + "," + div2rect.top + "," + div2rect.right + "," + div2rect.bottom + "<br/>";
+	html += "内层DIV WHXY: " + div2rect.width + "," + div2rect.height + "," + div2rect.x + "," + div2rect.y + "<br/>";
+    $('#div_msg').append('<div style="float:left;display:inline-block;padding:0.5em;border-radius:0.5em;border:1px solid #cccccc;margin:0.5em;">'+html+"</div>");
+}
+</script>
+</body></html>

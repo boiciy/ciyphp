@@ -2,7 +2,7 @@
 /* =================================================================================
  * 版权声明：保留开源作者及版权声明前提下，开源代码可进行修改及用于任何商业用途。
  * 开源作者：众产国际产业公会  http://ciy.cn/code
- * 版本：0.6.0
+ * 版本：0.6.1
 ====================================================================================*/
 /*
  * acommon.php 扩展函数库。
@@ -197,7 +197,7 @@ function showpage($pageno,$pagecount, $rowcount, $showpages = 5) {
         $pagestr.= '<a href="' . urlparam('', array('pageno' => $pagemax)) . '">&gt;&gt;</a>';
     }
     if($pagemax > $showpages)
-        $pagestr.= '<input class="n" type="text" name="topage" value="'.$pageno.'" style="width:3em;height:30px;text-align:center;margin:0 4px;"/><button onclick="location.href=\''.urlparam('', array('pageno' => '[topage]')).'\'.replace(\'[topage]\',$(\'input[name=topage]\').val());" class="btn btn-default">GO</button>';
+        $pagestr.= '<input class="n" type="text" name="topage" value="'.$pageno.'" style="width:3em;min-height:2.2em;height:2.2em;text-align:center;margin:0 4px;"/><button onclick="location.href=\''.urlparam('', array('pageno' => '[topage]')).'\'.replace(\'[topage]\',$(\'input[name=topage]\').val());" class="btn btn-default">GO</button>';
     $pagestr.= '</div><div class="clearfix"></div>';
     return $pagestr;
 }
@@ -213,7 +213,7 @@ function showorder($field)
         else
             $asc = ' active';
     }
-    return '<i class="asc'.$asc.'" title="从小到大，升序排序" onclick="location.href=\''.urlparam('', array('order' => $field)).'\';"></i><i class="desc'.$desc.'" title="从大到小，降序排序" onclick="location.href=\''.urlparam('', array('order' => $field.' desc')).'\';"></i>';
+    return '<i class="asc'.$asc.'" title="升序排序" onclick="location.href=\''.urlparam('', array('order' => $field)).'\';"></i><i class="desc'.$desc.'" title="降序排序" onclick="location.href=\''.urlparam('', array('order' => $field.' desc')).'\';"></i>';
 }
 function refreshpower($uid){
     global $mydata;
@@ -537,6 +537,19 @@ function img2thumb($src_img, $dst_img, $width = 75, $height = 75, $cut = false,$
     imagedestroy($src);
     return true;
 }
+//addmessage('用户注册', 10, '有新用户注册<br/><a>前往查看</a>','来自系统');
+function addmessage($types, $adminid, $content, $frommsg = '', $fromuid = 0){
+    global $mydata;
+    $updata = array();
+    $updata['types'] = $types;
+    $updata['userid'] = $adminid;
+    $updata['content'] = $content;
+    $updata['status'] = 1;
+    $updata['fromuid'] = $fromuid;
+    $updata['frommsg'] = $frommsg;
+    $updata['addtimes'] = time();
+    return $mydata->data($updata)->set(new ciy_sql('p_admin_msg'));
+}
 function savelogdb($types,$oldrow, $newrow, $msg = ''){
     if(is_array($oldrow) && is_array($newrow))
     {
@@ -584,6 +597,7 @@ function savelog($types,$msg,$isrequest=false){
         $msg.=' POST:';
         foreach ($_POST as $key => $value)
             $msg.=$key.'='.$value.'&';
+        $msg.=' JSON:'.file_get_contents('php://input');
     }
     $updata = array();
     $updata['types'] = $types;
@@ -639,8 +653,12 @@ function verifyadmin($errfunc = null) {
                     $userrow = $mydata->getone($csql);
                     if($userrow === false)
                         $err = $mydata->error;
-                    else if(is_array($userrow))
+                    else if(is_array($userrow)){
+                        if($userrow['status'] != 10)
+                            $err = '您的账号被禁用，请联系管理员';
+                        else
                         return $userrow;
+                    }
                 }
             }
             else

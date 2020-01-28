@@ -135,25 +135,20 @@ function json_multiadd() {
     }
     return succjson();
 }
-function json_setact() {
+function json_del() {
     global $mydata;
     global $rsuser;
     global $table;
     if(nopower('admin'))
         return errjson('您无权操作');
     $post = new ciy_post();
-    $act = $post->get('act');
     $ids = $post->get('ids');
-    if($act === 'del')
-    {
-        $post = new ciy_post();
-        $csql = new ciy_sql($table);
-        $csql->where('id in',$ids);
-        $execute = $mydata->delete($csql);
-        if ($execute === false)
-            return errjson('删除数据库失败.' . $mydata->error);
-        savelog($table,'批量删除('.$ids.')');
-        return succjson();
-    }
+    $post = new ciy_post();
+    $csql = new ciy_sql($table);
+    $csql->where('id in',$ids);
+    $execute = $mydata->delete($csql);
+    if ($execute === false)
+        return errjson('删除数据库失败.' . $mydata->error);
+    savelog($table,'批量删除('.$ids.')');
     return succjson();
 }

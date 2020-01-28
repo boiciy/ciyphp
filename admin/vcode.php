@@ -8,7 +8,7 @@
 <body>
 <div class="container">
     <div class="crumbs">当前位置： 用户中心 → 验证码管理</div>
-    <form methodd="get" action="">
+    <form method="get" action="">
         <div class="form-group inline">
             <label>手机号</label>
             <div><input type="text" name="mobile" value="<?php echo get('mobile');?>" style="width:10em;"/></div>

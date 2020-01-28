@@ -11,14 +11,15 @@ class ciy_config {
         if($index == 1)
         {
             $ret['type'] = 'pdo';
-            $ret['mode'] = '';//空 单服务器模式；ns 一主多从模式；ms 单库多主多从模式。请替换专用data.php文件
+            $ret['mode'] = '';//空 单服务器模式；ns 一主多从模式；ms 多主多从模式。请替换专用data.php文件
             $ret['conn'] = array();
             $ret['conn'][] = array(
                 'dsn'=>'mysql:host=127.0.0.1;dbname=ciyphp;port=3306;',
                 //mysql:host=127.0.0.1;dbname=ciyphp;port=3306;                     MySQL/MariaDB
                 //pgsql:host=localhost;port=5432;dbname=ciyphp;                     PostgreSQL
                 //odbc:Driver={SQL Server};Server=127.0.0.1;Database=ciyphp         ODBC MSSQL
-                //oci:dbname=127.0.0.1:1521/ciyphp         ODBC MSSQL
+                //sqlsrv:Server=127.0.0.1;Database=ciyphp                           官方 MSSQL
+                //oci:dbname=127.0.0.1:1521/ciyphp                                  ODBC Oracle
                 'user'=>'ciyphp',
                 'pass'=>'CiyPHP',
                 'timeout'=>5,//数据库连接超时时间，默认5秒

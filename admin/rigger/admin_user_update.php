@@ -26,7 +26,7 @@
             <div><input type="text" name="mobile" style='width:15em;' value="<?php echo @$updaterow['mobile'];?>"/></div>
         </div>
         <div class="form-group inline">
-            <label style="width:6em;">重设密码</label>
+            <label style="width:6em;"><?php echo ($id== 0)?'初始密码':'重设密码'?></label>
             <div><input type="text" name="password" style='width:15em;' value=""/></div>
         </div>
         <div class="form-group inline">
@@ -103,7 +103,7 @@ function select_depart(dom)
         frame:'rigger/admin_depart_select.php?id='+departid,
         nobutton:true,
         cb:function(btn,data){
-            callfunc("getdepart",'id='+data.id,function(json){
+            callfunc("admin_depart_select.php?json=true&func=getdepart",'id='+data.id,function(json){
                 $('#departname').text(json.depart);
                 $('input[name=departid]').val(data.id);
                 var roles = json.defroles.split(',');
@@ -118,7 +118,7 @@ function select_depart(dom)
                     }
                     inprole[res].checked = sel;
                 });
-            },{murl:'admin_depart_select.php'});
+            });
         }
     });
 }
@@ -127,10 +127,12 @@ function formsubmit(dom)
     var postparam = ciy_getform(dom);
     if (postparam._check)
         return ciy_alert(postparam._check);
-    if(postparam.id == 0)
-    {
+    if(postparam.id == 0){
         if (postparam.password === "")
             return ciy_alert("请填写密码");
+    }
+    if(!postparam.role){
+        return ciy_alert("请选择角色");
     }
     callfunc("update",postparam,function(json){
         ciy_refresh();

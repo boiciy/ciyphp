@@ -25,76 +25,42 @@ function ciy_ImportCSV($file){
     }
     else
         $line = mb_convert_encoding($fh, 'UTF-8', 'GBK');
-    $line .= "\n";
-    $ret = array();
-    $syh = -1;
-    $offset = 0;
-    while(true)
-    {
-        //查找dot和"。
-        $inddot = strpos($line,$dot,$offset);
-        $ind = strpos($line,'"',$offset);
-        $indeof = strpos($line,"\r\n",$offset);
-        //pr($inddot.','.$ind.','.$indeof);
-        if($inddot === false && $ind === false && $indeof === false)
-            break;
-        if($inddot === false)
-            $inddot = 2147483600;
-        if($ind === false)
-            $ind = 2147483600;
-        if($indeof === false)
-            $indeof = 2147483600;
-        if($ind<$inddot && $ind < $indeof)
-        {//处理双引号
-            if($syh == -1)
-            {
-                $syh = $ind+1;//双引号开始
-                $offset = $ind + 1;
-            }
+    $csvlines = array();
+    $csvfields = array();
+    $csvdata = '';
+    $bcontent = false;
+    $linecnt = strlen($line)-1;
+    if($line[$linecnt] != "\n"){
+        $line .= "\n\n";
+        $linecnt+=2;
+    }else{
+        $line .= "\n";
+        $linecnt++;
+    }
+    for($i=0;$i<$linecnt;$i++){
+        if($line[$i] == "\""){
+            if($line[$i+1] == "\"")
+                $csvdata .= $line[$i];
             else
-            {
-                if($line[$ind+1] == '"')
-                    $offset = $ind+2;
-                else
-                {
-                    $ret[] = str_replace('""','"',substr($line,$syh,$ind-$syh));
-                    if($line[$ind+1] == $dot)
-                        $offset = $ind + 2;
-                    else
-                        $offset = $ind + 1;
-                    $syh = -1;
-                }
-            }
+            $bcontent = !$bcontent;
         }
-        else if($inddot < $ind && $inddot < $indeof)
-        {//处理分隔符
-            if($syh == -1)
-            {
-                $ret[] = substr($line,$offset,$inddot-$offset);
-                $offset = $inddot + 1;
-            }
-            else
-            {
-                $ret[] = substr($line,$offset,$ind-$syh);
-                $offset = $ind + 2;
-                $syh = -1;
-            }
+        else if($bcontent){
+            $csvdata .= $line[$i];
+        }
+        else if($line[$i] == $dot){
+            $csvfields[] = $csvdata;
+            $csvdata = '';
+        }
+        else if($line[$i] == "\n"){
+            $csvfields[] = $csvdata;
+            $csvdata = '';
+            $csvlines[] = $csvfields;
+            $csvfields = array();
         }
         else
-        {//处理换行
-            if($syh == -1)
-            {
-                if($line[$indeof-1] != '"')
-                    $ret[] = substr($line,$offset,$indeof-$offset);
-                $csvret[] = $ret;
-                $ret = array();
-            }
-            $offset = $indeof + 2;
-        }
+            $csvdata .= $line[$i];
     }
-    if(count($ret)>0)
-        $csvret[] = $ret;
-    return $csvret;
+    return $csvlines;
 }
 
 /**

@@ -11,8 +11,8 @@
       
 <blockquote>汉字的拼音首字母</blockquote>
 引用<code>pinyin.js</code><br/>
-调用pinyin_first(str)函数，返回不带多音字信息的拼音首字母。<br/>
-调用pinyin_arr(str)函数，返回带多音字信息的拼音首字母集合。<br/>
+调用ciyext_pinyin_first(str)函数，返回不带多音字信息的拼音首字母。<br/>
+调用ciyext_pinyin_arr(str)函数，返回带多音字信息的拼音首字母集合。<br/>
 
 <br/>
 
@@ -20,9 +20,9 @@
 <pre>
 &lt;script src="/jscss/pinyin.js" type="text/javascript"></script>
 var str = '自行车';
-var pinyin = pinyin_first(str);
+var pinyin = ciyext_pinyin_first(str);
 console.log(pinyin);//ZXJ
-var pinyins = pinyin_arr(str);
+var pinyins = ciyext_pinyin_arr(str);
 console.log(pinyins);//["Z", "XH", "JC"]
 </pre>
 
@@ -46,14 +46,14 @@ $(function(){
 function pfirst()
 {
     var str = document.getElementsByName('gbstr')[0].value;
-    document.getElementById("gbresult").innerHTML=pinyin_first(str);
-    console.log(pinyin_first(str));
+    document.getElementById("gbresult").innerHTML=ciyext_pinyin_first(str);
+    console.log(ciyext_pinyin_first(str));
 }
 function parr()
 {
     var str = document.getElementsByName('gbstr')[0].value;
-    document.getElementById("gbresult").innerHTML=pinyin_arr(str);
-    console.log(pinyin_arr(str));
+    document.getElementById("gbresult").innerHTML=ciyext_pinyin_arr(str);
+    console.log(ciyext_pinyin_arr(str));
 }
 </script>
 </body></html>

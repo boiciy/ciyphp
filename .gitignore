@@ -1,9 +1,7 @@
 
 upload/
-/nbproject/private/
-/nbproject/
+private/
 .buildpath
 .project
 .settings/org.eclipse.php.core.prefs
-acommon.php
 .settings/org.eclipse.wst.common.project.facet.core.xml

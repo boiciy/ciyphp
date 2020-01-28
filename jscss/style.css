@@ -1,5 +1,5 @@
 /*
-Version: 0.6.1
+Version: 0.6.3
 http://www.iconfont.cn/ 生成，实际为空，本框架没有依赖ciyfont中的字体
 */
 @font-face {
@@ -526,7 +526,7 @@ pre {
     margin:1px;
     text-align: center;
     white-space: nowrap;
-    vertical-align: middle;
+    vertical-align: top;
     -ms-touch-action: manipulation;
     touch-action: manipulation;
     cursor: pointer;
@@ -547,6 +547,13 @@ pre {
 .btn-default:hover {
     background: #f6f6f6;
     color:#000000;
+}
+.btn.btn-svg {
+	padding:0.2em;
+}
+.btn.btn-svg>svg {
+	 width: 1.45em;
+	 height: 1.45em;
 }
 .btn>i {
     font-family: ciyfont;font-style: normal;
@@ -634,6 +641,7 @@ textarea[disabled],select[disabled],input[disabled],input[disabled]+i, .btn.disa
 }
 
 
+
 .ciy-tree-dot{cursor:pointer;display:inline-block;transition: all .2s;-webkit-transition: all .2s;}
 .ciy-tree-spread .ciy-tree-dot{transform:rotate(90deg);}
 
@@ -650,6 +658,7 @@ textarea[disabled],select[disabled],input[disabled],input[disabled]+i, .btn.disa
     border-left:1px solid #cccccc;
     margin-bottom:10px;
 }
+
 .table th{
     position: relative;
     padding:0.5em 1em;
@@ -679,7 +688,7 @@ textarea[disabled],select[disabled],input[disabled],input[disabled]+i, .btn.disa
 .table tr:hover{
     background:#daedf4;
 }
-.table tr:first-child{
+.table tr>th{
     background:#f0f0f0;
 }
 .table th>i{
@@ -789,9 +798,9 @@ textarea {
     width:100%;
 }
 select::-ms-expand { display: none; }
-select,textarea,input[type=text],input[type=password],input[type=email],input[type=url],input[type=number],input[type=range],input[type=search],input[type=color],input[type=date],input[type=datetime],input[type=time]{
+.input-multi,select,textarea,input[type=text],input[type=password],input[type=email],input[type=url],input[type=number],input[type=range],input[type=search],input[type=color],input[type=date],input[type=datetime],input[type=time]{
     display: inline-block;
-    height: 2.5em;
+    min-height: 2.5em;
     padding-left: 0.5em;
     padding-right: 0.5em;
     color: #555555;
@@ -811,6 +820,7 @@ input[type=checkbox],input[type=radio]{
     zoom:1.5;
     vertical-align: middle;
 }
+
 .formi{
     position: relative;
 }
@@ -889,6 +899,12 @@ input[type=checkbox],input[type=radio]{
 .formswitch>input:checked+y+n+i{
     margin-left:3em;
     background: #1E9FFF;
+}
+.formswitch.char4>input+y,.formswitch.char4>input+y+n{
+    min-width:6em;
+}
+.formswitch.char4>input:checked+y+n+i{
+    margin-left:5em;
 }
 input.imp{
     border: 1px solid #1f2129;
@@ -1139,6 +1155,7 @@ input.imp{
     width: 0.6em;
     height: 0.6em;
     padding: 0;
+    right: 0;
     border-radius: 50%;
     display: inline-block;
     text-align: center;
@@ -1148,7 +1165,8 @@ input.imp{
 .ciy-badge{
     position: absolute;
     top: 50%;
-    margin: -0.6em 0.5em 0;
+    right:0;
+    margin: -0.6em -0.5em 0;
     height: 1em;
     line-height: 1em;
     display: inline-block;
@@ -1215,12 +1233,17 @@ input.imp{
     border: 1px solid #cccccc;
     border-top:none;
 }
-.ciy-tab>div>div{
+.ciy-tab>div.ciy-tab-box:after{
+    display: table;
+    content: " ";
+    clear:both;
+}
+.ciy-tab>div>div.tabcont{
     display:none;
-    min-height:4em;
+    min-height:1em;
 }
 .ciy-tab>div>div.active{
-    display:block;
+    display:block!important;
 }
 .ciy-tab.ciy-tab-card>ul{
     background:#f6f6f6;
@@ -1293,22 +1316,23 @@ float: right;
 .ciy-page-txt {
 color: #969696;
 line-height: 1.5em;
+margin-right: 0.5em;
 display:inline-block;
 }
 .ciy-page .current {
 color: #FFFFFF;
 font-weight: bold;
-margin-left: 5px;
-padding: 6px 10px;
+padding: 1px 10px;
 background-color: #1E9FFF!important;
 cursor: pointer;
 }
 .ciy-page a {
 border: 1px solid #DDDDDD;
 color: #000000;
-margin-left: 5px;
-padding: 5px 9px;
+margin: 0 2px;
+padding: 0 9px;
 text-decoration: none;
+display:inline-block;
 }
 .ciy-page a:hover {
 background-color: #e1edf7;

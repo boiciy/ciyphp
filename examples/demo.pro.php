@@ -101,17 +101,13 @@ function json_del() {//Ajax交互函数，ciy_runJSON()调用。
         return errjson('删除失败:'.$mydata->error);
     return succjson();
 }
-function json_setact() {
+function json_read() {
     global $mydata;
     global $table;
     $post = new ciy_post();
-    $act = $post->get('act');
     $ids = $post->get('ids');
-    if($act === 'read')
-    {
-        $execute = $mydata->execute('update '.$table.' set scores=scores+1 where id in ('.$ids.')');
-        if ($execute === false)
-            return errjson('操作失败:'.$mydata->error);
-    }
+    $execute = $mydata->execute('update '.$table.' set scores=scores+1 where id in ('.$ids.')');
+    if ($execute === false)
+        return errjson('操作失败:'.$mydata->error);
     return succjson();
 }

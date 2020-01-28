@@ -11,7 +11,7 @@
     <div class="ciy-tab ciy-tab-card">
         <ul><?php echo create_li($code_rolegroup,$liid);?></ul>
         <div class="ciy-tab-box">
-            <form methodd="get" action="">
+            <form method="get" action="">
                 <div class="form-group inline">
                     <label>角色名称</label>
                     <div><input type="text" name="title" value="<?php echo get('title');?>" style="width:10em;"/></div>

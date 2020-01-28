@@ -1,6 +1,6 @@
 <?php
 $mydata = new ciy_data();
-$table = 'd_user';
+$table = 'p_user';
 ciy_runJSON();
 
 function json_login() {

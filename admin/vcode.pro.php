@@ -28,19 +28,15 @@ function json_newtest() {
         return errjson('操作失败:'.$mydata->error);
     return succjson();
 }
-function json_setact() {
+function json_del() {
     global $mydata;
     global $table;
     $post = new ciy_post();
-    $act = $post->get('act');
     $ids = $post->get('ids');
-    if($act === 'del')
-    {
-        $csql = new ciy_sql($table);
-        $csql->where('id in',$ids);
-        $execute = $mydata->delete($csql);
-        if ($execute === false)
-            return errjson('操作失败:'.$mydata->error);
-    }
+    $csql = new ciy_sql($table);
+    $csql->where('id in',$ids);
+    $execute = $mydata->delete($csql);
+    if ($execute === false)
+        return errjson('操作失败:'.$mydata->error);
     return succjson();
 }
