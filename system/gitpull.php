@@ -10,8 +10,8 @@
  * 先从git上拉取代码。手动在目录中执行git pull无错。
  * 设置webhooks，选择application/json
  * 有push时，git库访问本页面，在upload目录下建立gitpull.x文件。
- * crond定时执行<gitpull.sh 仓库目录 [反馈地址]>，如果gitpull.x文件存在，则执行git pull拉取，成功后删除文件。
- * gitpull.sh脚本将拉取记录到upload/gitpull.log文件。如果设置反馈地址，则会进一步通知成功或失败消息。
+ * crond定时执行<gitpull.sh 仓库目录>，如果gitpull.x文件存在，则执行git pull拉取，成功后删除文件。
+ * gitpull.sh脚本将拉取记录到upload/gitpull.log文件。
  * 该方案无需增加php执行权限，相对安全，还可以实现集群部署。
  * 该方案也可用于golang等编译语言更新，成功后自动执行平滑重启。
  * 
