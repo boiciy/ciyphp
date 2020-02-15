@@ -94,6 +94,7 @@ foreach($rows as $row){
         <li>入口函数，请尽量设置不同的函数名，防止同时引用冲突。</li>
         <li>每天/每周/每月等大周期执行的任务，请尽量岔开时间。</li>
         <li>可以通过手动执行调试任务代码，建议用<code>pr()</code>打印变量。</li>
+        <li>nginx+fpm模式，请注意设置fpm的request_terminate_timeout参数，防止运行超时。</li>
     </ul>
   </div>
 </fieldset>
