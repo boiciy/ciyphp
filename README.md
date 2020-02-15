@@ -2,7 +2,7 @@
 
 ## WEB PHP框架
 极简封装的软件架构，附带一个后台UI，实现快速开发。  
-众产风格，能简化的，绝不繁杂，去概念化，回归本质。  
+众产风格，能简化的，绝不繁杂，摒弃概念，回归本质。  
 1个目录，最少4个文件组成框架结构，函数式代码风格。  
 支持前端、后端、DBA协同开发，类似但有别于MVC架构。  
 
@@ -113,11 +113,10 @@ $pageno = getint('pageno', 1);$pagecount = 20;
 $msql->limit($pageno,$pagecount);
 $rows = $mydata->get($msql,$mainrowcount); //不需页码的无限上拉加载，不要带mainrowcount参数，提升性能。
 
-function json_setact() {//Ajax交互函数，ciy_runJSON()调用。本质是json数据交换。
+function json_update() {//Ajax交互函数，ciy_runJSON()调用。本质是json数据交换。
     global $mydata;
     $post = new ciy_post();
     $id = $post->getint('id');
-    $act = $post->get('act');
     数据处理...
     return succjson();
 }
@@ -140,8 +139,7 @@ web根目录下拷贝zcommon目录，更改config.php配置文件。即可完成
 $count = get1();//返回第一行第一列数据
 $xxrow = getone();//返回单条数据
 $xxrows = get();//返回多条数据
-foreach($xxrows as $row)
-{
+foreach($xxrows as $row){
 }
 ```
 
