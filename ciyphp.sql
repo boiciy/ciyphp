@@ -17,7 +17,7 @@ CREATE TABLE `d_test`  (
   `dh` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '多行文本框',
   `activetime` bigint(20) NOT NULL COMMENT '日期时间,DATE,yyyy-m-d',
   `addtimes` datetime(0) NOT NULL COMMENT '新建时间,DATE',
-  `ip` int(11) NOT NULL COMMENT 'IP,INTIP',
+  `ip` int(10) UNSIGNED NOT NULL COMMENT 'IP,INTIP',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '增删改查Demo表' ROW_FORMAT = Compact;
 
@@ -37,7 +37,7 @@ CREATE TABLE `d_test_bak`  (
   `dh` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '多行文本框',
   `activetime` bigint(20) NOT NULL COMMENT '日期时间,DATE,yyyy-m-d',
   `addtimes` datetime(0) NOT NULL COMMENT '新建时间,DATE',
-  `ip` int(11) NOT NULL COMMENT 'IP',
+  `ip` int(10) UNSIGNED NOT NULL COMMENT 'IP,INTIP',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '增删改查Demo备份表' ROW_FORMAT = Compact;
 
@@ -61,7 +61,7 @@ CREATE TABLE `p_admin`  (
   `icon` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户照片',
   `activetime` bigint(20) NOT NULL COMMENT '活跃时间',
   `addtimes` bigint(20) NOT NULL COMMENT '注册日期',
-  `ip` int(20) NOT NULL COMMENT '登录IP',
+  `ip` int(10) UNSIGNED NOT NULL COMMENT '登录IP,INTIP',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `mobile`(`mobile`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员用户表' ROW_FORMAT = Compact;
@@ -121,7 +121,7 @@ CREATE TABLE `p_admin_online`  (
   `target` int(11) NOT NULL COMMENT '登录平台,10.中台登录,11.代登录',
   `sid` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '授权码',
   `exptime` bigint(20) NOT NULL COMMENT '授权到期日',
-  `ip` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'IP',
+  `ip` int(10) UNSIGNED NOT NULL COMMENT '登录IP,INTIP',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员登录状态表' ROW_FORMAT = Compact;
 
@@ -227,7 +227,7 @@ CREATE TABLE `p_log`  (
   `status` int(11) NOT NULL COMMENT '状态,0.未处理,1.已处理,2.锁定',
   `logs` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '详情',
   `addtimes` bigint(20) NOT NULL COMMENT '时间',
-  `ip` int(10) UNSIGNED NOT NULL COMMENT 'IP',
+  `ip` int(10) UNSIGNED NOT NULL COMMENT '注册IP,INTIP',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '日志表' ROW_FORMAT = Compact;
 
@@ -303,7 +303,7 @@ CREATE TABLE `p_user_ext`  (
   `city` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '城市',
   `country` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '国家',
   `province` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '省份',
-  `ip` int(10) UNSIGNED NOT NULL COMMENT '注册IP',
+  `ip` int(10) UNSIGNED NOT NULL COMMENT '注册IP,INTIP',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户扩展表' ROW_FORMAT = Compact;
 
@@ -322,7 +322,7 @@ CREATE TABLE `p_vcode`  (
   `mobile` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '手机号',
   `code` int(11) NOT NULL COMMENT '验证码',
   `addtimes` bigint(20) NOT NULL COMMENT '添加时间',
-  `ip` int(11) UNSIGNED NOT NULL COMMENT 'IP',
+  `ip` int(10) UNSIGNED NOT NULL COMMENT 'IP,INTIP',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '验证码表' ROW_FORMAT = Compact;
 
