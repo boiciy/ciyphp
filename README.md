@@ -148,7 +148,4 @@ foreach($xxrows as $row){
 我们将放弃一些酷炫前端界面效果的同时，尽量实现前端UI原生优化。  
 如果您对界面效果有极致要求，请谨慎使用。  
 
-## 版权声明
-遵循MIT协议。  
-
 [众产](http://ciy.cn) [众产IT工程](http://ciy.cn/code)
